@@ -11,7 +11,7 @@ module.exports.isPlaying = isPlaying;
 //https://www.gesource.jp/weblog/?p=8228
 const { execSync, spawn } = require('child_process');
 
-async function addAudioToQueue (resource, voiceChannel, voiceOption) {
+async function addAudioToQueue(resource, voiceChannel, voiceOption) {
     speakQueue.push(
         { resource: resource, voiceChannel: voiceChannel, voiceOption: voiceOption }
     );
@@ -22,28 +22,31 @@ async function addAudioToQueue (resource, voiceChannel, voiceOption) {
 async function playAudio() {
     if (speakQueue.length >= 1 && !isPlaying) {
         isPlaying = true;
-        const child = spawn(`../AquesTalkPi`, ["-p", "-v", `${speakQueue[0].voiceOption}`, `${speakQueue[0].resource}`]);
-        const playResource = createAudioResource(
-            child.stdout,
-            {
-                inputType: StreamType.Arbitrary
-            }
-        );
-        const player = createAudioPlayer({
-            behaviors: {
-                noSubscriber: NoSubscriberBehavior.Pause,
-            },
-        });
-        player.play(playResource);
-        const promises = [];
-        promises.push(entersState(player, AudioPlayerStatus.AutoPaused, 1000 * 10));
-        promises.push(entersState(speakQueue[0].voiceChannel, VoiceConnectionStatus.Ready, 1000 * 10));
-        await Promise.race(promises);
-        await Promise.all([...promises]);
-        speakQueue[0].voiceChannel.subscribe(player);
-        await entersState(player, AudioPlayerStatus.Playing, 100);
-        await entersState(player, AudioPlayerStatus.Idle, 2 ** 31 - 1);
-
+        if (process.platform == "linux") {
+            const child = spawn(`../AquesTalkPi`, ["-p", "-v", `${speakQueue[0].voiceOption}`, `${speakQueue[0].resource}`]);
+            const playResource = createAudioResource(
+                child.stdout,
+                {
+                    inputType: StreamType.Arbitrary
+                }
+            );
+            const player = createAudioPlayer({
+                behaviors: {
+                    noSubscriber: NoSubscriberBehavior.Pause,
+                },
+            });
+            player.play(playResource);
+            const promises = [];
+            promises.push(entersState(player, AudioPlayerStatus.AutoPaused, 1000 * 10));
+            promises.push(entersState(speakQueue[0].voiceChannel, VoiceConnectionStatus.Ready, 1000 * 10));
+            await Promise.race(promises);
+            await Promise.all([...promises]);
+            speakQueue[0].voiceChannel.subscribe(player);
+            await entersState(player, AudioPlayerStatus.Playing, 100);
+            await entersState(player, AudioPlayerStatus.Idle, 2 ** 31 - 1);
+        } else {
+            console.log("skip");
+        }
         speakQueue.shift();
         isPlaying = false;
         console.log(`queue length: ${speakQueue.length}`);
@@ -54,7 +57,7 @@ async function playAudio() {
     }
 };
 
-module.exports={
+module.exports = {
     playAudio,
     addAudioToQueue
 }
