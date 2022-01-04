@@ -1,4 +1,4 @@
-
+const { execSync, spawn } = require('child_process');
 var fs = require('fs');
 const add = require('nodemon/lib/rules/add');
 var path = require('path');
@@ -51,13 +51,14 @@ for (let i = 0; i < optionalCommandslength; i++) {
 }
 
 module.exports = {
-    attr: "option",
+    attr: "base",
     data: {
         name: "add",
         description: "コマンドを追加するコマンド．",
         options: optionsObject
     },
     async execute(interaction) {
+        await interaction.reply("working!");
         const guildID = interaction.guild.id;
         // console.log(guildID);
         const serverIndex = registerSet.findIndex((v) => v.id === guildID);
@@ -79,6 +80,11 @@ module.exports = {
         console.log(`addoptions:${addoptions}`);
 
         if (interaction.memberPermissions.has('ADMINISTRATOR')) {
+            if(addoptions!=""){
+                await interaction.editReply(`${addoptions}を登録します．`);
+            }else{
+                await interaction.editReply("none");
+            }
             for (const opt of addoptions) {
                 console.log(opt);
                 registerSet[serverIndex].registerCommands.push(opt);
@@ -91,9 +97,9 @@ module.exports = {
             if (process.platform == "linux") {
                 const stdout = execSync('node register.js');
             }
-            return interaction.reply(`${addoptions}が登録されました．`);
+            return;
         } else {
-            return interaction.reply("サーバ管理者限定のコマンドのため，実行できません");
+            return  await interaction.reply("サーバ管理者限定のコマンドのため，実行できません");
         }
     }
 }
