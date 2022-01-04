@@ -99,7 +99,7 @@ module.exports = {
             }
             return;
         } else {
-            return  await interaction.reply("サーバ管理者限定のコマンドのため，実行できません");
+            return  await interaction.editReply("サーバ管理者限定のコマンドのため，実行できません");
         }
     }
 }
