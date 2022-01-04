@@ -18,7 +18,8 @@ const allOptionalCommands = [];
 for (const file of commandFiles) {
     console.log(file);
     const command = require(`../commands/${file}`);
-    if (command.attr == "option" && command.data.name != "add" && command.data.name != "reboot") {
+    const commandsToBeExcluded = ["reboot", "beni", "add"];
+    if (command.attr == "option" && !commandsToBeExcluded.includes(command.data.name)) {
         allOptionalCommands[allOptionalCommands.length] = command.data;
     }
 }
