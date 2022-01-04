@@ -1,0 +1,25 @@
+{
+  "name": "talkbotjs",
+  "version": "1.0.0",
+  "description": "",
+  "nodemonConfig": {
+    "ignore": [
+      "commands.json"
+    ]
+  },
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/opus": "^0.5.3",
+    "@discordjs/voice": "^0.7.5",
+    "discord.js": "^13.3.1",
+    "ffmpeg-static": "^4.4.0",
+    "nodemon": "^2.0.15",
+    "tweetnacl": "^1.0.3",
+    "twemoji-parser": "^13.1.0"
+  }
+}
