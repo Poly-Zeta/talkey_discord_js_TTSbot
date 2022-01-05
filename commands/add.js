@@ -96,7 +96,7 @@ for (let i = 0; i < lengthOfAdditionalCommandList; i++) {
 //*************************************************************************************************************************** */
 
 module.exports = {
-    attr: "base",
+    attr: "option",
     data: {
         name: "add",
         description: "コマンドを追加するコマンド．",
