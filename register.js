@@ -55,9 +55,9 @@ for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
     if (command.attr == "base") {
         baseCommands[baseCommands.length] = command.data;
-    } else if (command.attr == "additional") {
-        optionalCommands[optionalCommands.length] = command.data;
     } else if (command.attr == "option") {
+        optionalCommands[optionalCommands.length] = command.data;
+    } else if (command.attr == "additional") {
         additionalCommands[additionalCommands.length] = command.data;
     }
 }

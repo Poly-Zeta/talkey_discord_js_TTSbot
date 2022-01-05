@@ -1,8 +1,8 @@
 const { textOperator } = require('../functions/textOperator.js');
-const { addAudioToQueue, playAudio ,isPlaying} = require('../functions/audio.js');
+const { addAudioToQueue, playAudio, isPlaying } = require('../functions/audio.js');
 const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioResource, StreamType, createAudioPlayer, AudioPlayerStatus, NoSubscriberBehavior, generateDependencyReport, getVoiceConnection } = require("@discordjs/voice");
 module.exports = {
-    attr: "option",
+    attr: "additional",
     data: {
         name: "beni",
         description: "某身内ミームを表示する",

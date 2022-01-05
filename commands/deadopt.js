@@ -1,7 +1,7 @@
 const { execSync, spawn } = require('child_process');
 
 module.exports = {
-    attr: "additional",
+    attr: "option",
     data: {
         name: "dead",
         description: "某AAを表示する",

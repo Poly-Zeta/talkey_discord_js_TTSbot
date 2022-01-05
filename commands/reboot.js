@@ -15,7 +15,7 @@ var tokens = JSON.parse(
 );
 
 module.exports = {
-    attr: "option",
+    attr: "additional",
     data: {
         name: "reboot",
         description: "緊急用"

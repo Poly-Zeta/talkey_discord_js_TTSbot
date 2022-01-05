@@ -1,5 +1,5 @@
 module.exports = {
-    attr: "additional",
+    attr: "option",
     data: {
         name: "tomb",
         description: "某AAを表示する",

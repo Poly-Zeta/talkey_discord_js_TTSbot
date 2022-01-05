@@ -9,7 +9,7 @@ var weaponData = JSON.parse(
 );
 
 module.exports = {
-    attr: "option",
+    attr: "additional",
     data: {
         name: "ikanoweapon",
         description: "スプラ2のブキランダマイザ",

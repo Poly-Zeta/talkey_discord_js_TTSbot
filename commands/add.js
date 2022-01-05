@@ -26,7 +26,7 @@ for (const file of commandFiles) {
     const commandsToBeExcluded = ["reboot", "beni"];
 
     //attrが条件通りで，除外設定にも引っかかってないならリスイン
-    if (command.attr == "option" && !commandsToBeExcluded.includes(command.data.name)) {
+    if (command.attr == "additional" && !commandsToBeExcluded.includes(command.data.name)) {
         additionalCommands[additionalCommands.length] = command.data;
     }
 }

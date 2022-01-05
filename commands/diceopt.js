@@ -1,7 +1,7 @@
 const { ndnDiceRoll } = require('../functions/diceroll.js');
 
 module.exports = {
-    attr: "additional",
+    attr: "option",
     data: {
         name: "dice",
         description: "ダイスロール．引数無しだと1D100で勝手に振る",
