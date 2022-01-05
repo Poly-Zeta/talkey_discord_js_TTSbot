@@ -6,6 +6,7 @@ const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fet
 const client = new Discord.Client({
     intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES"],
 });
+const { execSync } = require('child_process');
 
 var fs = require('fs');
 var path = require('path');
@@ -13,6 +14,13 @@ var path = require('path');
 var tokens = JSON.parse(
     fs.readFileSync(
         path.resolve(__dirname, "../tokens.json")
+    )
+);
+
+//どのコマンドをどの鯖に登録するかのデータ取得
+var registerSet = JSON.parse(
+    fs.readFileSync(
+        path.resolve(__dirname, "../commands.json")
     )
 );
 
@@ -65,6 +73,48 @@ async function onVoiceStateUpdate(oldState, newState) {
     }
 }
 
+async function onGuildCreate(guild) {
+    console.log(`Create ${guild.name} ${guild.id}`);
+    const serverIndex = registerSet.findIndex((v) => v.id === guild.id);
+    //何かの事故で鯖IDに重複が無ければ基本となるコマンド群を登録する
+    if (serverIndex == -1) {
+        registerSet[registerSet.length] = {
+            "name": guild.name,
+            "id": guild.id,
+            "registerCommands": []
+        };
+        fs.writeFileSync(
+            path.resolve(__dirname, "../commands.json"),
+            JSON.stringify(registerSet, undefined, 4),
+            "utf-8"
+        );
+        console.log("create default commands");
+        if (process.platform == "linux") {
+            const stdout = execSync('node register.js');
+            console.log("created");
+        }
+    }
+    return guild.systemChannel.send("新規利用ありがとうございます．基本的なコマンドを本サーバに追加しました．拡張コマンドについては/addを使用して確認してください．");
+}
+
+async function onGuildDelete(guild) {
+    console.log(`Delete ${guild.name} ${guild.id}`);
+    const serverIndex = registerSet.findIndex((v) => v.id === guild.id);
+    if (serverIndex != -1) {
+        registerSet.splice(serverIndex, 1);
+        fs.writeFileSync(
+            path.resolve(__dirname, "../commands.json"),
+            JSON.stringify(registerSet, undefined, 4),
+            "utf-8"
+        );
+        console.log("delete default commands");
+        if (process.platform == "linux") {
+            const stdout = execSync('node register.js');
+            console.log("deleted");
+        }
+    }
+    return;
+}
 
 //ここのコードの改造
 //https://github.com/Nich87/Discord-Musicbot/blob/v13-remaster/main.js
@@ -83,6 +133,8 @@ client.on('ready', () => {
 
 client.on("interactionCreate", interaction => onInteraction(interaction).catch(err => console.error(err)));
 client.on("voiceStateUpdate", (oldState, newState) => onVoiceStateUpdate(oldState, newState).catch(err => console.error(err)));
+client.on('guildCreate', guild => onGuildCreate(guild).catch(err => console.error(err)));
+client.on('guildDelete', guild => onGuildDelete(guild).catch(err => console.error(err)));
 
 client.login(tokens.bot).catch(err => {
     console.error(err);

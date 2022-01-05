@@ -18,6 +18,9 @@ console.log(commandFiles);
 const additionalCommands = [];
 for (const file of commandFiles) {
     console.log(file);
+    if (file == "add.js") {
+        continue;
+    }
     const command = require(`../commands/${file}`);
 
     //除外設定
