@@ -8,6 +8,12 @@ var statConfig = JSON.parse(
     )
 );
 
+var tokens = JSON.parse(
+    fs.readFileSync(
+        path.resolve(__dirname, "../../tokens.json")
+    )
+);
+
 module.exports = {
     attr: "option",
     data: {
@@ -15,7 +21,7 @@ module.exports = {
         description: "緊急用"
     },
     async execute(interaction) {
-        if (interaction.member.id == "397020822369206274") {
+        if (interaction.member.id == tokens.PZID) {
             statConfig.reboot += 1;
             fs.writeFileSync(
                 path.resolve(__dirname, "../stat.json"),

@@ -43,7 +43,7 @@ async function onVoiceStateUpdate(oldState, newState) {
     const vc = await guild.channels.fetch(oldState.channelId);
     const updatedMember = oldState.member.id;
     if (vc.members != null) {
-        if (updatedMember != "922362927292485632") {
+        if (updatedMember != tokens.myID) {
             // console.log(vc.members.size);
             // console.log(vc.members.filter(member => !member.user.bot).size);
             // console.log("vcupdate");
