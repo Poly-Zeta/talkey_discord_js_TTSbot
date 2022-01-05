@@ -30,8 +30,10 @@ for (const file of commandFiles) {
 
     //attrが条件通りで，除外設定にも引っかかってないならリスイン
     if (command.attr == "additional" && !commandsToBeExcluded.includes(command.data.name)) {
+        console.log("added");
         additionalCommands[additionalCommands.length] = command.data;
     }
+    console.log("");
 }
 
 //最大値を低めに取っておく

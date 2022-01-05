@@ -120,6 +120,9 @@ async function onGuildDelete(guild) {
 //https://github.com/Nich87/Discord-Musicbot/blob/v13-remaster/main.js
 client.on('ready', () => {
     console.log('stand by');
+    if (process.platform == "linux") {
+        const stdout = execSync('node register.js');
+    }
     console.table({
         'Bot User:': client.user.tag,
         'Guild(s):': client.guilds.cache.size + 'Servers',
