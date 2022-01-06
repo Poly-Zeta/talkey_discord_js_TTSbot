@@ -1,6 +1,6 @@
 const { sendMessage } = require('../functions/sendMessage.js');
 const { textOperator } = require('../functions/textOperator.js');
-const { addAudioToQueue, playAudio,isPlaying} = require('../functions/audio.js');
+const { addAudioToQueue, playAudio, isPlaying } = require('../functions/audio.js');
 const { getResponseofTalkAPI } = require('../functions/talkapi.js');
 const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioResource, StreamType, createAudioPlayer, AudioPlayerStatus, NoSubscriberBehavior, generateDependencyReport, getVoiceConnection } = require("@discordjs/voice");
 
@@ -46,8 +46,13 @@ module.exports = {
 
             console.log(`namechk: ${readTxt}`);
 
-            //名前を除去した文を生成
-            readTxt = readTxt.replace(namePattern, "");
+            //名前を適宜差し替えた文を生成
+            const nameRepraceThrethold = Math.floor(Math.random() * 100);
+            if (nameRepraceThrethold < 80) {
+                readTxt = readTxt.replace(namePattern, "");
+            } else {
+                readTxt = readTxt.replace(namePattern, "あなた");
+            }
             // console.log(readTxt);
             // return interaction.reply(`名前を呼ばれた場合のテスト: ${readTxt}`);
 
