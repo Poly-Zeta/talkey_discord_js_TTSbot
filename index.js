@@ -24,6 +24,9 @@ var registerSet = JSON.parse(
     )
 );
 
+let voiceConnectionCount = 0;
+// module.exports.voiceConnectionCount=voiceConnectionCount;
+
 //https://www.gesource.jp/weblog/?p=8228
 // const { execSync, spawn } = require('child_process');
 
@@ -50,6 +53,14 @@ async function onVoiceStateUpdate(oldState, newState) {
     const guild = await client.guilds.fetch(oldState.guild.id);
     const vc = await guild.channels.fetch(oldState.channelId);
     const updatedMember = oldState.member.id;
+
+    if (oldState.channelId == null && newState.channelId != null && newState.member.id == tokens.myID) {
+        voiceConnectionCount += 1;
+    } else if (oldState.channelId != null && newState.channelId == null && oldState.member.id == tokens.myID) {
+        voiceConnectionCount -= 1;
+    }
+    client.user.setActivity(`${voiceConnectionCount}/${client.guilds.cache.size}ギルドで読み上げ`, { type: 'LISTENING' });
+
     if (vc.members != null) {
         if (updatedMember != tokens.myID) {
             // console.log(vc.members.size);
@@ -132,6 +143,7 @@ client.on('ready', () => {
         'Node.js:': process.version,
         'Plattform:': process.platform + '|' + process.arch
     });
+    client.user.setActivity(`${voiceConnectionCount}/${client.guilds.cache.size}ギルドで読み上げ`, { type: 'LISTENING' });
 });
 
 client.on("interactionCreate", interaction => onInteraction(interaction).catch(err => console.error(err)));
