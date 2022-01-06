@@ -109,16 +109,12 @@ module.exports = {
 
             //鯖IDを取得しておき，それをもとにcommand.jsonの該当部分を探す
             const guildID = interaction.guild.id;
-            // console.log(guildID);
+            //O(N)なのか？indexが欲しいのでとりあえず放置
             const serverIndex = registerSet.findIndex((v) => v.id === guildID);
-            // console.log(serverIndex);
 
-            //既に登録されているコマンドを取得しておく
-            const exsistingOptions = registerSet[serverIndex].registerCommands;
-            console.log(`exsist:${exsistingOptions}`)
-
-            //addコマンドの引数を取得し，新たに追加するべきコマンドのリストを作成する
-            const addoptions = [];
+            //****************************************************************************************************************** */
+            //追加コマンド(/addのオプションそのまま)のリストを，jsonのリストに直接突っ込んでから重複排除した方が速い説
+            const arguments = [];
             for (let i = 0; i < lengthOfAdditionalCommandList; i = (i + 1) | 0) {
 
                 //そもそもその引数があるかのチェック　無ければスキップ
@@ -127,26 +123,36 @@ module.exports = {
 
                 if (interactionOpt != null) {
                     console.log(`opt:${interactionOpt.value}`);
-                    console.log(`find?:${!exsistingOptions.includes(interactionOpt.value)}`);
+                    // console.log(`find?:${!exsistingOptions.includes(interactionOpt.value)}`);
 
-                    //既に登録されているものではなく，新規追加リストにもないなら追加
-                    if (!exsistingOptions.includes(interactionOpt.value) && !addoptions.includes(interactionOpt.value)) {
-                        addoptions[addoptions.length] = interactionOpt.value;
-                    }
+                    arguments[arguments.length] = interactionOpt.value;
                 }
             }
-            console.log(`addoptions:${addoptions}`);
 
-            //新規追加リストが空でないなら登録 空なら終了
-            if (addoptions != "") {
-                await interaction.editReply(`${addoptions}コマンドを登録します．`);
-            } else {
-                return await interaction.editReply("新規に登録する必要のあるコマンドがありませんでした．");
+            //↓これで一気にできるけど，場合分けして返答したかったので却下 パフォーマンスやばくなってきたら変える手もある
+            // registerSet[serverIndex].registerCommands= Array.from(new Set( registerSet[serverIndex].registerCommands.concat(addOptions) ) );
+
+            //まず引数無しを除外
+            if (arguments.length == 0) {
+                return interaction.editReply("addコマンドに引数が与えられませんでした．");
             }
-            for (const opt of addoptions) {
-                console.log(opt);
-                registerSet[serverIndex].registerCommands.push(opt);
+
+            //引数の被りを除外
+            const argumentsNoDuplicate = Array.from(new Set(arguments));
+
+            //既存コマンドとの被りを除外
+            const addOptions = argumentsNoDuplicate.filter(d => !registerSet[serverIndex].registerCommands.includes(d));
+
+            //この時点で追加処理をやる必要があるかチェック
+            if (addOptions.length == 0) {
+                return interaction.editReply("新規に追加する必要のある拡張コマンドが存在しませんでした．");
             }
+            interaction.editReply(`${addOptions}コマンドを登録します．`);
+
+            //この状態でaddoptionsとregisterSet[serverIndex].registerCommandsを連結すればいいはず
+            registerSet[serverIndex].registerCommands = registerSet[serverIndex].registerCommands.concat(addOptions);
+
+            //単に毎回FileSyncしたくなかったというのもある
             fs.writeFileSync(
                 path.resolve(__dirname, "../../commands.json"),
                 JSON.stringify(registerSet, undefined, 4),
