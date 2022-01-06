@@ -76,7 +76,7 @@ if (maxNumOfAdditionalCommand > additionalCommands.length) {
 
 
 const optionsOfChoiceObject = [];
-for (let i = 0; i < lengthOfAdditionalCommandList; i++) {
+for (let i = 0; i < lengthOfAdditionalCommandList; i = (i + 1) | 0) {
     optionsOfChoiceObject[optionsOfChoiceObject.length] = {
         name: `${additionalCommands[i].name}`,
         value: `${additionalCommands[i].name}`,
@@ -84,7 +84,7 @@ for (let i = 0; i < lengthOfAdditionalCommandList; i++) {
 }
 
 const optionsObject = [];
-for (let i = 0; i < lengthOfAdditionalCommandList; i++) {
+for (let i = 0; i < lengthOfAdditionalCommandList; i = (i + 1) | 0) {
     optionsObject[optionsObject.length] = {
         type: "STRING",
         name: `command${i + 1}`,
@@ -119,7 +119,7 @@ module.exports = {
 
             //addコマンドの引数を取得し，新たに追加するべきコマンドのリストを作成する
             const addoptions = [];
-            for (let i = 0; i < lengthOfAdditionalCommandList; i++) {
+            for (let i = 0; i < lengthOfAdditionalCommandList; i = (i + 1) | 0) {
 
                 //そもそもその引数があるかのチェック　無ければスキップ
                 const interactionOpt = interaction.options.get(`command${i + 1}`, false);
