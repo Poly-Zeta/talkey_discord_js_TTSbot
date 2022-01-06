@@ -71,25 +71,13 @@ async function main() {
     console.log(baseCommands);
     console.log(`global : registration succeed!`);
 
-    //各鯖に登録するコマンドのリスト
-    let commandList;
-
-    //commandListを埋める
     //(commands.jsonに登録されている)サーバの数だけforループ
     for (let i = 0; i < registerSet.length; i = (i + 1) | 0) {
 
-        //optional系はbaseの拡張であるため全サーバに実装．
-        commandList = optionalCommands.concat();
+        //optional系はbaseの拡張であるため全サーバに実装する．additional系と連結して一応重複排除しておく
+        const commandList = Array.from(new Set(optionalCommands.concat(registerSet[i].registerCommands)));
 
-        //各鯖の.registerCommands部分をcommandListに登録していく
-        for (let j = 0; j < registerSet[i].registerCommands.length; j = (j + 1) | 0) {
-            let pos = additionalCommands.findIndex((c) => c.name === registerSet[i].registerCommands[j]);
-            if (pos >= 0) {
-                commandList.push(additionalCommands[pos]);
-            }
-        }
-
-        //commandListが完成したのでguildコマンドとして登録
+        //guildコマンドとして登録
         await register(client, commandList, registerSet[i].id);
         console.log(commandList);
         console.log(`${registerSet[i].name} : registration succeed!`);
