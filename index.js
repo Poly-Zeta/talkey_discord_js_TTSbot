@@ -1,8 +1,9 @@
-const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioResource, StreamType, createAudioPlayer, AudioPlayerStatus, NoSubscriberBehavior, generateDependencyReport, getVoiceConnection } = require("@discordjs/voice");
+// const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioResource, StreamType, createAudioPlayer, AudioPlayerStatus, NoSubscriberBehavior, generateDependencyReport, getVoiceConnection } = require("@discordjs/voice");
+const { generateDependencyReport, getVoiceConnection } = require("@discordjs/voice");
 console.log(generateDependencyReport());
 const Discord = require("discord.js");
-const twemojiRegex = require('twemoji-parser/dist/lib/regex').default;
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+// const twemojiRegex = require('twemoji-parser/dist/lib/regex').default;
+// const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const client = new Discord.Client({
     intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES"],
 });
@@ -11,6 +12,9 @@ const { execSync } = require('child_process');
 var fs = require('fs');
 var path = require('path');
 
+//************************************************************************************ */
+//json読み込み系
+//トークンとかIDとか
 var tokens = JSON.parse(
     fs.readFileSync(
         path.resolve(__dirname, "../tokens.json")
@@ -24,12 +28,9 @@ var registerSet = JSON.parse(
     )
 );
 
-let voiceConnectionCount = 0;
-// module.exports.voiceConnectionCount=voiceConnectionCount;
+//************************************************************************************ */
 
-//https://www.gesource.jp/weblog/?p=8228
-// const { execSync, spawn } = require('child_process');
-
+//コマンド用ファイルの読み込み->コマンドをリストにする
 const commands = {}
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'))
 
@@ -38,6 +39,8 @@ for (const file of commandFiles) {
     commands[command.data.name] = command
 }
 
+//************************************************************************************ */
+//interactionイベント時
 async function onInteraction(interaction) {
     console.log(interaction.isCommand);
     if (!interaction.isCommand()) {
@@ -47,78 +50,123 @@ async function onInteraction(interaction) {
     return commands[interaction.commandName].execute(interaction);
 }
 
+//************************************************************************************ */
+//vcのステータスアップデート時
+let voiceConnectionCount = 0;
 async function onVoiceStateUpdate(oldState, newState) {
-    //メンバーがvcから抜けた際，vc残り人数が1で自分自身だったら自身もvcから抜ける
+
+    //自身のステータスアップデートか否かを検知
+    //新たにvcに参加した場合
+    if (oldState.channelId == null && newState.channelId != null && newState.member.id == tokens.myID) {
+        voiceConnectionCount += 1;
+        client.user.setActivity(statusMessageGen(voiceConnectionCount, client.guilds.cache.size), { type: 'LISTENING' });
+        return;
+    }
+    //vcから退出した場合
+    else if (oldState.channelId != null && newState.channelId == null && oldState.member.id == tokens.myID) {
+        voiceConnectionCount -= 1;
+        client.user.setActivity(statusMessageGen(voiceConnectionCount, client.guilds.cache.size), { type: 'LISTENING' });
+        return;
+    }
+
     const botConnection = getVoiceConnection(oldState.guild.id);
     const guild = await client.guilds.fetch(oldState.guild.id);
     const vc = await guild.channels.fetch(oldState.channelId);
-    const updatedMember = oldState.member.id;
-
-    if (oldState.channelId == null && newState.channelId != null && newState.member.id == tokens.myID) {
-        voiceConnectionCount += 1;
-    } else if (oldState.channelId != null && newState.channelId == null && oldState.member.id == tokens.myID) {
-        voiceConnectionCount -= 1;
-    }
-    client.user.setActivity(`${voiceConnectionCount}/${client.guilds.cache.size}ギルドで読み上げ`, { type: 'LISTENING' });
-
     if (vc.members != null) {
-        if (updatedMember != tokens.myID) {
-            // console.log(vc.members.size);
-            // console.log(vc.members.filter(member => !member.user.bot).size);
-            // console.log("vcupdate");
-
-            //botConnectionがnullなら特に処理する必要はない
-            if (vc.members.size >= 1 && vc.members.filter(member => !member.user.bot).size == 0) {
-                console.log("auto-disconnect");
-                botConnection.destroy();
-                const replyMessage = "退出します．";
-                return oldState.guild.systemChannel.send(replyMessage);
-            }
-            return;
-        } else {
-            console.log("updated my status");
+        //メンバーがvcから抜けた際，vc残り人数が1で自分自身だったら自身もvcから抜ける
+        if (vc.members.size >= 1 && vc.members.filter(member => !member.user.bot).size == 0) {
+            console.log("auto-disconnect");
+            botConnection.destroy();
+            const replyMessage = "退出します．";
+            return oldState.guild.systemChannel.send(replyMessage);
         }
+        return;
     } else {
         console.log("JOIN");
         return;
     }
 }
 
+function statusMessageGen(vcCount, guildSize) {
+    return `${vcCount}/${guildSize}ギルドで読み上げ`;
+}
+
+//************************************************************************************ */
+
+//新規にサーバに参加した際の処理
 async function onGuildCreate(guild) {
     console.log(`Create ${guild.name} ${guild.id}`);
     const serverIndex = registerSet.findIndex((v) => v.id === guild.id);
-    //何かの事故で鯖IDに重複が無ければ基本となるコマンド群を登録する
+
+    //何かの事故で鯖IDに重複が無ければ，基本となるコマンド群を登録する
     if (serverIndex == -1) {
+
+        //基本形1ブロックを追加して
         registerSet[registerSet.length] = {
             "name": guild.name,
             "id": guild.id,
             "registerCommands": []
         };
+
+        //ファイルに書き込み
         fs.writeFileSync(
             path.resolve(__dirname, "../commands.json"),
             JSON.stringify(registerSet, undefined, 4),
             "utf-8"
         );
         console.log("create default commands");
+
+        //開発機がwinで実機がラズパイのため悲しみのif文
         if (process.platform == "linux") {
             const stdout = execSync('node register.js');
             console.log("created");
         }
     }
-    return guild.systemChannel.send("新規利用ありがとうございます．基本的なコマンドを本サーバに追加しました．拡張コマンドについては/addを使用して確認してください．");
+
+    const embed = new MessageEmbed()
+        .setTitle('新規利用ありがとうございます．')
+        .setColor('#0000ff')
+        .addFields(
+            {
+                name: "通知",
+                value: "基本的なコマンドを本サーバに追加しました．拡張コマンドについては/addを使用して確認してください．"
+            },
+            {
+                name: "基本的なコマンド類",
+                value: "join,talk,bye等 テキストチャット欄に「/」を打ち込むと確認できます．"
+            },
+            {
+                name: "拡張コマンド",
+                value: "サーバの管理者のみ，/addを使用することでコマンドを一部追加できます．"
+            },
+        );
+
+    return guild.systemChannel.send({ embeds: [embed] });
+    // return guild.systemChannel.send("新規利用ありがとうございます．基本的なコマンドを本サーバに追加しました．拡張コマンドについては/addを使用して確認してください．");
 }
 
+//************************************************************************************ */
+
+//サーバから退出したり，サーバが爆散したりしたときの処理
 async function onGuildDelete(guild) {
     console.log(`Delete ${guild.name} ${guild.id}`);
     const serverIndex = registerSet.findIndex((v) => v.id === guild.id);
+
+    //一応json内を検索はする．基本あるはず...
     if (serverIndex != -1) {
+
+        //消す
         registerSet.splice(serverIndex, 1);
+
+        //書き込み
         fs.writeFileSync(
             path.resolve(__dirname, "../commands.json"),
             JSON.stringify(registerSet, undefined, 4),
             "utf-8"
         );
         console.log("delete default commands");
+
+        //悲しみのif
         if (process.platform == "linux") {
             const stdout = execSync('node register.js');
             console.log("deleted");
@@ -126,6 +174,8 @@ async function onGuildDelete(guild) {
     }
     return;
 }
+
+//************************************************************************************ */
 
 //ここのコードの改造
 //https://github.com/Nich87/Discord-Musicbot/blob/v13-remaster/main.js
@@ -138,12 +188,11 @@ client.on('ready', () => {
         'Bot User:': client.user.tag,
         'Guild(s):': client.guilds.cache.size + 'Servers',
         'Watching:': client.guilds.cache.reduce((a, b) => a + b.memberCount, 0) + 'Members',
-        // 'Prefix:': config.prefix,
         'Discord.js:': 'v' + require('discord.js').version,
         'Node.js:': process.version,
         'Plattform:': process.platform + '|' + process.arch
     });
-    client.user.setActivity(`${voiceConnectionCount}/${client.guilds.cache.size}ギルドで読み上げ`, { type: 'LISTENING' });
+    client.user.setActivity(statusMessageGen(0, client.guilds.cache.size), { type: 'LISTENING' });
 });
 
 client.on("interactionCreate", interaction => onInteraction(interaction).catch(err => console.error(err)));
