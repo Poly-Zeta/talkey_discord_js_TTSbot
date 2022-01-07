@@ -1,4 +1,4 @@
-const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioResource, StreamType, createAudioPlayer, AudioPlayerStatus, NoSubscriberBehavior, generateDependencyReport, getVoiceConnection } = require("@discordjs/voice");
+const { entersState, VoiceConnectionStatus, createAudioResource, StreamType, createAudioPlayer, AudioPlayerStatus, NoSubscriberBehavior } = require("@discordjs/voice");
 //queue処理のお試し
 //以下の改造
 //https://zenn.dev/s7/articles/86511eb5089fb6c05599
@@ -6,16 +6,19 @@ const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioResourc
 let speakQueue = [];
 let isPlaying = false;
 
-module.exports.isPlaying = isPlaying;
+// module.exports.isPlaying = isPlaying;
 
 //https://www.gesource.jp/weblog/?p=8228
-const { execSync, spawn } = require('child_process');
+const { spawn } = require('child_process');
 
 async function addAudioToQueue(resource, voiceChannel, voiceOption) {
     speakQueue.push(
         { resource: resource, voiceChannel: voiceChannel, voiceOption: voiceOption }
     );
     console.log(`queue length: ${speakQueue.length}`);
+    if (!isPlaying) {
+        playAudio();
+    }
     return;
 };
 
@@ -45,11 +48,12 @@ async function playAudio() {
             await entersState(player, AudioPlayerStatus.Playing, 100);
             await entersState(player, AudioPlayerStatus.Idle, 2 ** 31 - 1);
         } else {
+            await wait(5000);
             console.log("skip");
         }
         speakQueue.shift();
-        isPlaying = false;
         console.log(`queue length: ${speakQueue.length}`);
+        isPlaying = false;
         playAudio();
     } else {
         isPlaying = false
@@ -58,6 +62,14 @@ async function playAudio() {
 };
 
 module.exports = {
-    playAudio,
+    // playAudio,
     addAudioToQueue
+}
+
+const wait = async (ms) => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(); // setTimeoutの第一引数の関数として簡略化できる
+        }, ms)
+    });
 }

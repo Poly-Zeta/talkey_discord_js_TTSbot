@@ -1,6 +1,7 @@
 const { textOperator } = require('../functions/textOperator.js');
-const { addAudioToQueue, playAudio, isPlaying } = require('../functions/audio.js');
-const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioResource, StreamType, createAudioPlayer, AudioPlayerStatus, NoSubscriberBehavior, generateDependencyReport, getVoiceConnection } = require("@discordjs/voice");
+// const { addAudioToQueue, playAudio, isPlaying } = require('../functions/audio.js');
+const { addAudioToQueue } = require('../functions/audio.js');
+const { getVoiceConnection } = require("@discordjs/voice");
 module.exports = {
     attr: "additional",
     data: {
@@ -50,9 +51,9 @@ module.exports = {
         if (botConnection != undefined) {
             const tts = textOperator(reply);
             addAudioToQueue(tts, botConnection, "f1");
-            if (!isPlaying) {
-                playAudio();
-            }
+            // if (!isPlaying) {
+            //     playAudio();
+            // }
         }
         return interaction.reply(reply);
     }

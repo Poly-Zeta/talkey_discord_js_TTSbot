@@ -1,6 +1,7 @@
 const { sendMessage } = require('../functions/sendMessage.js');
 const { textOperator } = require('../functions/textOperator.js');
-const { addAudioToQueue, playAudio, isPlaying } = require('../functions/audio.js');
+// const { addAudioToQueue, playAudio, isPlaying } = require('../functions/audio.js');
+const { addAudioToQueue } = require('../functions/audio.js');
 const { getResponseofTalkAPI } = require('../functions/talkapi.js');
 const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioResource, StreamType, createAudioPlayer, AudioPlayerStatus, NoSubscriberBehavior, generateDependencyReport, getVoiceConnection } = require("@discordjs/voice");
 
@@ -39,9 +40,9 @@ module.exports = {
             //名前があったら，ボイチャに接続しているかを確認してf2ボイスにしてqueueに追加
             if (botConnection != undefined) {
                 addAudioToQueue(readTxt, botConnection, "f2");
-                if (!isPlaying) {
-                    playAudio();
-                }
+                // if (!isPlaying) {
+                //     playAudio();
+                // }
             }
 
             console.log(`namechk: ${readTxt}`);
@@ -62,9 +63,9 @@ module.exports = {
             //ボイチャに接続している場合は応答をf1ボイスにしてqueueに投げる
             if (botConnection != undefined) {
                 addAudioToQueue(apiResponseText, botConnection, "f1");
-                if (!isPlaying) {
-                    playAudio();
-                }
+                // if (!isPlaying) {
+                //     playAudio();
+                // }
             }
             //応答をreplyで返す
             // return interaction.reply(apiResponseText);
@@ -74,9 +75,9 @@ module.exports = {
             //名前が無ければ，ボイチャに接続しているかを確認して入力をそのままf1ボイスでqueueに追加
             if (botConnection != undefined) {
                 addAudioToQueue(readTxt, botConnection, "f1");
-                if (!isPlaying) {
-                    playAudio();
-                }
+                // if (!isPlaying) {
+                //     playAudio();
+                // }
             }
         }
 
