@@ -2,7 +2,7 @@ const { NoSubscriberBehavior, joinVoiceChannel, getVoiceConnection, createAudioP
 const { addGuildToMap } = require('../functions/audioMap.js');
 
 module.exports = {
-    attr: "additional",
+    attr: "base",
     data: {
         name: "join",
         description: "botをvcに参加させる",

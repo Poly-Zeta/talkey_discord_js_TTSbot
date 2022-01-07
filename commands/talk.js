@@ -5,7 +5,7 @@ const { getVoiceConnection } = require("@discordjs/voice");
 const { addAudioToMapQueue } = require('../functions/audioMap.js');
 
 module.exports = {
-    attr: "additional",
+    attr: "base",
     data: {
         name: "talk",
         description: "このコマンドの引数をbotが読み上げる",

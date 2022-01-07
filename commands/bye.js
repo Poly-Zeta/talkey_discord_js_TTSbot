@@ -2,7 +2,7 @@ const { getVoiceConnection } = require("@discordjs/voice");
 const { deleteGuildToMap } = require('../functions/audioMap.js');
 
 module.exports = {
-    attr: "additional",
+    attr: "base",
     data: {
         name: "bye",
         description: "botをvcから退出させる",
