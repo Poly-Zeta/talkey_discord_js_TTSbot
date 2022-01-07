@@ -1,5 +1,5 @@
 // const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioResource, StreamType, createAudioPlayer, AudioPlayerStatus, NoSubscriberBehavior, generateDependencyReport, getVoiceConnection } = require("@discordjs/voice");
-const { generateDependencyReport, getVoiceConnection } = require("@discordjs/voice");
+const { generateDependencyReport, getVoiceConnection, getVoiceConnections } = require("@discordjs/voice");
 console.log(generateDependencyReport());
 const Discord = require("discord.js");
 // const twemojiRegex = require('twemoji-parser/dist/lib/regex').default;
@@ -54,20 +54,10 @@ async function onInteraction(interaction) {
 //vcのステータスアップデート時
 let voiceConnectionCount = 0;
 async function onVoiceStateUpdate(oldState, newState) {
+    console.log(oldState.channelId, newState.channelId);
+    // console.log(getVoiceConnections().size);
 
-    //自身のステータスアップデートか否かを検知
-    //新たにvcに参加した場合
-    if (oldState.channelId == null && newState.channelId != null && newState.member.id == tokens.myID) {
-        voiceConnectionCount += 1;
-        client.user.setActivity(statusMessageGen(voiceConnectionCount, client.guilds.cache.size), { type: 'LISTENING' });
-        return;
-    }
-    //vcから退出した場合
-    else if (oldState.channelId != null && newState.channelId == null && oldState.member.id == tokens.myID) {
-        voiceConnectionCount -= 1;
-        client.user.setActivity(statusMessageGen(voiceConnectionCount, client.guilds.cache.size), { type: 'LISTENING' });
-        return;
-    }
+    client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
 
     const botConnection = getVoiceConnection(oldState.guild.id);
     const guild = await client.guilds.fetch(oldState.guild.id);
@@ -192,7 +182,7 @@ client.on('ready', () => {
         'Node.js:': process.version,
         'Plattform:': process.platform + '|' + process.arch
     });
-    client.user.setActivity(statusMessageGen(0, client.guilds.cache.size), { type: 'LISTENING' });
+    client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
 });
 
 client.on("interactionCreate", interaction => onInteraction(interaction).catch(err => console.error(err)));
