@@ -1,7 +1,8 @@
-const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioResource, StreamType, createAudioPlayer, AudioPlayerStatus, NoSubscriberBehavior, generateDependencyReport, getVoiceConnection } = require("@discordjs/voice");
+const { getVoiceConnection } = require("@discordjs/voice");
+const { deleteGuildToMap } = require('../functions/audioMap.js');
 
 module.exports = {
-    attr: "base",
+    attr: "additional",
     data: {
         name: "bye",
         description: "botをvcから退出させる",
@@ -31,7 +32,8 @@ module.exports = {
         //->connection.destroy()
         else {
             //全部違ったら退出
-            botConnection.destroy()
+            botConnection.destroy();
+            deleteGuildToMap(interaction.guild.id);
             const replyMessage = "退出します．";
             return interaction.reply(replyMessage);
         }

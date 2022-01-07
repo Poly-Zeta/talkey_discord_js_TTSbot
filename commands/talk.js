@@ -1,12 +1,11 @@
 const { sendMessage } = require('../functions/sendMessage.js');
 const { textOperator } = require('../functions/textOperator.js');
-// const { addAudioToQueue, playAudio, isPlaying } = require('../functions/audio.js');
-const { addAudioToQueue } = require('../functions/audio.js');
 const { getResponseofTalkAPI } = require('../functions/talkapi.js');
-const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioResource, StreamType, createAudioPlayer, AudioPlayerStatus, NoSubscriberBehavior, generateDependencyReport, getVoiceConnection } = require("@discordjs/voice");
+const { getVoiceConnection } = require("@discordjs/voice");
+const { addAudioToMapQueue } = require('../functions/audioMap.js');
 
 module.exports = {
-    attr: "base",
+    attr: "additional",
     data: {
         name: "talk",
         description: "このコマンドの引数をbotが読み上げる",
@@ -39,7 +38,8 @@ module.exports = {
         if (namePattern.test(readTxt)) {
             //名前があったら，ボイチャに接続しているかを確認してf2ボイスにしてqueueに追加
             if (botConnection != undefined) {
-                addAudioToQueue(readTxt, botConnection, "f2");
+                // addAudioToQueue(readTxt, botConnection, "f2");
+                addAudioToMapQueue(interaction.guild.id, readTxt, "f2");
                 // if (!isPlaying) {
                 //     playAudio();
                 // }
@@ -62,7 +62,8 @@ module.exports = {
 
             //ボイチャに接続している場合は応答をf1ボイスにしてqueueに投げる
             if (botConnection != undefined) {
-                addAudioToQueue(apiResponseText, botConnection, "f1");
+                // addAudioToMap(apiResponseText, botConnection, "f1");
+                addAudioToMapQueue(interaction.guild.id, readTxt, "f1");
                 // if (!isPlaying) {
                 //     playAudio();
                 // }
@@ -74,7 +75,8 @@ module.exports = {
             console.log("chk3");
             //名前が無ければ，ボイチャに接続しているかを確認して入力をそのままf1ボイスでqueueに追加
             if (botConnection != undefined) {
-                addAudioToQueue(readTxt, botConnection, "f1");
+                // addAudioToQueue(readTxt, botConnection, "f1");
+                addAudioToMapQueue(interaction.guild.id, readTxt, "f1");
                 // if (!isPlaying) {
                 //     playAudio();
                 // }

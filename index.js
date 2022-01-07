@@ -2,8 +2,9 @@
 const { generateDependencyReport, getVoiceConnection, getVoiceConnections } = require("@discordjs/voice");
 console.log(generateDependencyReport());
 const Discord = require("discord.js");
-// const twemojiRegex = require('twemoji-parser/dist/lib/regex').default;
-// const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+const { MessageEmbed } = require('discord.js');
+const { deleteGuildToMap } = require('../functions/audioMap.js');
+
 const client = new Discord.Client({
     intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES"],
 });
@@ -52,7 +53,6 @@ async function onInteraction(interaction) {
 
 //************************************************************************************ */
 //vcのステータスアップデート時
-let voiceConnectionCount = 0;
 async function onVoiceStateUpdate(oldState, newState) {
     console.log(oldState.channelId, newState.channelId);
     // console.log(getVoiceConnections().size);
@@ -67,6 +67,7 @@ async function onVoiceStateUpdate(oldState, newState) {
         if (vc.members.size >= 1 && vc.members.filter(member => !member.user.bot).size == 0) {
             console.log("auto-disconnect");
             botConnection.destroy();
+            deleteGuildToMap(guild.id);
             const replyMessage = "退出します．";
             return oldState.guild.systemChannel.send(replyMessage);
         }
@@ -112,7 +113,6 @@ async function onGuildCreate(guild) {
             console.log("created");
         }
     }
-
     const embed = new MessageEmbed()
         .setTitle('新規利用ありがとうございます．')
         .setColor('#0000ff')

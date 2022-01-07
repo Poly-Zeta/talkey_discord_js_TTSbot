@@ -1,7 +1,8 @@
-const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioResource, StreamType, createAudioPlayer, AudioPlayerStatus, NoSubscriberBehavior, generateDependencyReport, getVoiceConnection } = require("@discordjs/voice");
+const { NoSubscriberBehavior, joinVoiceChannel, getVoiceConnection, createAudioPlayer } = require("@discordjs/voice");
+const { addGuildToMap } = require('../functions/audioMap.js');
 
 module.exports = {
-    attr: "base",
+    attr: "additional",
     data: {
         name: "join",
         description: "botをvcに参加させる",
@@ -44,6 +45,9 @@ module.exports = {
                 adapterCreator: guild.voiceAdapterCreator,
                 selfMute: false,
             });
+            const player = createAudioPlayer({ behaviors: { noSubscriber: NoSubscriberBehavior.Pause, } });
+            connection.subscribe(player);
+            addGuildToMap(guild.id, memberVC.id, connection, player);
             return interaction.reply(replyMessage);
         }
     }
