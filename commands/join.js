@@ -38,7 +38,7 @@ module.exports = {
         }
         //全部違ったら接続
         else {
-            const replyMessage = "vcに接続します. 2022/01/03 20:59 大幅にソースコードをいじったので，そこらじゅうでバグや動作停止が起きると思います．適宜連絡ください．";
+            const replyMessage = "vcに接続します. 2022/01/07 21:48 ボイチャ同時読み上げできるようになったはず，んで相変わらずバグや動作停止が起きると思います．適宜連絡ください．";
             const connection = joinVoiceChannel({
                 guildId: guild.id,
                 channelId: memberVC.id,
