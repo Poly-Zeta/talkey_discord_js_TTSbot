@@ -75,7 +75,15 @@ async function main() {
     for (let i = 0; i < registerSet.length; i = (i + 1) | 0) {
 
         //optional系はbaseの拡張であるため全サーバに実装する．additional系と連結して一応重複排除しておく
-        const commandList = Array.from(new Set(optionalCommands.concat(registerSet[i].registerCommands)));
+        // console.log(additionalCommands);
+        const commandList = Array.from(
+            new Set(
+                optionalCommands.concat(
+                    additionalCommands.filter(item => registerSet[i].registerCommands.includes(item.name))
+                )
+            )
+        );
+        // console.log(commandList);
 
         //guildコマンドとして登録
         await register(client, commandList, registerSet[i].id);
