@@ -3,7 +3,7 @@ const { generateDependencyReport, getVoiceConnection, getVoiceConnections } = re
 console.log(generateDependencyReport());
 const Discord = require("discord.js");
 const { MessageEmbed } = require('discord.js');
-const { deleteGuildToMap } = require('../functions/audioMap.js');
+const { deleteGuildToMap } = require('./functions/audioMap.js');
 
 const client = new Discord.Client({
     intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES"],
