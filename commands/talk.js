@@ -49,7 +49,7 @@ module.exports = {
 
             //名前を適宜差し替えた文を生成
             const nameRepraceThrethold = Math.floor(Math.random() * 100);
-            if (nameRepraceThrethold < 80) {
+            if (nameRepraceThrethold < 100) {//ちょっと無効化しておく
                 readTxt = readTxt.replace(namePattern, "");
             } else {
                 readTxt = readTxt.replace(namePattern, "あなた");

@@ -42,7 +42,7 @@ exports.getResponseofTalkAPI = async function (txt) {
     const inputTextRandomThrethold = Math.floor(Math.random() * 100);
     let input_txt;
 
-    if (inputTextRandomThrethold < 80) {
+    if (inputTextRandomThrethold < 0) {//無効化しておく
         console.log("suggest txt");
         input_txt = `${txt}${suggestData.suggestion[Math.floor(Math.random() * suggestData.suggestion.length)]}`;
     } else {
