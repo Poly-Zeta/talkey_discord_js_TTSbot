@@ -196,7 +196,7 @@ async function onGuildDelete(guild) {
     console.log(`Delete ${guild.name} ${guild.id}`);
 
     //消す
-    registerSet.splice(guild.id, 1);
+    delete registerSet[guild.id];
 
     //書き込み
     fs.writeFileSync(
