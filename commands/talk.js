@@ -21,9 +21,6 @@ module.exports = {
     async execute(interaction) {
         const namePattern = /たーきーちゃん|ターキーちゃん|たーきーくん|ターキーくん/;
         const botConnection = getVoiceConnection(interaction.guild.id);
-        // if (botConnection == undefined) {
-        //     return interaction.reply("読み上げを行うためにはbotがボイスチャットに参加している必要があります．");
-        // }
 
         //ユーザアカウントに偽装したwebhookを送る
         await sendMessage(interaction).catch(e => console.error(e));
@@ -38,11 +35,7 @@ module.exports = {
         if (namePattern.test(readTxt)) {
             //名前があったら，ボイチャに接続しているかを確認してf2ボイスにしてqueueに追加
             if (botConnection != undefined) {
-                // addAudioToQueue(readTxt, botConnection, "f2");
                 addAudioToMapQueue(interaction.guild.id, readTxt, "f2");
-                // if (!isPlaying) {
-                //     playAudio();
-                // }
             }
 
             console.log(`namechk: ${readTxt}`);
@@ -62,24 +55,15 @@ module.exports = {
 
             //ボイチャに接続している場合は応答をf1ボイスにしてqueueに投げる
             if (botConnection != undefined) {
-                // addAudioToMap(apiResponseText, botConnection, "f1");
                 addAudioToMapQueue(interaction.guild.id, apiResponseText, "f1");
-                // if (!isPlaying) {
-                //     playAudio();
-                // }
             }
             //応答をreplyで返す
-            // return interaction.reply(apiResponseText);
             interaction.channel.send(apiResponseText);
         } else {
             console.log("chk3");
             //名前が無ければ，ボイチャに接続しているかを確認して入力をそのままf1ボイスでqueueに追加
             if (botConnection != undefined) {
-                // addAudioToQueue(readTxt, botConnection, "f1");
                 addAudioToMapQueue(interaction.guild.id, readTxt, "f1");
-                // if (!isPlaying) {
-                //     playAudio();
-                // }
             }
         }
 

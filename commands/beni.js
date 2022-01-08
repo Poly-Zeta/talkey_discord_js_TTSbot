@@ -49,12 +49,8 @@ module.exports = {
             reply = "エラー";
         }
         if (botConnection != undefined) {
-            const tts = textOperator(reply);
-            addAudioToQueue(tts, botConnection, "f1");
-            addAudioToMapQueue(interaction.guild.id, tts, "f1");
-            // if (!isPlaying) {
-            //     playAudio();
-            // }
+            const replyText = textOperator(reply);
+            addAudioToMapQueue(interaction.guild.id, replyText, "f1");
         }
         return interaction.reply(reply);
     }
