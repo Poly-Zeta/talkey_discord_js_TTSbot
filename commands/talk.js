@@ -47,13 +47,13 @@ module.exports = {
 
             console.log(`namechk: ${readTxt}`);
 
-            //名前を適宜差し替えた文を生成
-            const nameRepraceThrethold = Math.floor(Math.random() * 100);
-            if (nameRepraceThrethold < 100) {//ちょっと無効化しておく
-                readTxt = readTxt.replace(namePattern, "");
-            } else {
-                readTxt = readTxt.replace(namePattern, "あなた");
-            }
+            //名前を適宜差し替えた文を生成->ちょっと無効化しておく
+            // const nameRepraceThrethold = Math.floor(Math.random() * 100);
+            // if (nameRepraceThrethold < 100) {
+            //     readTxt = readTxt.replace(namePattern, "");
+            // } else {
+            //     readTxt = readTxt.replace(namePattern, "あなた");
+            // }
             // console.log(readTxt);
             // return interaction.reply(`名前を呼ばれた場合のテスト: ${readTxt}`);
 
@@ -63,7 +63,7 @@ module.exports = {
             //ボイチャに接続している場合は応答をf1ボイスにしてqueueに投げる
             if (botConnection != undefined) {
                 // addAudioToMap(apiResponseText, botConnection, "f1");
-                addAudioToMapQueue(interaction.guild.id, readTxt, "f1");
+                addAudioToMapQueue(interaction.guild.id, apiResponseText, "f1");
                 // if (!isPlaying) {
                 //     playAudio();
                 // }
