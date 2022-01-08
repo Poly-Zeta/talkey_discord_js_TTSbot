@@ -1,4 +1,5 @@
-const { execSync } = require('child_process');
+// const { execSync } = require('child_process');
+// const { singleGuildRegister } = require('../register.js');
 var fs = require('fs');
 var path = require('path');
 
@@ -16,6 +17,7 @@ console.log(commandFiles);
 //addコマンドの引数に取れるコマンドのリストを作成する
 //具体的にはコマンドのモジュール内にあるattrを参照してチェックしてるだけ
 const additionalCommands = [];
+const optionalCommands = [];
 for (const file of commandFiles) {
     console.log(file);
     if (file == "add.js") {
@@ -28,8 +30,11 @@ for (const file of commandFiles) {
     //beniコマンドは完全身内ネタなので無条件に登録されたら困る
     const commandsToBeExcluded = ["reboot", "beni"];
 
+    if (command.attr == "option") {
+        optionalCommands[optionalCommands.length] = command.data;
+    }
     //attrが条件通りで，除外設定にも引っかかってないならリスイン
-    if (command.attr == "additional" && !commandsToBeExcluded.includes(command.data.name)) {
+    else if (command.attr == "additional" && !commandsToBeExcluded.includes(command.data.name)) {
         console.log("added");
         additionalCommands[additionalCommands.length] = command.data;
     }
@@ -109,8 +114,6 @@ module.exports = {
 
             //鯖IDを取得しておき，それをもとにcommand.jsonの該当部分を探す
             const guildID = interaction.guild.id;
-            //O(N)なのか？indexが欲しいのでとりあえず放置
-            const serverIndex = registerSet.findIndex((v) => v.id === guildID);
 
             //****************************************************************************************************************** */
             //追加コマンド(/addのオプションそのまま)のリストを，jsonのリストに直接突っ込んでから重複排除した方が速い説
@@ -119,10 +122,10 @@ module.exports = {
 
                 //そもそもその引数があるかのチェック　無ければスキップ
                 const interactionOpt = interaction.options.get(`command${i + 1}`, false);
-                console.log(`interactionOpt:${interactionOpt}`);
+                // console.log(`interactionOpt:${interactionOpt}`);
 
                 if (interactionOpt != null) {
-                    console.log(`opt:${interactionOpt.value}`);
+                    console.log(`command${i + 1}opt:${interactionOpt.value}`);
                     // console.log(`find?:${!exsistingOptions.includes(interactionOpt.value)}`);
 
                     arguments[arguments.length] = interactionOpt.value;
@@ -141,7 +144,7 @@ module.exports = {
             const argumentsNoDuplicate = Array.from(new Set(arguments));
 
             //既存コマンドとの被りを除外
-            const addOptions = argumentsNoDuplicate.filter(d => !registerSet[serverIndex].registerCommands.includes(d));
+            const addOptions = argumentsNoDuplicate.filter(d => !registerSet[guildID].registerCommands.includes(d));
 
             //この時点で追加処理をやる必要があるかチェック
             if (addOptions.length == 0) {
@@ -150,7 +153,7 @@ module.exports = {
             interaction.editReply(`${addOptions}コマンドを登録します．`);
 
             //この状態でaddoptionsとregisterSet[serverIndex].registerCommandsを連結すればいいはず
-            registerSet[serverIndex].registerCommands = registerSet[serverIndex].registerCommands.concat(addOptions);
+            registerSet[guildID].registerCommands = registerSet[guildID].registerCommands.concat(addOptions);
 
             //単に毎回FileSyncしたくなかったというのもある
             fs.writeFileSync(
@@ -158,9 +161,19 @@ module.exports = {
                 JSON.stringify(registerSet, undefined, 4),
                 "utf-8"
             );
-            if (process.platform == "linux") {
-                const stdout = execSync('node register.js');
-            }
+
+            const commandList = Array.from(
+                new Set(
+                    optionalCommands.concat(
+                        additionalCommands.filter(item => registerSet[guildID].registerCommands.includes(item.name))
+                    )
+                )
+            );
+            console.log(`add ${addOptions}`)
+            interaction.guild.commands.set(commandList);
+            // if (process.platform == "linux") {
+            //     const stdout = execSync('node register.js');
+            // }
             return;
         } else {
             return await interaction.editReply("addは各サーバ管理者限定のコマンドのため，実行できません");

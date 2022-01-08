@@ -87,32 +87,28 @@ function statusMessageGen(vcCount, guildSize) {
 //新規にサーバに参加した際の処理
 async function onGuildCreate(guild) {
     console.log(`Create ${guild.name} ${guild.id}`);
-    const serverIndex = registerSet.findIndex((v) => v.id === guild.id);
+    // const serverIndex = registerSet.findIndex((v) => v.id === guild.id);
 
-    //何かの事故で鯖IDに重複が無ければ，基本となるコマンド群を登録する
-    if (serverIndex == -1) {
+    //基本形1ブロックを追加して
+    registerSet[guild.id] = {
+        "name": guild.name,
+        "registerCommands": []
+    };
 
-        //基本形1ブロックを追加して
-        registerSet[registerSet.length] = {
-            "name": guild.name,
-            "id": guild.id,
-            "registerCommands": []
-        };
+    //ファイルに書き込み
+    fs.writeFileSync(
+        path.resolve(__dirname, "../commands.json"),
+        JSON.stringify(registerSet, undefined, 4),
+        "utf-8"
+    );
+    console.log("create default commands");
 
-        //ファイルに書き込み
-        fs.writeFileSync(
-            path.resolve(__dirname, "../commands.json"),
-            JSON.stringify(registerSet, undefined, 4),
-            "utf-8"
-        );
-        console.log("create default commands");
-
-        //開発機がwinで実機がラズパイのため悲しみのif文
-        if (process.platform == "linux") {
-            const stdout = execSync('node register.js');
-            console.log("created");
-        }
+    //開発機がwinで実機がラズパイのため悲しみのif文
+    if (process.platform == "linux") {
+        const stdout = execSync('node register.js');
+        console.log("created");
     }
+
     const embed = new MessageEmbed()
         .setTitle('新規利用ありがとうございます．')
         .setColor('#0000ff')
@@ -132,7 +128,6 @@ async function onGuildCreate(guild) {
         );
 
     return guild.systemChannel.send({ embeds: [embed] });
-    // return guild.systemChannel.send("新規利用ありがとうございます．基本的なコマンドを本サーバに追加しました．拡張コマンドについては/addを使用して確認してください．");
 }
 
 //************************************************************************************ */
@@ -140,27 +135,22 @@ async function onGuildCreate(guild) {
 //サーバから退出したり，サーバが爆散したりしたときの処理
 async function onGuildDelete(guild) {
     console.log(`Delete ${guild.name} ${guild.id}`);
-    const serverIndex = registerSet.findIndex((v) => v.id === guild.id);
 
-    //一応json内を検索はする．基本あるはず...
-    if (serverIndex != -1) {
+    //消す
+    registerSet.splice(guild.id, 1);
 
-        //消す
-        registerSet.splice(serverIndex, 1);
+    //書き込み
+    fs.writeFileSync(
+        path.resolve(__dirname, "../commands.json"),
+        JSON.stringify(registerSet, undefined, 4),
+        "utf-8"
+    );
+    console.log("delete default commands");
 
-        //書き込み
-        fs.writeFileSync(
-            path.resolve(__dirname, "../commands.json"),
-            JSON.stringify(registerSet, undefined, 4),
-            "utf-8"
-        );
-        console.log("delete default commands");
-
-        //悲しみのif
-        if (process.platform == "linux") {
-            const stdout = execSync('node register.js');
-            console.log("deleted");
-        }
+    //悲しみのif
+    if (process.platform == "linux") {
+        const stdout = execSync('node register.js');
+        console.log("deleted");
     }
     return;
 }
@@ -188,10 +178,11 @@ client.on('ready', () => {
         const reportChannel = client.channels.cache.get(tokens.reportingChannel);
         const now = Date.now();
         const vcMessage = statusMessageGen(getVoiceConnections().size, client.guilds.cache.size);
-        const tempStdout = execSync('vcgencmd measure_temp');
-        const memStdout = execSync('free');
-        reportChannel.send(`${now}\n${vcMessage}\n${tempStdout}\n${memStdout}`);
-
+        if (process.platform == "linux") {
+            const tempStdout = execSync('vcgencmd measure_temp');
+            const memStdout = execSync('free');
+            reportChannel.send(`${now}\n${vcMessage}\n${tempStdout}\n${memStdout}`);
+        }
     }, 1000 * 60 * 60);
 });
 

@@ -62,7 +62,9 @@ for (const file of commandFiles) {
     }
 }
 
+
 async function main() {
+    console.log("REG");
     client.application = new ClientApplication(client, {});
     await client.application.fetch();
 
@@ -72,23 +74,23 @@ async function main() {
     console.log(`global : registration succeed!`);
 
     //(commands.jsonに登録されている)サーバの数だけforループ
-    for (let i = 0; i < registerSet.length; i = (i + 1) | 0) {
+    for (let id of Object.keys(registerSet)) {
 
         //optional系はbaseの拡張であるため全サーバに実装する．additional系と連結して一応重複排除しておく
         // console.log(additionalCommands);
         const commandList = Array.from(
             new Set(
                 optionalCommands.concat(
-                    additionalCommands.filter(item => registerSet[i].registerCommands.includes(item.name))
+                    additionalCommands.filter(item => registerSet[id].registerCommands.includes(item.name))
                 )
             )
         );
         // console.log(commandList);
 
         //guildコマンドとして登録
-        await register(client, commandList, registerSet[i].id);
+        await register(client, commandList, id);
         console.log(commandList);
-        console.log(`${registerSet[i].name} : registration succeed!`);
+        console.log(`${registerSet[id].name} : registration succeed!`);
     };
 }
 main().catch(err => console.error(err));
