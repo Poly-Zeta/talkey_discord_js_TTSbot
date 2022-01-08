@@ -15,8 +15,6 @@ module.exports = {
             const reply = `†┏┛${interaction.options.get("text").value}┗┓†`;
             // const reply = "†┏┛墓┗┓†";
             return interaction.reply(reply);
-        } else if (subCommand == "help") {
-            return interaction.reply("工事中");
         } else {
             return interaction.reply("エラー");
         }

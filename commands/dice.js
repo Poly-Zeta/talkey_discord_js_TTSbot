@@ -50,11 +50,7 @@ module.exports = {
                     return interaction.reply("aまたはbの形が指定外のため，計算できませんでした．");
                 }
             }
-        }
-        else if (subCommand == "help") {
-            return interaction.reply("工事中");
-        }
-        else {
+        } else {
             return interaction.reply("エラー");
         }
     }

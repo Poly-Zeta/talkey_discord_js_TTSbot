@@ -20,12 +20,6 @@ module.exports = {
                     }
                 ]
             },
-            {
-                type: "SUB_COMMAND",
-                name: "help",
-                description: "コマンドのヘルプ",
-                required: false
-            }
         ]
     },
     async execute(interaction) {
@@ -39,8 +33,6 @@ module.exports = {
             const stdout = execSync(`echo-sd ${interaction.options.get("text").value}`);
             const reply = stdout.toString();
             return interaction.reply(reply);
-        } else if (subCommand == "help") {
-            return interaction.reply("工事中");
         } else {
             return interaction.reply("エラー");
         }

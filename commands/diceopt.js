@@ -29,12 +29,6 @@ module.exports = {
                         min_value: 0
                     }
                 ]
-            },
-            {
-                type: "SUB_COMMAND",
-                name: "help",
-                description: "ヘルプを表示",
-                required: false,
             }
         ]
     },
@@ -76,11 +70,7 @@ module.exports = {
                     return interaction.reply("aまたはbの形が指定外のため，計算できませんでした．");
                 }
             }
-        }
-        else if (subCommand == "help") {
-            return interaction.reply("工事中");
-        }
-        else {
+        } else {
             return interaction.reply("エラー");
         }
     }
