@@ -1,5 +1,15 @@
 const { NoSubscriberBehavior, joinVoiceChannel, getVoiceConnection, createAudioPlayer } = require("@discordjs/voice");
 const { addGuildToMap } = require('../functions/audioMap.js');
+const { MessageEmbed } = require('discord.js');
+
+var fs = require('fs');
+var path = require('path');
+
+var tokens = JSON.parse(
+    fs.readFileSync(
+        path.resolve(__dirname, "../../tokens.json")
+    )
+);
 
 module.exports = {
     attr: "base",
@@ -38,7 +48,23 @@ module.exports = {
         }
         //全部違ったら接続
         else {
-            const replyMessage = "vcに接続します. 2022/01/07 21:48 ボイチャ同時読み上げできるようになったはず，んで相変わらずバグや動作停止が起きると思います．適宜連絡ください．";
+            const embed = new MessageEmbed()
+                .setTitle('ボイスチャンネルに参加します')
+                .setColor('#0000ff')
+                .addFields(
+                    {
+                        name: "使い方",
+                        value: "ボイスチャットに参加している間は，/talkコマンドでの書き込みを読み上げます．"
+                    },
+                    {
+                        name: "広告",
+                        value: `アプデ情報や質問等はここから: ${tokens.officialServerURL}`
+                    },
+                    {
+                        name: "告知",
+                        value: "2022/01/07 21:48 ボイチャ同時読み上げできるようになったはず，んで相変わらずバグや動作停止が起きると思います．適宜連絡ください．"
+                    }
+                );
             const connection = joinVoiceChannel({
                 guildId: guild.id,
                 channelId: memberVC.id,
@@ -48,7 +74,8 @@ module.exports = {
             const player = createAudioPlayer({ behaviors: { noSubscriber: NoSubscriberBehavior.Pause, } });
             connection.subscribe(player);
             addGuildToMap(guild.id, memberVC.id, connection, player);
-            return interaction.reply(replyMessage);
+            return interaction.reply({ embeds: [embed] });
+            // return interaction.reply(replyMessage);
         }
     }
 }

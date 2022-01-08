@@ -1,4 +1,4 @@
-const { execSync, spawn } = require('child_process');
+const { execSync } = require('child_process');
 
 module.exports = {
     attr: "base",

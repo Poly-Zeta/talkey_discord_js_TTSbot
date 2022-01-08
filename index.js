@@ -68,7 +68,7 @@ async function onVoiceStateUpdate(oldState, newState) {
             console.log("auto-disconnect");
             botConnection.destroy();
             deleteGuildToMap(guild.id);
-            const replyMessage = "退出します．";
+            const replyMessage = "自動退出します．";
             return oldState.guild.systemChannel.send(replyMessage);
         }
         return;
@@ -183,6 +183,16 @@ client.on('ready', () => {
         'Plattform:': process.platform + '|' + process.arch
     });
     client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
+    client.channels.cache.get(tokens.bootNotifyChannel).send('起動しました．');
+    setInterval(() => {
+        const reportChannel = client.channels.cache.get(tokens.reportingChannel);
+        const now = Date.now();
+        const vcMessage = statusMessageGen(getVoiceConnections().size, client.guilds.cache.size);
+        const tempStdout = execSync('vcgencmd measure_temp');
+        const memStdout = execSync('free');
+        reportChannel.send(`${now}\n${vcMessage}\n${tempStdout}\n${memStdout}`);
+
+    }, 1000 * 60 * 60);
 });
 
 client.on("interactionCreate", interaction => onInteraction(interaction).catch(err => console.error(err)));
