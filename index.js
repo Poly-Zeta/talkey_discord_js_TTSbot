@@ -3,7 +3,7 @@ const { generateDependencyReport, getVoiceConnection, getVoiceConnections } = re
 console.log(generateDependencyReport());
 const Discord = require("discord.js");
 const { MessageEmbed } = require('discord.js');
-const { deleteGuildToMap } = require('./functions/audioMap.js');
+const { getGuildMap, addGuildToMap, moveVoiceChannel, deleteGuildToMap } = require('./functions/audioMap.js');
 
 const client = new Discord.Client({
     intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES"],
@@ -12,6 +12,7 @@ const { execSync } = require('child_process');
 
 var fs = require('fs');
 var path = require('path');
+const { channel } = require("diagnostics_channel");
 
 //************************************************************************************ */
 //json読み込み系
@@ -54,16 +55,33 @@ async function onInteraction(interaction) {
 //************************************************************************************ */
 //vcのステータスアップデート時
 async function onVoiceStateUpdate(oldState, newState) {
-    console.log(oldState.channelId, newState.channelId);
-    // console.log(getVoiceConnections().size);
-
+    console.log(oldState.channelId, newState.channelId, (oldState.member.id == tokens.myID), (newState.member.id == tokens.myID));
     client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
 
-    const botConnection = getVoiceConnection(oldState.guild.id);
+    //oldでもnewでも変わらないやつ
+    const memberId = oldState.member.id;
     const guild = await client.guilds.fetch(oldState.guild.id);
-    const vc = await guild.channels.fetch(oldState.channelId);
-    if (vc.members != null) {
-        //メンバーがvcから抜けた際，vc残り人数が1で自分自身だったら自身もvcから抜ける
+
+    //old:null,new:null->イベントにならない
+    //old:null,new:xxxx->vcに参加っぽい
+    //old:xxxx,new:null->vcから離脱っぽい
+    //old:xxxx,new:xxxx->ミュートのオンオフや移動
+
+    //自身に関係無い場合
+    if (memberId != tokens.myID) {
+        console.log("user event");
+        //ユーザのイベントについては，vcが空になった場合のみ反応したい
+        //->botは留まっている(はず)なので，oldStateの情報から判断できる
+
+        const botConnection = getVoiceConnection(oldState.guild.id);
+        const vc = await guild.channels.fetch(oldState.channelId);
+
+        //oldのvcにまだ
+        if (!vc.members) {
+            console.log("join");
+            return;
+        }
+        //vc残り人数が1以上で，残っている人数からbotを省いたら0人だったら自身もvcから抜ける
         if (vc.members.size >= 1 && vc.members.filter(member => !member.user.bot).size == 0) {
             console.log("auto-disconnect");
             botConnection.destroy();
@@ -72,10 +90,51 @@ async function onVoiceStateUpdate(oldState, newState) {
             return oldState.guild.systemChannel.send(replyMessage);
         }
         return;
-    } else {
-        console.log("JOIN");
+    }
+
+    //自身のステータスに変更があり，oldだけがnull->joinコマンド
+    if (oldState.channelId === null) {
+        console.log("i connect");
         return;
     }
+
+    //自身のステータスに変更があり，oldがnullでないブロック
+    //newがnull->何かしらの手段で退出
+    if (newState.channelId === null) {
+        console.log("i disconnect");
+
+        //queueMapに残っていたら消す
+        if (!getGuildMap(guild.id)) {
+            deleteGuildToMap(guild.id);
+            const botConnection = getVoiceConnection(oldState.guild.id);
+            botConnection.destroy();
+        }
+        return;
+    }
+
+    //ここまで来ている場合，移動やミュートをされているはず
+
+    //new側に人がいるかを確認する用
+    const vc = await guild.channels.fetch(newState.channelId);
+
+    //ミュート/解除
+    if (newState.channelId === oldState.channelId) {
+        console.log("mute or unmute");
+        return;
+    }
+
+    //移動先が空の場合->自動退室
+    if (vc.members.size >= 1 && vc.members.filter(member => !member.user.bot).size == 0) {
+        const botConnection = getVoiceConnection(newState.guild.id);
+        console.log("auto-disconnect");
+        botConnection.destroy();
+        deleteGuildToMap(guild.id);
+        const replyMessage = "自動退出します．";
+        return oldState.guild.systemChannel.send(replyMessage);
+    }
+
+    //移動先に人がいる場合->音声再生マップを書き換え
+    return await moveVoiceChannel(guild, guild.id, oldState.channel, newState.channel);
 }
 
 function statusMessageGen(vcCount, guildSize) {

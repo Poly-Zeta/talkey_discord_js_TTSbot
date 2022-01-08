@@ -1,4 +1,4 @@
-const { entersState, createAudioResource, StreamType, AudioPlayerStatus } = require("@discordjs/voice");
+const { entersState, createAudioResource, StreamType, AudioPlayerStatus, joinVoiceChannel, getVoiceConnection } = require("@discordjs/voice");
 //queue処理のお試し
 //以下の改造
 //https://zenn.dev/s7/articles/86511eb5089fb6c05599
@@ -11,18 +11,57 @@ const queueMap = new Map();
 //https://www.gesource.jp/weblog/?p=8228
 const { spawn } = require('child_process');
 
+async function getGuildMap(guildId) {
+    return queueMap.get(guildId);
+}
+
 async function addGuildToMap(guildId, voiceChannelId, connection, player) {
+    const beforeSize = queueMap.size;
     queueMap.set(guildId, {
         voiceChannelId,
         speakQueue: [],
         connection,
         player
     });
+    console.log(queueMap.size)
+    // console.log(`add ${queueMap.get(guildId)}`);
+    console.log(`add before:${beforeSize}->after:${queueMap.size}`);
+    return;
+}
+
+async function moveVoiceChannel(guild, guildId, oldChannel, newChannel) {
+    const beforeSize = queueMap.size;
+    const mapBefore = queueMap.get(guildId);
+    console.log(`move before ${mapBefore.voiceChannelId}`);
+    console.log("================movestart================");
+
+    const botConnection = getVoiceConnection(guildId);
+    botConnection.destroy();
+
+    const connection = joinVoiceChannel({
+        guildId: guildId,
+        channelId: newChannel.id,
+        adapterCreator: guild.voiceAdapterCreator,
+        selfMute: false,
+    });
+    const newPlayer = mapBefore.player;
+    connection.subscribe(newPlayer);
+
+    deleteGuildToMap(guildId);
+    addGuildToMap(guildId, newChannel.id, connection, newPlayer);
+
+    console.log("================moveend================");
+
+    const mapAfter = queueMap.get(guildId);
+    console.log(`move after ${mapAfter.voiceChannelId}`);
+    console.log(`before:${beforeSize}->after:${queueMap.size}`);
     return;
 }
 
 async function deleteGuildToMap(guildId) {
+    const beforeSize = queueMap.size;
     queueMap.delete(guildId);
+    console.log(`delete before:${beforeSize}->after:${queueMap.size}`);
     return;
 }
 
@@ -52,7 +91,7 @@ async function playGuildAudio(guildId) {
         );
     } else {
         playResource = createAudioResource(
-            "D:\\Users\\poly_Z\\Music\\splat10s\\batteryfull_01.wav",
+            "D:\\Users\\poly_Z\\Music\\buppigaaan.wav",
             {
                 inputType: StreamType.Arbitrary
             }
@@ -71,7 +110,9 @@ async function playGuildAudio(guildId) {
 };
 
 module.exports = {
+    getGuildMap,
     addGuildToMap,
+    moveVoiceChannel,
     deleteGuildToMap,
     addAudioToMapQueue
 }
