@@ -250,7 +250,7 @@ client.on('ready', () => {
     }, 1000 * 60 * 60);
 });
 
-async function onmessage(message) {
+async function onMessage(message) {
     //  /ttsList join 等で，読み上げ対象鯖のリストにユーザidを登録する
     //そのうえでmessageが送られた時，
     //1.botがvcに参加している
@@ -269,7 +269,7 @@ client.on("interactionCreate", interaction => onInteraction(interaction).catch(e
 client.on("voiceStateUpdate", (oldState, newState) => onVoiceStateUpdate(oldState, newState).catch(err => console.error(err)));
 client.on('guildCreate', guild => onGuildCreate(guild).catch(err => console.error(err)));
 client.on('guildDelete', guild => onGuildDelete(guild).catch(err => console.error(err)));
-client.on('messageCreate', message => onmessage(message).catch(err => console.error(err)));
+client.on('messageCreate', message => onMessage(message).catch(err => console.error(err)));
 
 client.login(tokens.bot).catch(err => {
     console.error(err);
