@@ -12,11 +12,21 @@ const queueMap = new Map();
 const { spawn } = require('child_process');
 
 async function getGuildMap(guildId) {
-    return queueMap.get(guildId);
+    // console.log("queueMap.keys()", queueMap.keys());
+    // console.log("guildId", guildId);
+    // console.log("queueMap.get(guildId)", queueMap.get(guildId));
+    const guildMap = queueMap.get(guildId);
+    if (guildMap === undefined) {
+        return;
+    }
+    // console.log("guildmap", guildMap);
+    // console.log("guildMap.memberId", guildMap.memberId);
+    return guildMap;
 }
 
 async function addMember(guildId, newMemberId) {
     const serverQueue = queueMap.get(guildId);
+    console.log(serverQueue.memberId);
     serverQueue.memberId.push(newMemberId);
     console.log(`add member guild:${guildId} , member:${serverQueue.memberId.length}`);
     return;
@@ -34,7 +44,7 @@ async function addGuildToMap(guildId, voiceChannelId, connection, player) {
     queueMap.set(guildId, {
         voiceChannelId,
         speakQueue: [],
-        memberId: {},
+        memberId: [],
         connection,
         player
     });

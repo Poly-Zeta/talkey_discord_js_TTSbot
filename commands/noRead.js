@@ -1,7 +1,7 @@
 const { sendMessage } = require('../functions/sendMessage.js');
 
 module.exports = {
-    attr: "base",
+    attr: "option",
     data: {
         name: "noread",
         description: "このコマンドを使用すると，ttsListに登録済みのユーザでもbotに読み上げられない",

@@ -46,7 +46,7 @@ for (const file of commandFiles) {
 //************************************************************************************ */
 //interactionイベント時
 async function onInteraction(interaction) {
-    console.log(interaction);
+    // console.log(interaction);
     if (!interaction.isCommand()) {
         return;
     }
@@ -110,7 +110,7 @@ async function onVoiceStateUpdate(oldState, newState) {
         console.log("i disconnect");
 
         //queueMapに残っていたら消す
-        if (!getGuildMap(guild.id)) {
+        if (getGuildMap(guild.id) != null) {
             deleteGuildToMap(guild.id);
             const botConnection = getVoiceConnection(oldState.guild.id);
             botConnection.destroy();
@@ -259,40 +259,55 @@ client.on('ready', () => {
 async function onMessage(message) {
     //  /ttsList join 等で，読み上げ対象鯖のリストにユーザidを登録する
     //そのうえでmessageが送られた時，
-    //1.messageのInteractionがnullである
-    //2.message.guildIdが読み上げ対象鯖のリストに存在する
+    //1.message.guildIdが読み上げ対象鯖のリストに存在する
+    //2.鯖データの読み上げ対象者リストが空でない
     //3.message.author.idがその中のデータにある
-    //4.botがvcに参加している
+    //4.messageのInteractionがnullである
+    //5.botがvcに参加している
     //の1~4がそろえば読み上げる
+    // console.log(message.content);
 
     //1
-    console.log(message.content);
-    if (message.interaction != null) {
-        console.log("autotts interaction!=null");
-        return;
-    }
-
-    //2
-    const guildData = getGuildMap(message.guildId);
+    const guildData = await getGuildMap(message.guildId);
     if (!guildData) {
         console.log("autotts guild==null");
         return;
     }
 
-    //3
+    //2
+    // console.log("index:guildData", guildData);
+    // console.log("index:guildData.memberId", guildData.memberId);
     const memberIdList = guildData.memberId;
+    // console.log(memberIdList);
+    if (memberIdList === undefined) {
+        console.log("autotts memberIdList===undefined");
+        return;
+    }
+
+    //3
+    // console.log(memberIdList[message.author.id]);
+    // if (!memberIdList[message.author.id]) {
+    //     console.log("autotts user is not include");
+    //     return;
+    // }
     if (!memberIdList.includes(message.author.id)) {
         console.log("autotts user is not include");
         return;
     }
 
     //4
+    if (message.interaction != null) {
+        console.log("autotts interaction!=null");
+        return;
+    }
+
+    //5
     const botConnection = getVoiceConnection(message.guildId);
     if (botConnection == undefined) {
         return;
     }
 
-    await talkFunc(message.guild, message.channelId, message.content);
+    await talkFunc(message);
     return;
 }
 
