@@ -4,6 +4,7 @@ console.log(generateDependencyReport());
 const Discord = require("discord.js");
 const { MessageEmbed } = require('discord.js');
 const { getGuildMap, addGuildToMap, moveVoiceChannel, deleteGuildToMap } = require('./functions/audioMap.js');
+const { talkFunc } = require('./functions/talkFunc.js');
 
 const client = new Discord.Client({
     intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES"],
@@ -56,6 +57,10 @@ async function onInteraction(interaction) {
 //************************************************************************************ */
 //vcのステータスアップデート時
 async function onVoiceStateUpdate(oldState, newState) {
+    const botConnection = getVoiceConnection(oldState.guild.id);
+    if (botConnection == undefined) {
+        return;
+    }
     console.log(oldState.channelId, newState.channelId, (oldState.member.id == tokens.myID), (newState.member.id == tokens.myID));
     client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
 
@@ -74,7 +79,7 @@ async function onVoiceStateUpdate(oldState, newState) {
         //ユーザのイベントについては，vcが空になった場合のみ反応したい
         //->botは留まっている(はず)なので，oldStateの情報から判断できる
 
-        const botConnection = getVoiceConnection(oldState.guild.id);
+        // const botConnection = getVoiceConnection(oldState.guild.id);
         const vc = await guild.channels.fetch(oldState.channelId);
 
         //oldのvcにまだ
@@ -87,7 +92,7 @@ async function onVoiceStateUpdate(oldState, newState) {
             console.log("auto-disconnect");
             botConnection.destroy();
             deleteGuildToMap(guild.id);
-            const replyMessage = "自動退出します．";
+            const replyMessage = "ボイスチャットが空になりました．自動退出します．";
             return oldState.guild.systemChannel.send(replyMessage);
         }
         return;
@@ -130,11 +135,12 @@ async function onVoiceStateUpdate(oldState, newState) {
         console.log("auto-disconnect");
         botConnection.destroy();
         deleteGuildToMap(guild.id);
-        const replyMessage = "自動退出します．";
+        const replyMessage = "空のボイスチャットへの移動を検知しました．自動退出します．";
         return oldState.guild.systemChannel.send(replyMessage);
     }
 
     //移動先に人がいる場合->音声再生マップを書き換え
+    guild.systemChannel.send("botの移動を検知しました．接続データを変更します．\nまた，お手数ですがbotの移動は/bye->/joinで行ってください．");
     return await moveVoiceChannel(guild, guild.id, oldState.channel, newState.channel);
 }
 
@@ -253,15 +259,40 @@ client.on('ready', () => {
 async function onMessage(message) {
     //  /ttsList join 等で，読み上げ対象鯖のリストにユーザidを登録する
     //そのうえでmessageが送られた時，
-    //1.botがvcに参加している
-    //2.messageのInteractionがnullである
-    //3.message.guildIdが読み上げ対象鯖のリストに存在する
-    //4.message.author.idがその中のデータにある
+    //1.messageのInteractionがnullである
+    //2.message.guildIdが読み上げ対象鯖のリストに存在する
+    //3.message.author.idがその中のデータにある
+    //4.botがvcに参加している
     //の1~4がそろえば読み上げる
 
-    //工事中
+    //1
     console.log(message.content);
-    if (message.interaction === null) { return; }
+    if (message.interaction != null) {
+        console.log("autotts interaction!=null");
+        return;
+    }
+
+    //2
+    const guildData = getGuildMap(message.guildId);
+    if (!guildData) {
+        console.log("autotts guild==null");
+        return;
+    }
+
+    //3
+    const memberIdList = guildData.memberId;
+    if (!memberIdList.includes(message.author.id)) {
+        console.log("autotts user is not include");
+        return;
+    }
+
+    //4
+    const botConnection = getVoiceConnection(message.guildId);
+    if (botConnection == undefined) {
+        return;
+    }
+
+    await talkFunc(message.guild, message.channelId, message.content);
     return;
 }
 
