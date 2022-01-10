@@ -279,18 +279,14 @@ async function onMessage(message) {
     // console.log("index:guildData.memberId", guildData.memberId);
     const memberIdList = guildData.memberId;
     // console.log(memberIdList);
-    if (memberIdList === undefined) {
-        console.log("autotts memberIdList===undefined");
+    if (Object.keys(memberIdList).length == 0) {
+        console.log("autotts memberIdList==0");
         return;
     }
 
     //3
-    // console.log(memberIdList[message.author.id]);
-    // if (!memberIdList[message.author.id]) {
-    //     console.log("autotts user is not include");
-    //     return;
-    // }
-    if (!memberIdList.includes(message.author.id)) {
+    console.log(memberIdList[message.author.id]);
+    if (memberIdList[message.author.id] == null) {
         console.log("autotts user is not include");
         return;
     }

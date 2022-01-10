@@ -24,18 +24,18 @@ async function getGuildMap(guildId) {
     return guildMap;
 }
 
-async function addMember(guildId, newMemberId) {
+async function addMember(guildId, newMemberId, newMemberName) {
     const serverQueue = queueMap.get(guildId);
     console.log(serverQueue.memberId);
-    serverQueue.memberId.push(newMemberId);
-    console.log(`add member guild:${guildId} , member:${serverQueue.memberId.length}`);
+    serverQueue.memberId[newMemberId] = { name: newMemberName };
+    console.log(`add member guild:${guildId} , member:${serverQueue.memberId.size}, member:${Object.keys(serverQueue.memberId).length}`);
     return;
 }
 
 async function deleteMember(guildId, deleteMemberId) {
     const serverQueue = queueMap.get(guildId);
-    serverQueue.memberId.pop(deleteMemberId);
-    console.log(`delete member guild:${guildId} , member:${serverQueue.memberId.length}`);
+    delete serverQueue.memberId[deleteMemberId];
+    console.log(`delete member guild:${guildId} , member:${Object.keys(serverQueue.memberId).length}`);
     return;
 }
 
@@ -44,7 +44,7 @@ async function addGuildToMap(guildId, voiceChannelId, connection, player) {
     queueMap.set(guildId, {
         voiceChannelId,
         speakQueue: [],
-        memberId: [],
+        memberId: {},
         connection,
         player
     });
@@ -143,3 +143,4 @@ module.exports = {
     deleteGuildToMap,
     addAudioToMapQueue
 }
+
