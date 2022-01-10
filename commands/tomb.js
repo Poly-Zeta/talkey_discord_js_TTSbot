@@ -1,8 +1,24 @@
 module.exports = {
-    attr: "base",
+    attr: "option",
     data: {
         name: "tomb",
-        description: "某AAを表示する"
+        description: "某AAを表示する",
+        options: [
+            {
+                type: "SUB_COMMAND",
+                name: "insert",
+                description: "表示する内容を一部差し換える",
+                required: false,
+                options: [
+                    {
+                        type: "STRING",
+                        name: "text",
+                        description: "差し替え先",
+                        required: true
+                    }
+                ]
+            }
+        ]
     },
     async execute(interaction) {
         const subCommand = interaction.options.getSubcommand(false);

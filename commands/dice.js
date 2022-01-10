@@ -1,55 +1,77 @@
 const { ndnDiceRoll } = require('../functions/diceroll.js');
 
 module.exports = {
-    attr: "base",
+    attr: "additional",
     data: {
         name: "dice",
-        description: "1D100",
+        description: "ダイスロール",
         options: [
             {
-                type: "STRING",
+                type: "SUB_COMMAND",
+                name: "1d100",
+                description: "1D100を実行",
+            },
+            {
+                type: "SUB_COMMAND",
                 name: "ndn",
-                description: "nDnの形で入力",
-                required: false,
+                description: "nDnを実行",
+                options: [
+                    {
+                        type: "STRING",
+                        name: "ndn",
+                        description: "nDnあるいはndn，nは3桁以内の数値",
+                        required: true
+                    }
+                ]
+            },
+            {
+                type: "SUB_COMMAND",
+                name: "option",
+                description: "「a面ダイスをb個回す」のa,bをそれぞれ入力",
+                options: [
+                    {
+                        type: "INTEGER",
+                        name: "a",
+                        description: "ダイスの面数(1~999)",
+                        required: true,
+                        max_value: 999,
+                        min_value: 0
+                    },
+                    {
+                        type: "INTEGER",
+                        name: "b",
+                        description: "ダイスの個数(1~999)",
+                        required: true,
+                        max_value: 999,
+                        min_value: 0
+                    }
+                ]
             }
         ]
     },
     async execute(interaction) {
         const nDnPattern = /^\d{1,3}D{1}\d{1,3}$/gi;
-        const nPattern = /^\d{1,3}$/gi;
+        // const nPattern = /^\d{1,3}$/gi;
         const splitDPattern = /D{1}/gi;
 
         const subCommand = interaction.options.getSubcommand(false);
-        const ndnOption = interaction.options.get("ndn", false);
         console.log(subCommand);
         //オプション無し
         console.log(ndnOption);
-        if (subCommand == null) {
-            if (ndnOption == null) {
-                return interaction.reply(`1D100->${ndnDiceRoll(1, 100)}`);
+        if (subCommand == "1d100") {
+            return interaction.reply(`1D100->${ndnDiceRoll(1, 100)}`);
+        } if (subCommand == "ndn") {
+            const ndn = interaction.options.get("ndn").value;
+            if (nDnPattern.test(ndn)) {
+                const arg = ndn.split(splitDPattern);
+                return interaction.reply(`${ndn}->${ndnDiceRoll(+arg[0], +arg[1])}`);
             } else {
-                if (nDnPattern.test(ndnOption.value)) {
-                    const arg = ndnOption.value.split(splitDPattern);
-                    return interaction.reply(`${ndnOption.value}->${ndnDiceRoll(+arg[0], +arg[1])}`);
-                } else {
-                    return interaction.reply(`1D100->${ndnDiceRoll(1, 100)}`);
-                }
+                return interaction.reply(`引数が指定の形式に一致していないため，1D100を実行しました．\n1D100->${ndnDiceRoll(1, 100)}`);
             }
-        }
-        else if (subCommand == "option") {
+        } else if (subCommand == "option") {
             const first = interaction.options.get("a").value;
             const second = interaction.options.get("b").value;
-            //firstが3桁の数値
-            if (first.match(nPattern)) {
-                //secondが3桁の数値
-                if (second.match(nPattern)) {
-                    return interaction.reply(`${first}D${second}->${ndnDiceRoll(first, second)}`);
-                }
-                //secondが3桁の数値でない
-                else {
-                    return interaction.reply("aまたはbの形が指定外のため，計算できませんでした．");
-                }
-            }
+            return interaction.reply(`${first}D${second}->${ndnDiceRoll(first, second)}`);
         } else {
             return interaction.reply("エラー");
         }

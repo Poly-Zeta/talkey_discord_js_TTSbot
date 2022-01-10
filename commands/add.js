@@ -30,9 +30,11 @@ for (const file of commandFiles) {
     //beniコマンドは完全身内ネタなので無条件に登録されたら困る
     const commandsToBeExcluded = ["reboot", "beni"];
 
+    //全サーバに自動導入させたいけど，即時反映させたいのでguildコマンドとして登録するものはここ
     if (command.attr == "option") {
         optionalCommands[optionalCommands.length] = command.data;
     }
+
     //attrが条件通りで，除外設定にも引っかかってないならリスイン
     else if (command.attr == "additional" && !commandsToBeExcluded.includes(command.data.name)) {
         console.log("added");

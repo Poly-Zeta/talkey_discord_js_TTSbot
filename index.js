@@ -7,6 +7,7 @@ const { getGuildMap, addGuildToMap, moveVoiceChannel, deleteGuildToMap } = requi
 
 const client = new Discord.Client({
     intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES"],
+    // intents: ["GUILDS", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES"],
 });
 const { execSync } = require('child_process');
 
@@ -44,7 +45,7 @@ for (const file of commandFiles) {
 //************************************************************************************ */
 //interactionイベント時
 async function onInteraction(interaction) {
-    console.log(interaction.isCommand);
+    console.log(interaction);
     if (!interaction.isCommand()) {
         return;
     }
@@ -114,14 +115,14 @@ async function onVoiceStateUpdate(oldState, newState) {
 
     //ここまで来ている場合，移動やミュートをされているはず
 
-    //new側に人がいるかを確認する用
-    const vc = await guild.channels.fetch(newState.channelId);
-
     //ミュート/解除
     if (newState.channelId === oldState.channelId) {
         console.log("mute or unmute");
         return;
     }
+
+    //new側に人がいるかを確認する用
+    const vc = await guild.channels.fetch(newState.channelId);
 
     //移動先が空の場合->自動退室
     if (vc.members.size >= 1 && vc.members.filter(member => !member.user.bot).size == 0) {
@@ -146,6 +147,8 @@ function statusMessageGen(vcCount, guildSize) {
 //新規にサーバに参加した際の処理
 async function onGuildCreate(guild) {
     console.log(`Create ${guild.name} ${guild.id}`);
+    client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
+    client.channels.cache.get(tokens.newGuildNotifyChannel).send('新規にサーバに参加しました．');
     // const serverIndex = registerSet.findIndex((v) => v.id === guild.id);
 
     //基本形1ブロックを追加して
@@ -194,6 +197,8 @@ async function onGuildCreate(guild) {
 //サーバから退出したり，サーバが爆散したりしたときの処理
 async function onGuildDelete(guild) {
     console.log(`Delete ${guild.name} ${guild.id}`);
+    client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
+    client.channels.cache.get(tokens.newGuildNotifyChannel).send('サーバから退出しました．');
 
     //消す
     delete registerSet[guild.id];
@@ -245,10 +250,26 @@ client.on('ready', () => {
     }, 1000 * 60 * 60);
 });
 
+async function onmessage(message) {
+    //  /ttsList join 等で，読み上げ対象鯖のリストにユーザidを登録する
+    //そのうえでmessageが送られた時，
+    //1.botがvcに参加している
+    //2.messageのInteractionがnullである
+    //3.message.guildIdが読み上げ対象鯖のリストに存在する
+    //4.message.author.idがその中のデータにある
+    //の1~4がそろえば読み上げる
+
+    //工事中
+    console.log(message.content);
+    if (message.interaction === null) { return; }
+    return;
+}
+
 client.on("interactionCreate", interaction => onInteraction(interaction).catch(err => console.error(err)));
 client.on("voiceStateUpdate", (oldState, newState) => onVoiceStateUpdate(oldState, newState).catch(err => console.error(err)));
 client.on('guildCreate', guild => onGuildCreate(guild).catch(err => console.error(err)));
 client.on('guildDelete', guild => onGuildDelete(guild).catch(err => console.error(err)));
+client.on('messageCreate', message => onmessage(message).catch(err => console.error(err)));
 
 client.login(tokens.bot).catch(err => {
     console.error(err);
