@@ -3,7 +3,7 @@ const { addMember, deleteMember, getGuildMap } = require('../functions/audioMap.
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
-    attr: "option",
+    attr: "base",
     data: {
         name: "ttslist",
         description: "/talkを使わなくても読み上げされるユーザのリストを編集する．botがサーバ内のボイスチャットに参加している必要がある．",
