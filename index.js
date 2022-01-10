@@ -277,16 +277,16 @@ async function onMessage(message) {
     //2
     // console.log("index:guildData", guildData);
     // console.log("index:guildData.memberId", guildData.memberId);
-    const memberIdList = guildData.memberId;
+    const memberIdMap = guildData.memberId;
     // console.log(memberIdList);
-    if (Object.keys(memberIdList).length == 0) {
+    if (memberIdMap.size == 0) {
         console.log("autotts memberIdList==0");
         return;
     }
 
     //3
-    console.log(memberIdList[message.author.id]);
-    if (memberIdList[message.author.id] == null) {
+    console.log(memberIdMap.get(message.author.id));
+    if (!memberIdMap.has(message.author.id)) {
         console.log("autotts user is not include");
         return;
     }
@@ -306,6 +306,57 @@ async function onMessage(message) {
     await talkFunc(message);
     return;
 }
+
+// async function onMessage(message) {
+//     //  /ttsList join 等で，読み上げ対象鯖のリストにユーザidを登録する
+//     //そのうえでmessageが送られた時，
+//     //1.message.guildIdが読み上げ対象鯖のリストに存在する
+//     //2.鯖データの読み上げ対象者リストが空でない
+//     //3.message.author.idがその中のデータにある
+//     //4.messageのInteractionがnullである
+//     //5.botがvcに参加している
+//     //の1~4がそろえば読み上げる
+//     // console.log(message.content);
+
+//     //1
+//     const guildData = await getGuildMap(message.guildId);
+//     if (!guildData) {
+//         console.log("autotts guild==null");
+//         return;
+//     }
+
+//     //2
+//     // console.log("index:guildData", guildData);
+//     // console.log("index:guildData.memberId", guildData.memberId);
+//     const memberIdList = guildData.memberId;
+//     // console.log(memberIdList);
+//     if (Object.keys(memberIdList).length == 0) {
+//         console.log("autotts memberIdList==0");
+//         return;
+//     }
+
+//     //3
+//     console.log(memberIdList[message.author.id]);
+//     if (memberIdList[message.author.id] == null) {
+//         console.log("autotts user is not include");
+//         return;
+//     }
+
+//     //4
+//     if (message.interaction != null) {
+//         console.log("autotts interaction!=null");
+//         return;
+//     }
+
+//     //5
+//     const botConnection = getVoiceConnection(message.guildId);
+//     if (botConnection == undefined) {
+//         return;
+//     }
+
+//     await talkFunc(message);
+//     return;
+// }
 
 client.on("interactionCreate", interaction => onInteraction(interaction).catch(err => console.error(err)));
 client.on("voiceStateUpdate", (oldState, newState) => onVoiceStateUpdate(oldState, newState).catch(err => console.error(err)));

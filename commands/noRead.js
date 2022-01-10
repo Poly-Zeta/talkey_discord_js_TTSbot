@@ -8,7 +8,8 @@ module.exports = {
         options: [
             {
                 type: "STRING",
-                name: "text",
+                name: "message",
+                required: true,
                 description: "テキストチャットにはこの引数の内容が送信される",
             }
         ]

@@ -23,28 +23,47 @@ async function getGuildMap(guildId) {
     // console.log("guildMap.memberId", guildMap.memberId);
     return guildMap;
 }
-
 async function addMember(guildId, newMemberId, newMemberName) {
     const serverQueue = queueMap.get(guildId);
     console.log(serverQueue.memberId);
-    serverQueue.memberId[newMemberId] = { name: newMemberName };
-    console.log(`add member guild:${guildId} , member:${serverQueue.memberId.size}, member:${Object.keys(serverQueue.memberId).length}`);
+    const id = newMemberId;
+    const name = newMemberName;
+    // serverQueue.memberId.set(newMemberId, { name: newMemberName });
+    serverQueue.memberId.set(id, name);
+    // serverQueue.memberId[newMemberId] = newMemberName;
+    console.log(`add member guild:${guildId} , member:${serverQueue.memberId.size}`);
+    console.log(serverQueue.memberId);
+    console.log(serverQueue.memberId[newMemberId]);
     return;
 }
 
 async function deleteMember(guildId, deleteMemberId) {
     const serverQueue = queueMap.get(guildId);
-    delete serverQueue.memberId[deleteMemberId];
+    serverQueue.memberId.delete(deleteMemberId);
     console.log(`delete member guild:${guildId} , member:${Object.keys(serverQueue.memberId).length}`);
     return;
 }
+// async function addMember(guildId, newMemberId, newMemberName) {
+//     const serverQueue = queueMap.get(guildId);
+//     console.log(serverQueue.memberId);
+//     serverQueue.memberId[newMemberId] = { name: newMemberName };
+//     console.log(`add member guild:${guildId} , member:${serverQueue.memberId.size}, member:${Object.keys(serverQueue.memberId).length}`);
+//     return;
+// }
+
+// async function deleteMember(guildId, deleteMemberId) {
+//     const serverQueue = queueMap.get(guildId);
+//     delete serverQueue.memberId[deleteMemberId];
+//     console.log(`delete member guild:${guildId} , member:${Object.keys(serverQueue.memberId).length}`);
+//     return;
+// }
 
 async function addGuildToMap(guildId, voiceChannelId, connection, player) {
     const beforeSize = queueMap.size;
     queueMap.set(guildId, {
         voiceChannelId,
         speakQueue: [],
-        memberId: {},
+        memberId: new Map(),
         connection,
         player
     });
