@@ -98,6 +98,7 @@ async function onVoiceStateUpdate(oldState, newState) {
 
     //移動か？
     if (oldVcId !== newVcId && oldVc !== null && newVc !== null) {
+        console.log("move");
         //移動はbotのものか？
         if (updateMember.id === tokens.myID) {
             console.log("i move");
@@ -110,6 +111,7 @@ async function onVoiceStateUpdate(oldState, newState) {
                 const replyMessage = "ボイスチャットが空のため，退出します．";
                 return newGuild.systemChannel.send(replyMessage);
             } else {
+                console.log("move execute");
                 //同じギルド内で，空でないvcに移動した．前のギルドからデータを移行
                 newGuild.systemChannel.send("botの移動を検知しました．接続データを変更します．\nまた，お手数ですがbotの移動は/bye->/joinで行ってください．");
                 return await moveVoiceChannel(newGuild, newGuild.id, oldVc, newVc);
@@ -119,6 +121,7 @@ async function onVoiceStateUpdate(oldState, newState) {
             console.log("user move");
             //移動前のvcにbotは居るか？
             if (oldBotConnection != undefined) {
+                console.log("oldvc now");
                 //移動前のvcは空か？
                 if (oldState.member.size >= 1 && oldState.members.filter(member => !member.user.bot).size == 0) {
                     //空なので自動退室
@@ -128,12 +131,14 @@ async function onVoiceStateUpdate(oldState, newState) {
                     const replyMessage = "ボイスチャットが空のため，退出します．";
                     return oldGuild.systemChannel.send(replyMessage);
                 } else {
+                    console.log("user disconnect");
                     //空でないので，残っている人に退室メッセージ
                     return addAudioToMapQueue(oldGuild.id, `${updateMember.displayName}さんが通話から退出しました`, "f1");
                 }
             }
             //移動先のvcにbotは居るか？
             if (newBotConnection != undefined) {
+                console.log("newvc now");
                 //移動先のvcは空か？
                 if (newState.member.size >= 1 && newState.members.filter(member => !member.user.bot).size == 0) {
                     //空なので自動退室
@@ -144,6 +149,7 @@ async function onVoiceStateUpdate(oldState, newState) {
                     return newGuild.systemChannel.send(replyMessage);
                 } else {
                     //空でないので，vc内の人に退室メッセージ
+                    console.log("user connect");
                     return addAudioToMapQueue(newGuild.id, `${updateMember.displayName}さんが通話に参加しました`, "f1");
                 }
             }
