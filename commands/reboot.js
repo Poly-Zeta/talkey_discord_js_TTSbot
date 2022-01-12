@@ -35,7 +35,7 @@ module.exports = {
         // );
         //*********************************************************
         
-        //これでいけるのか？？？
+        //これでいけるんか...
         const stdout = execSync("git pull origin master");
 
         return interaction.reply("再起動します");
