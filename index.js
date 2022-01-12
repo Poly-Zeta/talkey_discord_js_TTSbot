@@ -265,30 +265,27 @@ async function onMessage(message) {
     //1
     const guildData = await getGuildMap(message.guildId);
     if (!guildData) {
-        console.log("autotts guild==null");
+        // console.log("autotts guild==null");
         return;
     }
 
     //2
-    // console.log("index:guildData", guildData);
-    // console.log("index:guildData.memberId", guildData.memberId);
     const memberIdMap = guildData.memberId;
-    // console.log(memberIdList);
     if (memberIdMap.size == 0) {
-        console.log("autotts memberIdList==0");
+        // console.log("autotts memberIdList==0");
         return;
     }
 
     //3
-    console.log(memberIdMap.get(message.author.id));
+    // console.log(memberIdMap.get(message.author.id));
     if (!memberIdMap.has(message.author.id)) {
-        console.log("autotts user is not include");
+        // console.log("autotts user is not include");
         return;
     }
 
     //4
     if (message.interaction != null) {
-        console.log("autotts interaction!=null");
+        // console.log("autotts interaction!=null");
         return;
     }
 
