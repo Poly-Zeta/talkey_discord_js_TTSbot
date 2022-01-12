@@ -28,6 +28,11 @@ module.exports = {
     async execute(interaction) {
         const botConnection = getVoiceConnection(interaction.guild.id);
 
+        if (!interaction.member.voice.channel) {
+            const replyMessage = "コマンド送信者がボイスチャットに参加している必要があります．";
+            return interaction.reply(replyMessage);
+        }
+
         if (botConnection == undefined) {
             const replyMessage = "botがボイスチャットに参加している必要があります．/joinでbotを参加させることができます．";
             return interaction.reply(replyMessage);
