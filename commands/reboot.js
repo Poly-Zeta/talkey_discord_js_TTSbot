@@ -1,13 +1,7 @@
-const { execSync, spawn } = require('child_process');
+const { execSync } = require('child_process');
 
 var fs = require('fs');
 var path = require('path');
-
-// var statConfig = JSON.parse(
-//     fs.readFileSync(
-//         path.resolve(__dirname, "../../stat.json")
-//     )
-// );
 
 var tokens = JSON.parse(
     fs.readFileSync(
@@ -19,25 +13,42 @@ module.exports = {
     attr: "additional",
     data: {
         name: "reboot",
-        description: "緊急用"
+        description: "再起動",
+        options: [
+            {
+                type: "SUB_COMMAND",
+                name: "default",
+                description: "再起動",
+            },
+            {
+                type: "SUB_COMMAND",
+                name: "upgrade",
+                description: "gitから最新版をpull",
+            },
+        ]
     },
     async execute(interaction) {
         if (interaction.member.id != tokens.PZID) {
             return interaction.reply("作者限定のコマンド");
         }
-        
-        //*********************************************************
-        // statConfig.reboot += 1;
-        // fs.writeFileSync(
-        //     path.resolve(__dirname, "../stat.json"),
-        //     JSON.stringify(statConfig, undefined, 4),
-        //     "utf-8"
-        // );
-        //*********************************************************
-        
-        //これでいけるんか...
-        const stdout = execSync("git pull origin master");
+        const subCommand = interaction.options.getSubcommand(false);
+        console.log(subCommand);
 
-        return interaction.reply("再起動します");
+        await interaction.reply(`${subCommand} : 再起動します`);
+
+        if (subCommand == "default") {
+            statConfig.reboot += 1;
+            fs.writeFileSync(
+                path.resolve(__dirname, "../stat.json"),
+                JSON.stringify(statConfig, undefined, 4),
+                "utf-8"
+            );
+        }
+
+        if (subCommand == "upgrade") {
+            const stdout = execSync("git pull origin master");
+        }
+
+        return;
     }
 }
