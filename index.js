@@ -129,11 +129,11 @@ async function onVoiceStateUpdate(oldState, newState) {
                     oldBotConnection.destroy();
                     deleteGuildToMap(oldGuild.id);
                     const replyMessage = "ボイスチャットが空のため，退出します．";
-                    return oldGuild.systemChannel.send(replyMessage);
+                    oldGuild.systemChannel.send(replyMessage);
                 } else {
                     console.log("user disconnect");
                     //空でないので，残っている人に退室メッセージ
-                    return addAudioToMapQueue(oldGuild.id, `${updateMember.displayName}さんが通話から退出しました`, "f1");
+                    addAudioToMapQueue(oldGuild.id, `${updateMember.displayName}さんが通話から退出しました`, "f1");
                 }
             }
             //移動先のvcにbotは居るか？
@@ -146,15 +146,15 @@ async function onVoiceStateUpdate(oldState, newState) {
                     newBotConnection.destroy();
                     deleteGuildToMap(newGuild.id);
                     const replyMessage = "ボイスチャットが空のため，退出します．";
-                    return newGuild.systemChannel.send(replyMessage);
+                    newGuild.systemChannel.send(replyMessage);
                 } else {
                     //空でないので，vc内の人に退室メッセージ
                     console.log("user connect");
-                    return addAudioToMapQueue(newGuild.id, `${updateMember.displayName}さんが通話に参加しました`, "f1");
+                    addAudioToMapQueue(newGuild.id, `${updateMember.displayName}さんが通話に参加しました`, "f1");
                 }
             }
+            return;
         }
-        return;
     }
 
     //誰かの参加を検出
