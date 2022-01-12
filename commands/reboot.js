@@ -25,15 +25,15 @@ module.exports = {
         if (interaction.member.id != tokens.PZID) {
             return interaction.reply("作者限定のコマンド");
         }
-        *********************************************************
+        
+        //*********************************************************
         // statConfig.reboot += 1;
         // fs.writeFileSync(
         //     path.resolve(__dirname, "../stat.json"),
         //     JSON.stringify(statConfig, undefined, 4),
         //     "utf-8"
         // );
-
-        *********************************************************
+        //*********************************************************
         
         //これでいけるのか？？？
         const stdout = execSync("git pull origin master");
