@@ -1,4 +1,3 @@
-// const { joinVoiceChannel, entersState, VoiceConnectionStatus, createAudioResource, StreamType, createAudioPlayer, AudioPlayerStatus, NoSubscriberBehavior, generateDependencyReport, getVoiceConnection } = require("@discordjs/voice");
 const { generateDependencyReport, getVoiceConnection, getVoiceConnections, VoiceConnection } = require("@discordjs/voice");
 console.log(generateDependencyReport());
 const Discord = require("discord.js");
@@ -8,13 +7,11 @@ const { talkFunc } = require('./functions/talkFunc.js');
 
 const client = new Discord.Client({
     intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES"],
-    // intents: ["GUILDS", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES"],
 });
 const { execSync } = require('child_process');
 
 var fs = require('fs');
 var path = require('path');
-const { channel } = require("diagnostics_channel");
 
 //************************************************************************************ */
 //json読み込み系
