@@ -129,7 +129,7 @@ async function onVoiceStateUpdate(oldState, newState) {
                     return oldGuild.systemChannel.send(replyMessage);
                 } else {
                     //空でないので，残っている人に退室メッセージ
-                    return addAudioToMapQueue(oldGuild.id, `${updateMember.name}さんが通話から退出しました`, "f1");
+                    return addAudioToMapQueue(oldGuild.id, `${updateMember.nickname}さんが通話から退出しました`, "f1");
                 }
             }
             //移動先のvcにbotは居るか？
@@ -144,7 +144,7 @@ async function onVoiceStateUpdate(oldState, newState) {
                     return newGuild.systemChannel.send(replyMessage);
                 } else {
                     //空でないので，vc内の人に退室メッセージ
-                    return addAudioToMapQueue(newGuild.id, `${updateMember.name}さんが通話に参加しました`, "f1");
+                    return addAudioToMapQueue(newGuild.id, `${updateMember.nickname}さんが通話に参加しました`, "f1");
                 }
             }
         }
@@ -158,7 +158,7 @@ async function onVoiceStateUpdate(oldState, newState) {
         } else {
             console.log("user join");
             if (newBotConnection != undefined) {
-                addAudioToMapQueue(newGuild.id, `${updateMember.name}さんが通話に参加しました`, "f1");
+                addAudioToMapQueue(newGuild.id, `${updateMember.nickname}さんが通話に参加しました`, "f1");
             }
         }
         return;
@@ -182,7 +182,7 @@ async function onVoiceStateUpdate(oldState, newState) {
                     return oldGuild.systemChannel.send(replyMessage);
                 } else {
                     //空でないので，残っている人に退室メッセージ
-                    return addAudioToMapQueue(oldGuild.id, `${updateMember.name}さんが通話から退出しました`, "f1");
+                    return addAudioToMapQueue(oldGuild.id, `${updateMember.nickname}さんが通話から退出しました`, "f1");
                 }
             }
         }
