@@ -63,6 +63,8 @@ async function onVoiceStateUpdate(oldState, newState) {
     const newGuild = newState.guild;
     const oldVc = oldState.channel;
     const newVc = newState.channel;
+    const oldVcId = oldState.channelId;
+    const newVcId = newState.channelId;
     const oldBotConnection = getVoiceConnection(oldGuild.id);
     const newBotConnection = getVoiceConnection(newGuild.id);
 
@@ -77,7 +79,7 @@ async function onVoiceStateUpdate(oldState, newState) {
     //old:xxxx,new:xxxx->ミュートのオンオフや移動
 
     //誰かのミュートを検出->特にアクションはない
-    if (oldVc.id === newVc.id && oldVc !== null) {
+    if (oldVcId === newVcId && oldVc !== null) {
         if (updateMember.id === tokens.myID) {
             console.log("i mute or unmute");
         } else {
@@ -95,7 +97,7 @@ async function onVoiceStateUpdate(oldState, newState) {
     //N:bot移動を関数に投げる
 
     //移動か？
-    if (oldVc.id !== newVc.id && oldVc !== null && newVc !== null) {
+    if (oldVcId !== newVcId && oldVc !== null && newVc !== null) {
         //移動はbotのものか？
         if (updateMember.id === tokens.myID) {
             console.log("i move");
