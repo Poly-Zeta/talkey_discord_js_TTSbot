@@ -144,7 +144,7 @@ async function onVoiceStateUpdate(oldState, newState) {
                         //空でないのでユーザの退出
                         console.log("user disconnect");
                         //ユーザの退室したvcはbotの居るものと同じか？
-                        if () {
+                        if (oldVcId == oldGuildBotVcData.voiceChannelId) {
                             addAudioToMapQueue(oldGuild.id, `${updateMember.displayName}さんが通話から退出しました`, "f1");
                         }
                     }
