@@ -54,9 +54,8 @@ async function onInteraction(interaction) {
 //************************************************************************************ */
 //vcのステータスアップデート時
 async function onVoiceStateUpdate(oldState, newState) {
-    console.log(oldState.channelId, newState.channelId, (oldState.member.id == tokens.myID), (newState.member.id == tokens.myID));
+    // console.log(oldState.channelId, newState.channelId, (oldState.member.id == tokens.myID), (newState.member.id == tokens.myID));
     client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
-
 
     const updateMember = oldState.member;
     const oldGuild = oldState.guild;
@@ -67,6 +66,8 @@ async function onVoiceStateUpdate(oldState, newState) {
     const newVcId = newState.channelId;
     const oldBotConnection = getVoiceConnection(oldGuild.id);
     const newBotConnection = getVoiceConnection(newGuild.id);
+    const oldGuildBotVcData = await getGuildMap(oldGuild.id);
+    const newGuildBotVcData = await getGuildMap(newGuild.id);
 
     // const guild = await client.guilds.fetch(oldState.guild.id);
     // const oldvc = await guild.channels.fetch(oldState.channelId);
@@ -101,6 +102,7 @@ async function onVoiceStateUpdate(oldState, newState) {
         console.log("move");
         //移動はbotのものか？
         if (updateMember.id === tokens.myID) {
+            //botの移動は，ひとつのサーバでしか行われないはず
             console.log("i move");
             //移動先は空か？
             if (newState.member.size >= 1 && newState.members.filter(member => !member.user.bot).size == 0) {
@@ -119,29 +121,41 @@ async function onVoiceStateUpdate(oldState, newState) {
         } else {
             //ユーザの移動
             console.log("user move");
-            //移動前のvcにbotは居るか？
-            if (oldBotConnection != undefined) {
-                console.log("oldvc now");
-                //移動前のvcは空か？
-                if (oldState.member.size >= 1 && oldState.members.filter(member => !member.user.bot).size == 0) {
-                    //空なので自動退室
-                    console.log("auto-disconnect");
-                    oldBotConnection.destroy();
-                    deleteGuildToMap(oldGuild.id);
-                    const replyMessage = "ボイスチャットが空のため，退出します．";
-                    oldGuild.systemChannel.send(replyMessage);
-                } else {
-                    console.log("user disconnect");
-                    //空でないので，残っている人に退室メッセージ
-                    addAudioToMapQueue(oldGuild.id, `${updateMember.displayName}さんが通話から退出しました`, "f1");
+            //この移動はひとつのサーバで行われたか？
+            if (newGuild.id === oldGuild.id) {
+                //ユーザがひとつのサーバ内でvcを移動した．botはどちらか1箇所に居る/居ない
+                //botは居る？
+                if (oldBotConnection != undefined) {
+
                 }
+            } else {
+                //移動前のサーバにbotは居たか？
+                if (oldBotConnection != undefined) {
+                    console.log("oldvc now");
+                    //移動前のvcは空か？
+                    if (oldState.member.size >= 1 && oldState.members.filter(member => !member.user.bot).size == 0) {
+                        //空なので自動退室
+                        console.log("auto-disconnect");
+                        oldBotConnection.destroy();
+                        deleteGuildToMap(oldGuild.id);
+                        const replyMessage = "ボイスチャットが空のため，退出します．";
+                        oldGuild.systemChannel.send(replyMessage);
+                    } else {
+                        //空でないのでユーザの退出
+                        console.log("user disconnect");
+                        //ユーザの退室したvcはbotの居るものと同じか？
+                        if () {
+                            addAudioToMapQueue(oldGuild.id, `${updateMember.displayName}さんが通話から退出しました`, "f1");
+                        }
+                    }
+                }
+                //移動先のサーバにbotは居るか？
+                if (newBotConnection != undefined && newVcId == newGuildBotVcData.voiceChannelId) {
+                    console.log("user connect");
+                    addAudioToMapQueue(newGuild.id, `${updateMember.displayName}さんが通話に参加しました`, "f1");
+                }
+                return;
             }
-            //移動先のvcにbotは居るか？
-            if (newBotConnection != undefined && newGuild.id !== oldGuild.id) {
-                console.log("user connect");
-                addAudioToMapQueue(newGuild.id, `${updateMember.displayName}さんが通話に参加しました`, "f1");
-            }
-            return;
         }
     }
 
@@ -159,7 +173,7 @@ async function onVoiceStateUpdate(oldState, newState) {
             }
         } else {
             console.log("user join");
-            if (newBotConnection != undefined) {
+            if (newBotConnection != undefined && newVcId == newGuildBotVcData.voiceChannelId) {
                 addAudioToMapQueue(newGuild.id, `${updateMember.displayName}さんが通話に参加しました`, "f1");
             }
         }
@@ -183,8 +197,12 @@ async function onVoiceStateUpdate(oldState, newState) {
                     const replyMessage = "ボイスチャットが空のため，退出します．";
                     return oldGuild.systemChannel.send(replyMessage);
                 } else {
-                    //空でないので，残っている人に退室メッセージ
-                    return addAudioToMapQueue(oldGuild.id, `${updateMember.displayName}さんが通話から退出しました`, "f1");
+                    //空でない
+                    //ユーザが退出したチャンネルにbotがいるか？
+                    if (oldVcId == oldGuildBotVcData.voiceChannelId) {
+                        //残っている人に退室メッセージ
+                        return addAudioToMapQueue(oldGuild.id, `${updateMember.displayName}さんが通話から退出しました`, "f1");
+                    }
                 }
             }
         }
