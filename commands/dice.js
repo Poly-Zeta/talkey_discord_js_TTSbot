@@ -57,7 +57,6 @@ module.exports = {
         const subCommand = interaction.options.getSubcommand(false);
         console.log(subCommand);
         //オプション無し
-        console.log(ndnOption);
         if (subCommand == "1d100") {
             return interaction.reply(`1D100->${ndnDiceRoll(1, 100)}`);
         } if (subCommand == "ndn") {
