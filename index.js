@@ -137,21 +137,9 @@ async function onVoiceStateUpdate(oldState, newState) {
                 }
             }
             //移動先のvcにbotは居るか？
-            if (newBotConnection != undefined) {
-                console.log("newvc now");
-                //移動先のvcは空か？
-                if (newState.member.size >= 1 && newState.members.filter(member => !member.user.bot).size == 0) {
-                    //空なので自動退室
-                    console.log("auto-disconnect");
-                    newBotConnection.destroy();
-                    deleteGuildToMap(newGuild.id);
-                    const replyMessage = "ボイスチャットが空のため，退出します．";
-                    newGuild.systemChannel.send(replyMessage);
-                } else {
-                    //空でないので，vc内の人に退室メッセージ
-                    console.log("user connect");
-                    addAudioToMapQueue(newGuild.id, `${updateMember.displayName}さんが通話に参加しました`, "f1");
-                }
+            if (newBotConnection != undefined && newGuild.id !== oldGuild.id) {
+                console.log("user connect");
+                addAudioToMapQueue(newGuild.id, `${updateMember.displayName}さんが通話に参加しました`, "f1");
             }
             return;
         }
@@ -161,6 +149,14 @@ async function onVoiceStateUpdate(oldState, newState) {
     if (oldVc === null && newVc !== null) {
         if (updateMember.id === tokens.myID) {
             console.log("i join");
+            if (newState.member.size >= 1 && newState.members.filter(member => !member.user.bot).size == 0) {
+                //空なので自動退室
+                console.log("auto-disconnect");
+                newBotConnection.destroy();
+                deleteGuildToMap(newGuild.id);
+                const replyMessage = "ボイスチャットが空のため，退出します．";
+                newGuild.systemChannel.send(replyMessage);
+            }
         } else {
             console.log("user join");
             if (newBotConnection != undefined) {
