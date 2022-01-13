@@ -69,8 +69,10 @@ async function onVoiceStateUpdate(oldState, newState) {
     const oldGuildBotVcData = await getGuildMap(oldGuild.id);
     const newGuildBotVcData = await getGuildMap(newGuild.id);
 
+    console.log(oldState.channelId, newState.channelId, (oldState.member.id == tokens.myID), (newState.member.id == tokens.myID), oldGuild.id, newGuild.id);
+
     //確実に参加
-    if (oldGuild === null && newGuild !== null) {
+    if (oldVc === null && newVc !== null) {
         console.log("join");
         //ユーザの移動？
         if (updateMember.id !== tokens.myID) {
@@ -91,7 +93,7 @@ async function onVoiceStateUpdate(oldState, newState) {
     }
 
     //確実に退出
-    if (oldGuild !== null && newGuild === null) {
+    if (oldVc !== null && newVc === null) {
         console.log("disconnect");
         //ユーザの移動？
         if (updateMember.id !== tokens.myID) {
@@ -129,7 +131,7 @@ async function onVoiceStateUpdate(oldState, newState) {
     //不一致->ギルド間移動
 
     //同一ギルド内でのアクションについて
-    if (oldGuild.id === newGuild.id) {
+    if (oldGuild.id === newGuild.id && oldVc.id !== newVc.id) {
         console.log("same guild id");
         //ユーザのアクション？
         if (updateMember.id !== tokens.myID) {
