@@ -78,7 +78,8 @@ async function onVoiceStateUpdate(oldState, newState) {
         if (updateMember.id !== tokens.myID) {
             console.log("user join");
             //ユーザの参加したギルドにbotは居ない？->居なければ関係ないのでreturn
-            if (newBotConnection === null) { return; }
+            // console.log(newBotConnection);
+            if (newBotConnection === undefined) { return; }
 
             //ユーザの参加したギルドにbotは居る，ではユーザの参加したvcにbotは居る？
             if (newGuildBotVcData.voiceChannelId === newVcId) {
@@ -99,7 +100,7 @@ async function onVoiceStateUpdate(oldState, newState) {
         if (updateMember.id !== tokens.myID) {
             console.log("user disconnect");
             //ユーザの退出したギルドにbotは居ない？->居なければ関係ないのでreturn
-            if (oldBotConnection === null) { return; }
+            if (oldBotConnection === undefined) { return; }
 
             //ユーザの退出したギルドにbotは居る，ではユーザの退出したvcにbotは居る？
             if (oldGuildBotVcData.voiceChannelId === oldVcId) {
@@ -131,40 +132,36 @@ async function onVoiceStateUpdate(oldState, newState) {
     //不一致->ギルド間移動
 
     //同一ギルド内でのアクションについて
-    if (oldGuild.id === newGuild.id && oldVc.id !== newVc.id) {
+    if (oldGuild.id === newGuild.id) {
         console.log("same guild id");
+
+        if (oldVcId === newVcId) {
+            console.log("same vc,mute or unmute");
+            return;
+        }
         //ユーザのアクション？
         if (updateMember.id !== tokens.myID) {
             console.log("user action");
-            //ユーザのvc移動？
-            if (oldVcId !== newVcId) {
-                console.log("user move");
-                //ユーザがvcを離れる/入ると動いたので，離脱，退出通知/入室通知が必要
-                //botは接続してる？
-                if (oldBotConnection !== null) {
-                    console.log("im participating in");
-                    //oldのほうにbotが居る？
-                    if (oldGuildBotVcData.voiceChannelId === oldVcId) {
-                        console.log("old");
-                        //oldはその移動で空になった？
-                        if (oldVc.members.size >= 1 && oldVc.members.filter(member => !member.user.bot).size == 0) {
-                            console.log("auto-disconnect");
-                            oldBotConnection.destroy();
-                            deleteGuildToMap(oldGuild.id);
-                            return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
-                        }
-                        //空になってないので退出通知
-                        return addAudioToMapQueue(oldGuild.id, `${updateMember.displayName}さんが通話から退出しました`, "f1");
+            //ユーザがvcを離れる/入ると動いたので，離脱，退出通知/入室通知が必要
+            //botは接続してる？
+            if (oldBotConnection !== undefined) {
+                console.log("im participating in");
+                //oldのほうにbotが居る？
+                if (oldGuildBotVcData.voiceChannelId === oldVcId) {
+                    console.log("old");
+                    //oldはその移動で空になった？
+                    if (oldVc.members.size >= 1 && oldVc.members.filter(member => !member.user.bot).size == 0) {
+                        console.log("auto-disconnect");
+                        oldBotConnection.destroy();
+                        deleteGuildToMap(oldGuild.id);
+                        return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
                     }
-                    //ユーザの移動先vcにbotが居る状態なので入室通知
-                    return addAudioToMapQueue(newGuild.id, `${updateMember.displayName}さんが通話に参加しました`, "f1");
+                    //空になってないので退出通知
+                    return addAudioToMapQueue(oldGuild.id, `${updateMember.displayName}さんが通話から退出しました`, "f1");
                 }
-                //接続してないならreturn
-                return;
+                //ユーザの移動先vcにbotが居る状態なので入室通知
+                return addAudioToMapQueue(newGuild.id, `${updateMember.displayName}さんが通話に参加しました`, "f1");
             }
-
-            //ここに来た場合はユーザのミュート．関係ないのでreturn
-            console.log("user mute or unmute");
             return;
         }
 
@@ -195,7 +192,7 @@ async function onVoiceStateUpdate(oldState, newState) {
     console.log("different guild id");
     console.log("user move");
     //ここまで来たら，それぞれのvcにbotがいるか調べて処理
-    if (oldBotConnection !== null) {
+    if (oldBotConnection !== undefined) {
         //oldはその移動で空になった？
         if (oldVc.members.size >= 1 && oldVc.members.filter(member => !member.user.bot).size == 0) {
             console.log("auto-disconnect");
@@ -207,7 +204,7 @@ async function onVoiceStateUpdate(oldState, newState) {
         return addAudioToMapQueue(oldGuild.id, `${updateMember.displayName}さんが通話から退出しました`, "f1");
     }
 
-    if (newBotConnection !== null) {
+    if (newBotConnection !== undefined) {
         return addAudioToMapQueue(newGuild.id, `${updateMember.displayName}さんが通話に参加しました`, "f1");
     }
     return;
