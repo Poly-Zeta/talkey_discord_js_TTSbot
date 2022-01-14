@@ -1,4 +1,5 @@
-const { execSync, spawn } = require('child_process');
+const { execSync } = require('child_process');
+const { textOperator } = require('../functions/textOperator.js');
 
 module.exports = {
     attr: "additional",
@@ -27,6 +28,8 @@ module.exports = {
         ]
     },
     async execute(interaction) {
+        const regex2Byte = /[^\x01-\x7E\xA1-\xDF]/g;
+        const regex1Byte = /[\x01-\x7E\xA1-\xDF]/g;
         const subCommand = interaction.options.getSubcommand(false);
         console.log(subCommand);
         if (subCommand == "default") {
@@ -34,8 +37,12 @@ module.exports = {
             const reply = stdout.toString();
             return interaction.reply(reply);
         } else if (subCommand == "insert") {
-            const stdout = execSync(`echo-sd ${interaction.options.get("text").value}`);
-            const reply = stdout.toString();
+            let insertText = interaction.options.get("text").value;
+            const rep1 = insertText.replace(regex2Byte, 'あ');
+            const rep2 = rep1.replace(regex1Byte, 'a');
+            const stdout = execSync(`echo-sd ${rep2}`);
+            const reply = stdout.toString().replace(rep2, insertText);
+            // const reply = stdout.toString();
             return interaction.reply(reply);
         } else {
             return interaction.reply("エラー");

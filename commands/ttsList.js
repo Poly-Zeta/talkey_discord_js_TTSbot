@@ -9,21 +9,43 @@ module.exports = {
         description: "/talkを使わなくても読み上げされるユーザのリストを編集する．botがサーバ内のボイスチャットに参加している必要がある．",
         options: [
             {
-                type: "SUB_COMMAND",
-                name: "add",
-                description: "リストにコマンド送信者を登録する",
-            },
-            {
-                type: "SUB_COMMAND",
-                name: "delete",
-                description: "リストからコマンド送信者を除外する",
-            },
-            {
-                type: "SUB_COMMAND",
-                name: "status",
-                description: "リストの状態を確認する",
-            },
+                type: "STRING",
+                name: "option",
+                description: "add->コマンド実行者をリストに登録．delete->コマンド実行者をリストから削除．",
+                required: true,
+                choices: [
+                    {
+                        name: "add",
+                        value: "add"
+                    },
+                    {
+                        name: "delete",
+                        value: "delete"
+                    },
+                    {
+                        name: "status",
+                        value: "status"
+                    }
+                ],
+            }
         ]
+        // options: [
+        //     {
+        //         type: "SUB_COMMAND",
+        //         name: "add",
+        //         description: "リストにコマンド送信者を登録する",
+        //     },
+        //     {
+        //         type: "SUB_COMMAND",
+        //         name: "delete",
+        //         description: "リストからコマンド送信者を除外する",
+        //     },
+        //     {
+        //         type: "SUB_COMMAND",
+        //         name: "status",
+        //         description: "リストの状態を確認する",
+        //     },
+        // ]
     },
     async execute(interaction) {
         const botConnection = getVoiceConnection(interaction.guild.id);
@@ -44,10 +66,11 @@ module.exports = {
             return interaction.reply(replyMessage);
         }
 
-        const subCommand = interaction.options.getSubcommand(false);
+        // const subCommand = interaction.options.getSubcommand(false);
+        const subCommand = interaction.options.get("option").value;
         console.log(subCommand);
         const guildData = await getGuildMap(interaction.guild.id);
-        console.log(`ttslist:guildData.memberId:${guildData.memberId}`);
+        // console.log(`ttslist:guildData.memberId:${guildData.memberId}`);
         // console.log(`guildData[memberId]:${guildData[memberId]}`);
         // console.log(`guildData['memberId']:${guildData["memberId"]}`);
 
