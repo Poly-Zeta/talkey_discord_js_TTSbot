@@ -1,9 +1,11 @@
-const { generateDependencyReport, getVoiceConnection, getVoiceConnections, VoiceConnection } = require("@discordjs/voice");
+const { generateDependencyReport, getVoiceConnection, getVoiceConnections } = require("@discordjs/voice");
 console.log(generateDependencyReport());
 const Discord = require("discord.js");
 const { MessageEmbed } = require('discord.js');
 const { getGuildMap, addAudioToMapQueue, moveVoiceChannel, deleteGuildToMap } = require('./functions/audioMap.js');
 const { talkFunc } = require('./functions/talkFunc.js');
+const { addAutoSpeechCounter, output } = require('./functions/talkLog.js');
+const cron = require('node-cron')
 
 const client = new Discord.Client({
     intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES"],
@@ -69,45 +71,45 @@ async function onVoiceStateUpdate(oldState, newState) {
     const oldGuildBotVcData = await getGuildMap(oldGuild.id);
     const newGuildBotVcData = await getGuildMap(newGuild.id);
 
-    console.log(oldState.channelId, newState.channelId, (oldState.member.id == tokens.myID), (newState.member.id == tokens.myID), oldGuild.id, newGuild.id);
+    // console.log(oldState.channelId, newState.channelId, (oldState.member.id == tokens.myID), (newState.member.id == tokens.myID), oldGuild.id, newGuild.id);
 
     //確実に参加
     if (oldVc === null && newVc !== null) {
-        console.log("join");
+        // console.log("join");
         //ユーザの移動？
         if (updateMember.id !== tokens.myID) {
-            console.log("user join");
+            // console.log("user join");
             //ユーザの参加したギルドにbotは居ない？->居なければ関係ないのでreturn
             // console.log(newBotConnection);
             if (newBotConnection === undefined) { return; }
 
             //ユーザの参加したギルドにbotは居る，ではユーザの参加したvcにbotは居る？
             if (newGuildBotVcData.voiceChannelId === newVcId) {
-                console.log("im participating in");
+                // console.log("im participating in");
                 return addAudioToMapQueue(newGuild.id, `${updateMember.displayName}さんが通話に参加しました`, "f1");
             }
             return;
         } else {
-            console.log("i join");
+            // console.log("i join");
             return;
         }
     }
 
     //確実に退出
     if (oldVc !== null && newVc === null) {
-        console.log("disconnect");
+        // console.log("disconnect");
         //ユーザの移動？
         if (updateMember.id !== tokens.myID) {
-            console.log("user disconnect");
+            // console.log("user disconnect");
             //ユーザの退出したギルドにbotは居ない？->居なければ関係ないのでreturn
             if (oldBotConnection === undefined) { return; }
 
             //ユーザの退出したギルドにbotは居る，ではユーザの退出したvcにbotは居る？
             if (oldGuildBotVcData.voiceChannelId === oldVcId) {
-                console.log("im participating in");
+                // console.log("im participating in");
                 //そのvcは空になった？
                 if (oldVc.members.size >= 1 && oldVc.members.filter(member => !member.user.bot).size == 0) {
-                    console.log("auto-disconnect");
+                    // console.log("auto-disconnect");
                     oldBotConnection.destroy();
                     deleteGuildToMap(oldGuild.id);
                     return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
@@ -133,25 +135,25 @@ async function onVoiceStateUpdate(oldState, newState) {
 
     //同一ギルド内でのアクションについて
     if (oldGuild.id === newGuild.id) {
-        console.log("same guild id");
+        // console.log("same guild id");
 
         if (oldVcId === newVcId) {
-            console.log("same vc,mute or unmute");
+            // console.log("same vc,mute or unmute");
             return;
         }
         //ユーザのアクション？
         if (updateMember.id !== tokens.myID) {
-            console.log("user action");
+            // console.log("user action");
             //ユーザがvcを離れる/入ると動いたので，離脱，退出通知/入室通知が必要
             //botは接続してる？
             if (oldBotConnection !== undefined) {
-                console.log("im participating in");
+                // console.log("im participating in");
                 //oldのほうにbotが居る？
                 if (oldGuildBotVcData.voiceChannelId === oldVcId) {
-                    console.log("old");
+                    // console.log("old");
                     //oldはその移動で空になった？
                     if (oldVc.members.size >= 1 && oldVc.members.filter(member => !member.user.bot).size == 0) {
-                        console.log("auto-disconnect");
+                        // console.log("auto-disconnect");
                         oldBotConnection.destroy();
                         deleteGuildToMap(oldGuild.id);
                         return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
@@ -168,12 +170,12 @@ async function onVoiceStateUpdate(oldState, newState) {
         //ここに来た場合はbotの移動かミュート
         //移動？
         if (oldVcId !== newVcId) {
-            console.log("i move");
+            // console.log("i move");
             //移動先に人がいる場合/空のvcに突っ込まれた場合のどちらかで，接続データの変更/切断をする
 
             //移動先は空？
             if (newVc.members.size >= 1 && newVc.members.filter(member => !member.user.bot).size == 0) {
-                console.log("auto-disconnect");
+                // console.log("auto-disconnect");
                 newBotConnection.destroy();
                 deleteGuildToMap(newGuild.id);
                 return newGuild.systemChannel.send("空のボイスチャットに移動ました．自動退出します．");
@@ -184,18 +186,18 @@ async function onVoiceStateUpdate(oldState, newState) {
             return await moveVoiceChannel(oldGuild, oldGuild.id, oldVc, newVc);
         }
         //ここに来たらbotのミュート
-        console.log("i mute or unmute");
+        // console.log("i mute or unmute");
         return;
     }
 
     //ギルドをまたいだアクションについて
-    console.log("different guild id");
-    console.log("user move");
+    // console.log("different guild id");
+    // console.log("user move");
     //ここまで来たら，それぞれのvcにbotがいるか調べて処理
     if (oldBotConnection !== undefined) {
         //oldはその移動で空になった？
         if (oldVc.members.size >= 1 && oldVc.members.filter(member => !member.user.bot).size == 0) {
-            console.log("auto-disconnect");
+            // console.log("auto-disconnect");
             oldBotConnection.destroy();
             deleteGuildToMap(oldGuild.id);
             return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
@@ -310,7 +312,11 @@ client.on('ready', () => {
     });
     client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
     client.channels.cache.get(tokens.bootNotifyChannel).send('起動しました．');
-    setInterval(() => {
+    cron.schedule('0 * * * *', () => {
+        console.log('0分だよ')
+    })
+    cron.schedule('0 * * * *', () => {
+        // setInterval(() => {
         const reportChannel = client.channels.cache.get(tokens.reportingChannel);
         const now = Date.now();
         const vcMessage = statusMessageGen(getVoiceConnections().size, client.guilds.cache.size);
@@ -319,7 +325,9 @@ client.on('ready', () => {
             const memStdout = execSync('free');
             reportChannel.send(`${now}\n${vcMessage}\n${tempStdout}\n${memStdout}`);
         }
-    }, 1000 * 60 * 60);
+        output(now);
+        // }, 1000 * 60 * 60);
+    });
 });
 
 async function onMessage(message) {
@@ -366,6 +374,7 @@ async function onMessage(message) {
         return;
     }
 
+    addAutoSpeechCounter();
     await talkFunc(message);
     return;
 }

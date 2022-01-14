@@ -3,6 +3,7 @@ const { textOperator } = require('../functions/textOperator.js');
 const { getResponseofTalkAPI } = require('../functions/talkapi.js');
 const { getVoiceConnection } = require("@discordjs/voice");
 const { addAudioToMapQueue } = require('../functions/audioMap.js');
+const { addTalkCommandCounter } = require('../functions/talkLog.js');
 
 module.exports = {
     attr: "base",
@@ -55,6 +56,7 @@ module.exports = {
 
             //ボイチャに接続している場合は応答をf1ボイスにしてqueueに投げる
             if (botConnection != undefined) {
+                addTalkCommandCounter();
                 addAudioToMapQueue(interaction.guild.id, apiResponseText, "f1");
             }
             //応答をreplyで返す
@@ -63,6 +65,7 @@ module.exports = {
             console.log("chk3");
             //名前が無ければ，ボイチャに接続しているかを確認して入力をそのままf1ボイスでqueueに追加
             if (botConnection != undefined) {
+                addTalkCommandCounter();
                 addAudioToMapQueue(interaction.guild.id, readTxt, "f1");
             }
         }
