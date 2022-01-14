@@ -1,5 +1,4 @@
 const { execSync } = require('child_process');
-const { textOperator } = require('../functions/textOperator.js');
 
 module.exports = {
     attr: "additional",
