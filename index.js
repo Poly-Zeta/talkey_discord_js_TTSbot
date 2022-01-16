@@ -302,15 +302,17 @@ client.on('ready', () => {
     if (process.platform == "linux") {
         const stdout = execSync('node register.js');
     }
+    const guildNum = client.guilds.cache.size;
+    const members = client.guilds.cache.reduce((a, b) => a + b.memberCount, 0);
     console.table({
         'Bot User:': client.user.tag,
-        'Guild(s):': client.guilds.cache.size + 'Servers',
-        'Watching:': client.guilds.cache.reduce((a, b) => a + b.memberCount, 0) + 'Members',
+        'Guild(s):': guildNum + 'Servers',
+        'Watching:': members + 'Members',
         'Discord.js:': 'v' + require('discord.js').version,
         'Node.js:': process.version,
         'Plattform:': process.platform + '|' + process.arch
     });
-    client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
+    client.user.setActivity(statusMessageGen(getVoiceConnections().size, guildNum), { type: 'LISTENING' });
     client.channels.cache.get(tokens.bootNotifyChannel).send('起動しました．');
     cron.schedule('0 * * * *', () => {
         // setInterval(() => {
@@ -328,6 +330,15 @@ client.on('ready', () => {
 });
 
 async function onMessage(message) {
+    //token削除
+    //参考
+    //https://qiita.com/minecraftomato1/items/50fac64d500ea98941f4
+    if (message.content.match(/[a-zA-Z0-9]{23}.[a-zA-Z0-9]{6}/)) {
+        message.delete()
+            .then(() => message.channel.send("tokenを検出したため削除"))
+            .catch(e => message.channel.send(`エラー${e.message}`));
+        return;
+    }
     //  /ttsList join 等で，読み上げ対象鯖のリストにユーザidを登録する
     //そのうえでmessageが送られた時，
     //1.message.guildIdが読み上げ対象鯖のリストに存在する
