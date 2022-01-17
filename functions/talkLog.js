@@ -11,6 +11,9 @@ const autoSpeechCounter = {
 };
 
 async function output(nowtime) {
+    if (talkCommandCounter.score === 0 && autoSpeechCounter.score === 0) {
+        return;
+    }
     const data = [{ time: Date(nowtime), command: talkCommandCounter.score, auto: autoSpeechCounter.score }];
     console.log(data);
     const csvWriter = createCsvWriter({

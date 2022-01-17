@@ -261,6 +261,14 @@ async function onGuildCreate(guild) {
                 name: "拡張コマンド",
                 value: "サーバの管理者のみ，/addを使用することでコマンドを一部追加できます．"
             },
+            {
+                name: "音声合成プログラム",
+                value: "読み上げ用の音声データ生成にはAquesTalkPiを利用させていただいています．\nhttps://www.a-quest.com/products/aquestalkpi.html"
+            },
+            {
+                name: "困ったら",
+                value: `アプデ情報や質問等はここから: ${tokens.officialServerURL}`
+            }
         );
 
     return guild.systemChannel.send({ embeds: [embed] });

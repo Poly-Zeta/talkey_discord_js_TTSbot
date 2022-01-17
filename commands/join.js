@@ -61,6 +61,10 @@ module.exports = {
                         value: `アプデ情報や質問等はここから: ${tokens.officialServerURL}`
                     },
                     {
+                        name: "音声合成プログラム",
+                        value: "読み上げ用の音声データ生成にはAquesTalkPiを利用させていただいています．\nhttps://www.a-quest.com/products/aquestalkpi.html"
+                    },
+                    {
                         name: "告知",
                         value: "2022/01/11 /ttslistで，/talk無しでもメッセージの読み上げができるようになりました．バグまみれな疑惑あるので何かあったら連絡ください．"
                     }
