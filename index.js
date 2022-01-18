@@ -342,6 +342,7 @@ client.on('ready', () => {
             const guild = client.guilds.cache.get(elem);
             guild.systemChannel.send('一定時間読み上げ指示が無かったため，切断しました．');
         }
+        client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
     });
 });
 
