@@ -54,7 +54,7 @@ module.exports = {
                 .addFields(
                     {
                         name: "使い方",
-                        value: "ボイスチャットに参加している間は，/talkコマンドでの書き込みを読み上げます．"
+                        value: "ボイスチャットに参加している間は，/talk コマンドでの書き込みを読み上げます．\nまた，/ttslist add コマンドを使用することで，/talk コマンドの使用に関係なく常時読み上げさせることも出来ます．"
                     },
                     {
                         name: "広告",
@@ -62,11 +62,11 @@ module.exports = {
                     },
                     {
                         name: "音声合成プログラム",
-                        value: "読み上げ用の音声データ生成にはAquesTalkPiを利用させていただいています．\nhttps://www.a-quest.com/products/aquestalkpi.html"
+                        value: "読み上げ用音声データ生成にはAquesTalkPiを利用させて頂いています．\nhttps://www.a-quest.com/products/aquestalkpi.html"
                     },
                     {
                         name: "告知",
-                        value: "2022/01/11 /ttslistで，/talk無しでもメッセージの読み上げができるようになりました．バグまみれな疑惑あるので何かあったら連絡ください．"
+                        value: "2022/01/18 長時間読み上げ指示が無いと自動的に切断する機能のテスト中"
                     }
                 );
             const connection = joinVoiceChannel({

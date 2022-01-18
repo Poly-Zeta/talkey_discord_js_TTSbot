@@ -62,7 +62,7 @@ module.exports = {
 
         //異なるvcからコマンドを送ってきた場合
         if (botConnection.joinConfig.channelId != interaction.member.voice.channel.id) {
-            const replyMessage = "botと同じボイスチャットに参加していないユーザーは，botを退出させることができません．";
+            const replyMessage = "botと同じボイスチャットに参加していないユーザーは，このコマンドを使用できません．";
             return interaction.reply(replyMessage);
         }
 
@@ -86,7 +86,7 @@ module.exports = {
             // console.log(interaction.username);
             addMember(interaction.guild.id, interaction.user.id, interaction.user.username);
             // addMember(interaction.guild.id, interaction.user.id);
-            return interaction.reply(`${interaction.user.username}さんを読み上げ対象に追加しました．/ttslist statusでリストを確認できます．`);
+            return interaction.reply(`${interaction.user.username}さんを読み上げ対象に追加しました．/ttslist statusでリストを確認できます．\n読み上げさせずにテキストチャットへの書き込みをしたい場合は/noread コマンドを使用してください．`);
 
         } else if (subCommand == "delete") {
             if (guildData.memberId.size == 0) {

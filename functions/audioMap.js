@@ -6,21 +6,14 @@ const { entersState, createAudioResource, StreamType, AudioPlayerStatus, joinVoi
 
 const queueMap = new Map();
 
-// module.exports.queueMap=queueMap;
-
 //https://www.gesource.jp/weblog/?p=8228
 const { spawn } = require('child_process');
 
 async function getGuildMap(guildId) {
-    // console.log("queueMap.keys()", queueMap.keys());
-    // console.log("guildId", guildId);
-    // console.log("queueMap.get(guildId)", queueMap.get(guildId));
     const guildMap = queueMap.get(guildId);
     if (guildMap === undefined) {
         return;
     }
-    // console.log("guildmap", guildMap);
-    // console.log("guildMap.memberId", guildMap.memberId);
     return guildMap;
 }
 async function addMember(guildId, newMemberId, newMemberName) {
@@ -43,32 +36,19 @@ async function deleteMember(guildId, deleteMemberId) {
     console.log(`delete member guild:${guildId} , member:${Object.keys(serverQueue.memberId).length}`);
     return;
 }
-// async function addMember(guildId, newMemberId, newMemberName) {
-//     const serverQueue = queueMap.get(guildId);
-//     console.log(serverQueue.memberId);
-//     serverQueue.memberId[newMemberId] = { name: newMemberName };
-//     console.log(`add member guild:${guildId} , member:${serverQueue.memberId.size}, member:${Object.keys(serverQueue.memberId).length}`);
-//     return;
-// }
-
-// async function deleteMember(guildId, deleteMemberId) {
-//     const serverQueue = queueMap.get(guildId);
-//     delete serverQueue.memberId[deleteMemberId];
-//     console.log(`delete member guild:${guildId} , member:${Object.keys(serverQueue.memberId).length}`);
-//     return;
-// }
 
 async function addGuildToMap(guildId, voiceChannelId, connection, player) {
     const beforeSize = queueMap.size;
+    const timestump = Date.now();
     queueMap.set(guildId, {
         voiceChannelId,
         speakQueue: [],
         memberId: new Map(),
         connection,
-        player
+        player,
+        timestump
     });
     console.log(queueMap.size)
-    // console.log(`add ${queueMap.get(guildId)}`);
     console.log(`add before:${beforeSize}->after:${queueMap.size}`);
     return;
 }
@@ -113,12 +93,31 @@ async function addAudioToMapQueue(guildId, text, voiceOption) {
     const serverQueue = queueMap.get(guildId);
     const startlength = serverQueue.speakQueue.length;
     serverQueue.speakQueue.push({ text, voiceOption });
-    console.log(`queue length: ${serverQueue.speakQueue.length}`);
+    serverQueue.timestump = Date.now();
+    console.log(`queue length: ${serverQueue.speakQueue.length}, ${serverQueue.timestump}`);
     if (startlength == 0) {
         playGuildAudio(guildId);
     }
     return;
 };
+
+function scanQueueMap(now) {
+    const beforeSize = queueMap.size;
+    console.log(`auto delete before:${beforeSize}`);
+    const idList = [];
+    const threshold = 1000 * 60 * 60;
+    for (let [key, value] of queueMap.entries()) {
+        if (now - value.timestump > threshold) {
+            idList.push(key);
+        }
+    };
+    console.log(`${idList.length}`);
+    // for(const elem of idList){
+
+    //     queueMap.delete(elem);
+    // }
+    return idList;
+}
 
 async function playGuildAudio(guildId) {
     const guildData = queueMap.get(guildId);
@@ -160,6 +159,7 @@ module.exports = {
     addGuildToMap,
     moveVoiceChannel,
     deleteGuildToMap,
-    addAudioToMapQueue
+    addAudioToMapQueue,
+    scanQueueMap
 }
 

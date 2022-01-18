@@ -2,7 +2,7 @@ const { generateDependencyReport, getVoiceConnection, getVoiceConnections } = re
 console.log(generateDependencyReport());
 const Discord = require("discord.js");
 const { MessageEmbed } = require('discord.js');
-const { getGuildMap, addAudioToMapQueue, moveVoiceChannel, deleteGuildToMap } = require('./functions/audioMap.js');
+const { getGuildMap, addAudioToMapQueue, moveVoiceChannel, deleteGuildToMap, scanQueueMap } = require('./functions/audioMap.js');
 const { talkFunc } = require('./functions/talkFunc.js');
 const { addAutoSpeechCounter, output } = require('./functions/talkLog.js');
 const cron = require('node-cron')
@@ -267,7 +267,7 @@ async function onGuildCreate(guild) {
             },
             {
                 name: "困ったら",
-                value: `アプデ情報や質問等はここから: ${tokens.officialServerURL}`
+                value: `アプデ情報や質問，使い方等はここから: ${tokens.officialServerURL}`
             }
         );
 
@@ -323,7 +323,6 @@ client.on('ready', () => {
     client.user.setActivity(statusMessageGen(getVoiceConnections().size, guildNum), { type: 'LISTENING' });
     client.channels.cache.get(tokens.bootNotifyChannel).send('起動しました．');
     cron.schedule('0 * * * *', () => {
-        // setInterval(() => {
         const reportChannel = client.channels.cache.get(tokens.reportingChannel);
         const now = Date.now();
         const vcMessage = statusMessageGen(getVoiceConnections().size, client.guilds.cache.size);
@@ -333,7 +332,16 @@ client.on('ready', () => {
             reportChannel.send(`${now}\n${vcMessage}\n${tempStdout}\n${memStdout}`);
         }
         output(now);
-        // }, 1000 * 60 * 60);
+        const idList = scanQueueMap(now);
+        console.log(idList);
+        for (const elem of idList) {
+            console.log(elem);
+            const botConnection = getVoiceConnection(elem);
+            botConnection.destroy();
+            deleteGuildToMap(elem);
+            const guild = client.guilds.cache.get(elem);
+            guild.systemChannel.send('一定時間読み上げ指示が無かったため，切断しました．');
+        }
     });
 });
 
