@@ -322,6 +322,7 @@ client.on('ready', () => {
     });
     client.user.setActivity(statusMessageGen(getVoiceConnections().size, guildNum), { type: 'LISTENING' });
     client.channels.cache.get(tokens.bootNotifyChannel).send('起動しました．');
+    console.log(process.memoryUsage().heapUsed);
     cron.schedule('0 * * * *', () => {
         const reportChannel = client.channels.cache.get(tokens.reportingChannel);
         const now = Date.now();
@@ -329,7 +330,8 @@ client.on('ready', () => {
         if (process.platform == "linux") {
             const tempStdout = execSync('vcgencmd measure_temp');
             const memStdout = execSync('free');
-            reportChannel.send(`${now}\n${vcMessage}\n${tempStdout}\n${memStdout}`);
+            const mem = console.log(process.memoryUsage().heapUsed);
+            reportChannel.send(`${now}\n${vcMessage}\n${mem}\n${tempStdout}\n${memStdout}`);
         }
         output(now);
         const idList = scanQueueMap(now);
