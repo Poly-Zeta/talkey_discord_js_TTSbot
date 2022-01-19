@@ -323,14 +323,14 @@ client.on('ready', () => {
     client.user.setActivity(statusMessageGen(getVoiceConnections().size, guildNum), { type: 'LISTENING' });
     client.channels.cache.get(tokens.bootNotifyChannel).send('起動しました．');
     console.log(process.memoryUsage().heapUsed);
-    cron.schedule('0 * * * *', () => {
+    cron.schedule('0 * * * * *', () => {
         const reportChannel = client.channels.cache.get(tokens.reportingChannel);
         const now = Date.now();
         const vcMessage = statusMessageGen(getVoiceConnections().size, client.guilds.cache.size);
         if (process.platform == "linux") {
             const tempStdout = execSync('vcgencmd measure_temp');
             const memStdout = execSync('free');
-            const mem = console.log(process.memoryUsage().heapUsed);
+            const mem = process.memoryUsage().heapUsed;
             reportChannel.send(`${now}\n${vcMessage}\n${mem}\n${tempStdout}\n${memStdout}`);
         }
         output(now);

@@ -105,7 +105,7 @@ function scanQueueMap(now) {
     const beforeSize = queueMap.size;
     console.log(`auto delete before:${beforeSize}`);
     const idList = [];
-    const threshold = 1000 * 60 * 60;
+    const threshold = 1000 * 60 * 30;
     for (let [key, value] of queueMap.entries()) {
         if (now - value.timestump > threshold) {
             idList.push(key);
