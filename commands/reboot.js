@@ -9,6 +9,12 @@ var tokens = JSON.parse(
     )
 );
 
+var statConfig = JSON.parse(
+    fs.readFileSync(
+        path.resolve(__dirname, "../../stat.json")
+    )
+);
+
 module.exports = {
     attr: "additional",
     data: {

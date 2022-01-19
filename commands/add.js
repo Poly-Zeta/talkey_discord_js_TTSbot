@@ -123,7 +123,11 @@ module.exports = {
         if (!interaction.memberPermissions.has('ADMINISTRATOR')) {
             return await interaction.editReply("addは各サーバ管理者限定のコマンドのため，実行できません");
         }
-
+        registerSet = JSON.parse(
+            fs.readFileSync(
+                path.resolve(__dirname, "../../commands.json")
+            )
+        );
         //鯖IDを取得しておき，それをもとにcommand.jsonの該当部分を探す
         const guildID = interaction.guild.id;
 
@@ -197,6 +201,7 @@ module.exports = {
         //     )
         // );
         console.log(`add ${addOptions}`)
+        console.log(commandList);
         interaction.guild.commands.set(commandList);
         // if (process.platform == "linux") {
         //     const stdout = execSync('node register.js');

@@ -31,6 +31,12 @@ var registerSet = JSON.parse(
     )
 );
 
+var statConfig = JSON.parse(
+    fs.readFileSync(
+        path.resolve(__dirname, "../stat.json")
+    )
+);
+
 //************************************************************************************ */
 
 //コマンド用ファイルの読み込み->コマンドをリストにする
@@ -239,11 +245,11 @@ async function onGuildCreate(guild) {
     );
     console.log("create default commands");
 
-    //開発機がwinで実機がラズパイのため悲しみのif文
-    if (process.platform == "linux") {
-        const stdout = execSync('node register.js');
-        console.log("created");
-    }
+    // const stdout = execSync('node register.js');
+    // console.log(commands["add"].data);
+    // console.log(commands["beni"].data);
+    guild.commands.set([commands["add"].data]);
+    console.log("created");
 
     const embed = new MessageEmbed()
         .setTitle('新規利用ありがとうございます．')
@@ -291,13 +297,11 @@ async function onGuildDelete(guild) {
         JSON.stringify(registerSet, undefined, 4),
         "utf-8"
     );
-    console.log("delete default commands");
+    // console.log("delete default commands");
 
-    //悲しみのif
-    if (process.platform == "linux") {
-        const stdout = execSync('node register.js');
-        console.log("deleted");
-    }
+    // const stdout = execSync('node register.js');
+    console.log("deleted");
+
     return;
 }
 
@@ -345,6 +349,15 @@ client.on('ready', () => {
             guild.systemChannel.send('一定時間読み上げ指示が無かったため，切断しました．');
         }
         client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
+    });
+    cron.schedule('* * */4 * *', () => {
+        client.channels.cache.get(tokens.bootNotifyChannel).send('定期再起動を実行．');
+        statConfig.reboot += 1;
+        fs.writeFileSync(
+            path.resolve(__dirname, "../../stat.json"),
+            JSON.stringify(statConfig, undefined, 4),
+            "utf-8"
+        );
     });
 });
 
