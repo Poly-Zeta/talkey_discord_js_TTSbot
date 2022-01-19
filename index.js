@@ -245,9 +245,6 @@ async function onGuildCreate(guild) {
     );
     console.log("create default commands");
 
-    // const stdout = execSync('node register.js');
-    // console.log(commands["add"].data);
-    // console.log(commands["beni"].data);
     guild.commands.set([commands["add"].data]);
     console.log("created");
 

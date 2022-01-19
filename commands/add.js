@@ -1,5 +1,3 @@
-// const { execSync } = require('child_process');
-// const { singleGuildRegister } = require('../register.js');
 var fs = require('fs');
 var path = require('path');
 
@@ -200,12 +198,8 @@ module.exports = {
         //         )
         //     )
         // );
-        console.log(`add ${addOptions}`)
-        console.log(commandList);
+        console.log(`add ${addOptions}`);
         interaction.guild.commands.set(commandList);
-        // if (process.platform == "linux") {
-        //     const stdout = execSync('node register.js');
-        // }
         return;
 
     }
