@@ -334,7 +334,6 @@ client.on('ready', () => {
             const mem = process.memoryUsage().heapUsed;
             reportChannel.send(`${now}\n${vcMessage}\n${mem}\n${tempStdout}\n${memStdout}`);
         }
-        output(now);
         const idList = scanQueueMap(now);
         console.log(idList);
         for (const elem of idList) {
@@ -346,6 +345,10 @@ client.on('ready', () => {
             guild.systemChannel.send('一定時間読み上げ指示が無かったため，切断しました．');
         }
         client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
+    });
+    cron.schedule('0 * * * *', () => {
+        const now = Date.now();
+        output(now);
     });
     cron.schedule('* * */4 * *', () => {
         client.channels.cache.get(tokens.bootNotifyChannel).send('定期再起動を実行．');
