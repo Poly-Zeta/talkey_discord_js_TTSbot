@@ -350,7 +350,7 @@ client.on('ready', () => {
         const now = Date.now();
         output(now);
     });
-    cron.schedule('* * */4 * *', () => {
+    cron.schedule('0 0 */4 * *', () => {
         client.channels.cache.get(tokens.bootNotifyChannel).send('定期再起動を実行．');
         statConfig.reboot += 1;
         fs.writeFileSync(
