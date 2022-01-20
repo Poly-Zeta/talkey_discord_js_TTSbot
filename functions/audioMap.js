@@ -105,17 +105,17 @@ function scanQueueMap(now) {
     const beforeSize = queueMap.size;
     console.log(`auto delete before:${beforeSize}`);
     const idList = [];
-    const threshold = 1000 * 60 * 30;
+
+    //放置の閾値 ms単位なので 1000(ms->sec)*60(sec->min)*xでx分を閾値としている
+    //チェック頻度はindex.jsのclient.on内のcronで決まっている
+    const threshold = 1000 * 60 * 120;
+
     for (let [key, value] of queueMap.entries()) {
         if (now - value.timestump > threshold) {
             idList.push(key);
         }
     };
     console.log(`${idList.length}`);
-    // for(const elem of idList){
-
-    //     queueMap.delete(elem);
-    // }
     return idList;
 }
 

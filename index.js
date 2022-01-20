@@ -324,16 +324,10 @@ client.on('ready', () => {
     client.user.setActivity(statusMessageGen(getVoiceConnections().size, guildNum), { type: 'LISTENING' });
     client.channels.cache.get(tokens.bootNotifyChannel).send('起動しました．');
     console.log(process.memoryUsage().heapUsed);
-    cron.schedule('0 * * * *', () => {
-        const reportChannel = client.channels.cache.get(tokens.reportingChannel);
+
+    //15分に1回(毎時0,15,30,45分)，vcで放置されていないかチェック
+    cron.schedule('0,15,30,45 * * * *', () => {
         const now = Date.now();
-        const vcMessage = statusMessageGen(getVoiceConnections().size, client.guilds.cache.size);
-        if (process.platform == "linux") {
-            const tempStdout = execSync('vcgencmd measure_temp');
-            const memStdout = execSync('free');
-            const mem = process.memoryUsage().heapUsed;
-            reportChannel.send(`${now}\n${vcMessage}\n${mem}\n${tempStdout}\n${memStdout}`);
-        }
         const idList = scanQueueMap(now);
         console.log(idList);
         for (const elem of idList) {
@@ -346,10 +340,22 @@ client.on('ready', () => {
         }
         client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
     });
+
+    //1時間に1回(00分)にコマンドと自動読み上げの回数をファイル出力，ついでに稼働状態をテキストチャンネルに書き込み
     cron.schedule('0 * * * *', () => {
+        const reportChannel = client.channels.cache.get(tokens.reportingChannel);
         const now = Date.now();
+        const vcMessage = statusMessageGen(getVoiceConnections().size, client.guilds.cache.size);
+        if (process.platform == "linux") {
+            const tempStdout = execSync('vcgencmd measure_temp');
+            const memStdout = execSync('free');
+            const mem = process.memoryUsage().heapUsed;
+            reportChannel.send(`${now}\n${vcMessage}\n${mem}\n${tempStdout}\n${memStdout}`);
+        }
         output(now);
     });
+
+    //4日以上連続稼働した場合の定期再起動
     cron.schedule('0 0 */4 * *', () => {
         client.channels.cache.get(tokens.bootNotifyChannel).send('定期再起動を実行．');
         statConfig.reboot += 1;
