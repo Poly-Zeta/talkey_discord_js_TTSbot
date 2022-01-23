@@ -116,11 +116,13 @@ module.exports = {
         options: optionsObject
     },
     async execute(interaction) {
-        //処理が重すぎて一番最後だとinteractionReplyが走らないので先にreplyしておく
-        await interaction.reply("working!");
         if (!interaction.memberPermissions.has('ADMINISTRATOR')) {
-            return await interaction.editReply("addは各サーバ管理者限定のコマンドのため，実行できません");
+            return interaction.editReply("addは各サーバ管理者限定のコマンドのため，実行できません");
         }
+
+        //IOが心配になるぐらいならDBにした方がいいのかもしれない
+        //shardingが必要な自体になってからでは遅いし
+        interaction.reply("working!");
         registerSet = JSON.parse(
             fs.readFileSync(
                 path.resolve(__dirname, "../../commands.json")
@@ -138,12 +140,9 @@ module.exports = {
 
             //そもそもその引数があるかのチェック　無ければスキップ
             const interactionOpt = interaction.options.get(`command${i + 1}`, false);
-            // console.log(`interactionOpt:${interactionOpt}`);
 
             if (interactionOpt != null) {
                 console.log(`command${i + 1}opt:${interactionOpt.value}`);
-                // console.log(`find?:${!exsistingOptions.includes(interactionOpt.value)}`);
-
                 arguments[arguments.length] = interactionOpt.value;
             }
         }
@@ -172,7 +171,7 @@ module.exports = {
         registerSet[guildID].registerCommands = registerSet[guildID].registerCommands.concat(addOptions);
 
         //単に毎回FileSyncしたくなかったというのもある
-        fs.writeFileSync(
+        fs.writeFile(
             path.resolve(__dirname, "../../commands.json"),
             JSON.stringify(registerSet, undefined, 4),
             "utf-8"
@@ -190,17 +189,8 @@ module.exports = {
         );
 
         const commandList = Array.from(new Set(commandsToBeRegistlated));
-        //
-        // const commandList = Array.from(
-        //     new Set(
-        //         optionalCommands.concat(
-        //             additionalCommands.filter(item => registerSet[guildID].registerCommands.includes(item.name))
-        //         )
-        //     )
-        // );
         console.log(`add ${addOptions}`);
-        interaction.guild.commands.set(commandList);
-        return;
+        return interaction.guild.commands.set(commandList);
 
     }
 }

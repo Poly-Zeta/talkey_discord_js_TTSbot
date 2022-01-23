@@ -219,7 +219,7 @@ async function onVoiceStateUpdate(oldState, newState) {
 }
 
 function statusMessageGen(vcCount, guildSize) {
-    return `${vcCount}/${guildSize}ギルドで読み上げ`;
+    return `${guildSize}鯖中${vcCount}鯖で読み上げ`;
 }
 
 //************************************************************************************ */
@@ -238,7 +238,7 @@ async function onGuildCreate(guild) {
     };
 
     //ファイルに書き込み
-    fs.writeFileSync(
+    fs.writeFile(
         path.resolve(__dirname, "../commands.json"),
         JSON.stringify(registerSet, undefined, 4),
         "utf-8"
@@ -289,7 +289,7 @@ async function onGuildDelete(guild) {
     delete registerSet[guild.id];
 
     //書き込み
-    fs.writeFileSync(
+    fs.writeFile(
         path.resolve(__dirname, "../commands.json"),
         JSON.stringify(registerSet, undefined, 4),
         "utf-8"
