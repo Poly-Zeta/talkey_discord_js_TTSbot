@@ -219,7 +219,7 @@ async function onVoiceStateUpdate(oldState, newState) {
 }
 
 function statusMessageGen(vcCount, guildSize) {
-    return `${guildSize}鯖中${vcCount}鯖で読み上げ`;
+    return `${guildSize}ギルド中${vcCount}ギルドで読み上げ`;
 }
 
 //************************************************************************************ */
@@ -356,7 +356,7 @@ client.on('ready', () => {
     });
 
     //4日以上連続稼働した場合の定期再起動
-    cron.schedule('0 0 */4 * *', () => {
+    cron.schedule('0 12 */4 * *', () => {
         client.channels.cache.get(tokens.bootNotifyChannel).send('定期再起動を実行．');
         statConfig.reboot += 1;
         fs.writeFileSync(
