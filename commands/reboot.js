@@ -11,7 +11,7 @@ var tokens = JSON.parse(
 
 var statConfig = JSON.parse(
     fs.readFileSync(
-        path.resolve(__dirname, "../../stat.json")
+        path.resolve(__dirname, "../stat.json")
     )
 );
 
@@ -45,7 +45,7 @@ module.exports = {
         if (subCommand == "default") {
             statConfig.reboot += 1;
             fs.writeFileSync(
-                path.resolve(__dirname, "../../stat.json"),
+                path.resolve(__dirname, "../stat.json"),
                 JSON.stringify(statConfig, undefined, 4),
                 "utf-8"
             );
