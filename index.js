@@ -431,6 +431,10 @@ client.on('guildCreate', guild => onGuildCreate(guild).catch(err => console.erro
 client.on('guildDelete', guild => onGuildDelete(guild).catch(err => console.error(err)));
 client.on('messageCreate', message => onMessage(message).catch(err => console.error(err)));
 
+process.on('unhandledRejection', error => {
+    console.log(error);
+});
+
 client.login(tokens.bot).catch(err => {
     console.error(err);
     process.exit(-1);
