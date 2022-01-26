@@ -6,11 +6,15 @@ const { getGuildMap, addAudioToMapQueue, moveVoiceChannel, deleteGuildToMap, sca
 const { talkFunc } = require('./functions/talkFunc.js');
 const { addAutoSpeechCounter, output } = require('./functions/talkLog.js');
 const cron = require('node-cron')
+const { execSync } = require('child_process');
+
+process.on('unhandledRejection', error => {
+    console.log(error);
+});
 
 const client = new Discord.Client({
     intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES"],
 });
-const { execSync } = require('child_process');
 
 var fs = require('fs');
 var path = require('path');
@@ -430,10 +434,6 @@ client.on("voiceStateUpdate", (oldState, newState) => onVoiceStateUpdate(oldStat
 client.on('guildCreate', guild => onGuildCreate(guild).catch(err => console.error(err)));
 client.on('guildDelete', guild => onGuildDelete(guild).catch(err => console.error(err)));
 client.on('messageCreate', message => onMessage(message).catch(err => console.error(err)));
-
-process.on('unhandledRejection', error => {
-    console.log(error);
-});
 
 client.login(tokens.bot).catch(err => {
     console.error(err);
