@@ -6,12 +6,12 @@ module.exports = {
     attr: "base",
     data: {
         name: "ttslist",
-        description: "/talkを使わなくても読み上げされるユーザのリストを編集する．botがサーバ内のボイスチャットに参加している必要がある．",
+        description: "常時読み上げ対象ユーザのリストを編集する．",
         options: [
             {
                 type: "STRING",
                 name: "option",
-                description: "add->コマンド実行者をリストに登録．delete->コマンド実行者をリストから削除．",
+                description: "詳しくはhelpオプションからどうぞ．",
                 required: true,
                 choices: [
                     {
@@ -25,6 +25,10 @@ module.exports = {
                     {
                         name: "status",
                         value: "status"
+                    },
+                    {
+                        name: "help",
+                        value: "help"
                     }
                 ],
             }
@@ -49,6 +53,38 @@ module.exports = {
     },
     async execute(interaction) {
         const botConnection = getVoiceConnection(interaction.guild.id);
+        // const commandOption = interaction.options.getcommandOption(false);
+        const commandOption = interaction.options.get("option").value;
+        console.log(commandOption);
+        const guildData = await getGuildMap(interaction.guild.id);
+        // console.log(`ttslist:guildData.memberId:${guildData.memberId}`);
+        // console.log(`guildData[memberId]:${guildData[memberId]}`);
+        // console.log(`guildData['memberId']:${guildData["memberId"]}`);
+
+        if (commandOption == "help") {
+            const embed = new MessageEmbed()
+                .setTitle('ttslistコマンドの詳細説明')
+                .setColor('#0000ff')
+                .addFields(
+                    {
+                        name: "何をするコマンドか",
+                        value: "このbotは通常，/talk コマンドを使用した書き込みしか読み上げません．\nしかし，このコマンドで作成されるリストに参加したユーザについては，/talk コマンドの使用に関わらず全ての書き込みを読み上げるようになります．\nなお，リストはbotがボイスチャットを退出した際に破棄されます．"
+                    },
+                    {
+                        name: "add オプション",
+                        value: "このオプションを付けて/ttslist を実行すると，そのサーバの常時読み上げ対象者のリストにコマンド使用者を加えます．"
+                    },
+                    {
+                        name: "delete オプション",
+                        value: "このオプションを付けて/ttslist を実行すると，そのサーバの常時読み上げ対象者のリストからコマンド使用者を削除します．"
+                    },
+                    {
+                        name: "status オプション",
+                        value: "このオプションを付けて/ttslist を実行すると，実行時点でのそのサーバの常時読み上げ対象者のリストをテキストチャットに表示します．"
+                    }
+                );
+            return interaction.reply({ embeds: [embed] });
+        }
 
         if (!interaction.member.voice.channel) {
             const replyMessage = "コマンド送信者がボイスチャットに参加している必要があります．";
@@ -66,15 +102,7 @@ module.exports = {
             return interaction.reply(replyMessage);
         }
 
-        // const subCommand = interaction.options.getSubcommand(false);
-        const subCommand = interaction.options.get("option").value;
-        console.log(subCommand);
-        const guildData = await getGuildMap(interaction.guild.id);
-        // console.log(`ttslist:guildData.memberId:${guildData.memberId}`);
-        // console.log(`guildData[memberId]:${guildData[memberId]}`);
-        // console.log(`guildData['memberId']:${guildData["memberId"]}`);
-
-        if (subCommand == "add") {
+        if (commandOption == "add") {
             if (guildData.memberId !== undefined) {
                 if (guildData.memberId.has(interaction.user.id)) {
                     return interaction.reply(`${interaction.user.username}さんは既に読み上げ対象です．/ttslist statusでリストを確認できます．`);
@@ -88,7 +116,7 @@ module.exports = {
             // addMember(interaction.guild.id, interaction.user.id);
             return interaction.reply(`${interaction.user.username}さんを読み上げ対象に追加しました．/ttslist statusでリストを確認できます．\n読み上げさせずにテキストチャットへの書き込みをしたい場合は/noread コマンドを使用してください．`);
 
-        } else if (subCommand == "delete") {
+        } else if (commandOption == "delete") {
             if (guildData.memberId.size == 0) {
                 return interaction.reply(`空のリストからユーザを削除することはできません．/ttslist statusでリストを確認できます．`);
             }
@@ -97,7 +125,7 @@ module.exports = {
             }
             deleteMember(interaction.guild.id, interaction.user.id);
             return interaction.reply(`${interaction.user.username}さんを読み上げ対象から除外しました．/ttslist statusでリストを確認できます．`);
-        } else if (subCommand == "status") {
+        } else if (commandOption == "status") {
             // const guildData = getGuildMap(interaction.guild.id);
             await interaction.reply("working!");
             const nameList = (guildData.memberId.size == 0) ? "無し" : [...guildData.memberId.values()];

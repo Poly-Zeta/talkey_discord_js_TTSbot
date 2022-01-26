@@ -53,20 +53,16 @@ module.exports = {
                 .setColor('#0000ff')
                 .addFields(
                     {
-                        name: "使い方",
-                        value: "ボイスチャットに参加している間は，/talk コマンドでの書き込みを読み上げます．\nまた，/ttslist add コマンドを使用することで，/talk コマンドの使用に関係なく常時読み上げさせることも出来ます．"
+                        name: "簡単な使い方",
+                        value: "ボイスチャットに参加している間は，/talk コマンドを使用した書き込みがあった場合ゆっくりボイスで読み上げます．\n詳しい使い方は下記のサーバからどうぞ．"
                     },
                     {
-                        name: "広告",
-                        value: `アプデ情報や質問等はここから: ${tokens.officialServerURL}`
+                        name: "詳細説明",
+                        value: `詳しい使い方やアプデ情報，質問はここから: ${tokens.officialServerURL}`
                     },
                     {
                         name: "音声合成プログラム",
                         value: "読み上げ用音声データ生成にはAquesTalkPiを利用させて頂いています．\nhttps://www.a-quest.com/products/aquestalkpi.html"
-                    },
-                    {
-                        name: "告知",
-                        value: "2022/01/18 長時間読み上げ指示が無いと自動的に切断する機能のテスト中"
                     }
                 );
             const connection = joinVoiceChannel({
