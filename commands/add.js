@@ -174,7 +174,8 @@ module.exports = {
         fs.writeFile(
             path.resolve(__dirname, "../../commands.json"),
             JSON.stringify(registerSet, undefined, 4),
-            "utf-8"
+            "utf-8",
+            (err) => { if (err) { console.log(err); } }
         );
         //これで，登録すべきコマンド一覧が完成
 

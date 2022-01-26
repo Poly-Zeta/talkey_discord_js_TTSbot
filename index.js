@@ -245,7 +245,8 @@ async function onGuildCreate(guild) {
     fs.writeFile(
         path.resolve(__dirname, "../commands.json"),
         JSON.stringify(registerSet, undefined, 4),
-        "utf-8"
+        "utf-8",
+        (err) => { if (err) { console.log(err); } }
     );
     console.log("create default commands");
 
@@ -296,7 +297,8 @@ async function onGuildDelete(guild) {
     fs.writeFile(
         path.resolve(__dirname, "../commands.json"),
         JSON.stringify(registerSet, undefined, 4),
-        "utf-8"
+        "utf-8",
+        (err) => { if (err) { console.log(err); } }
     );
     // console.log("delete default commands");
 
