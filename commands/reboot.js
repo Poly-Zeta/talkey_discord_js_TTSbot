@@ -44,6 +44,7 @@ module.exports = {
 
         if (subCommand == "default") {
             statConfig.reboot += 1;
+            //同期，上書き
             fs.writeFileSync(
                 path.resolve(__dirname, "../stat.json"),
                 JSON.stringify(statConfig, undefined, 4),

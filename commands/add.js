@@ -170,7 +170,7 @@ module.exports = {
         //この状態でaddoptionsとregisterSet[serverIndex].registerCommandsを連結すればいいはず
         registerSet[guildID].registerCommands = registerSet[guildID].registerCommands.concat(addOptions);
 
-        //単に毎回FileSyncしたくなかったというのもある
+        //readFileSyncで読み取り済み(上書き)，非同期
         fs.writeFile(
             path.resolve(__dirname, "../../commands.json"),
             JSON.stringify(registerSet, undefined, 4),

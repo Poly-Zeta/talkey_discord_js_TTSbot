@@ -241,11 +241,14 @@ async function onGuildCreate(guild) {
         "registerCommands": []
     };
 
-    //ファイルに書き込み
+    //ファイルに書き込み 非同期，読み取りしていないのでoptionをa(上書き)に
     fs.writeFile(
         path.resolve(__dirname, "../commands.json"),
         JSON.stringify(registerSet, undefined, 4),
-        "utf-8",
+        {
+            encoding: "utf-8",
+            flag: "a"
+        },
         (err) => { if (err) { console.log(err); } }
     );
     console.log("create default commands");
@@ -290,10 +293,16 @@ async function onGuildDelete(guild) {
     client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
     client.channels.cache.get(tokens.newGuildNotifyChannel).send('サーバから退出しました．');
 
+    registerSet = JSON.parse(
+        fs.readFileSync(
+            path.resolve(__dirname, "../commands.json")
+        )
+    );
+
     //消す
     delete registerSet[guild.id];
 
-    //書き込み
+    //非同期，readFileSyncで読み取り済み->上書き
     fs.writeFile(
         path.resolve(__dirname, "../commands.json"),
         JSON.stringify(registerSet, undefined, 4),
