@@ -4,22 +4,28 @@
 var fs = require('fs');
 var path = require('path');
 
+var absolutePath = JSON.parse(
+    fs.readFileSync(
+        path.resolve(__dirname, "../path.json")
+    )
+);
+
 //botのアクセストークンをファイルから持ってくる準備
 var tokens = JSON.parse(
     fs.readFileSync(
-        path.resolve(__dirname, "../tokens.json")
+        path.resolve(__dirname, absolutePath.tokens)
     )
 );
 
 //どのコマンドをどの鯖に登録するかのデータ取得
 var registerSet = JSON.parse(
     fs.readFileSync(
-        path.resolve(__dirname, "../commands.json")
+        path.resolve(__dirname, absolutePath.commands)
     )
 );
 
 //コマンド自体の引数や処理部分について書いてあるファイル群の取得
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commandFiles = fs.readdirSync(absolutePath.commandsdir).filter(file => file.endsWith('.js'));
 
 //準備
 const { Client, ClientApplication } = require("discord.js");
@@ -52,7 +58,7 @@ const additionalCommands = [];
 const optionalCommands = [];
 const baseCommands = [];
 for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
+    const command = require(`${absolutePath.commandsdir}/${file}`);
     if (command.attr == "base") {
         baseCommands[baseCommands.length] = command.data;
     } else if (command.attr == "option") {

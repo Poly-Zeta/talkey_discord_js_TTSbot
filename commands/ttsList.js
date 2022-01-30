@@ -33,23 +33,6 @@ module.exports = {
                 ],
             }
         ]
-        // options: [
-        //     {
-        //         type: "SUB_COMMAND",
-        //         name: "add",
-        //         description: "リストにコマンド送信者を登録する",
-        //     },
-        //     {
-        //         type: "SUB_COMMAND",
-        //         name: "delete",
-        //         description: "リストからコマンド送信者を除外する",
-        //     },
-        //     {
-        //         type: "SUB_COMMAND",
-        //         name: "status",
-        //         description: "リストの状態を確認する",
-        //     },
-        // ]
     },
     async execute(interaction) {
         const botConnection = getVoiceConnection(interaction.guild.id);

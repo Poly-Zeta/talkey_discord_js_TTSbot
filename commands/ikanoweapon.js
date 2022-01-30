@@ -2,9 +2,15 @@ const { ndnDiceRoll } = require('../functions/diceroll.js');
 var fs = require('fs');
 var path = require('path');
 
+var absolutePath = JSON.parse(
+    fs.readFileSync(
+        path.resolve(__dirname, "../../path.json")
+    )
+);
+
 var weaponData = JSON.parse(
     fs.readFileSync(
-        path.resolve(__dirname, "../../weapon.json")
+        path.resolve(__dirname, absolutePath.weapon)
     )
 );
 

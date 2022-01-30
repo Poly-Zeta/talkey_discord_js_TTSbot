@@ -5,6 +5,7 @@ const { MessageEmbed } = require('discord.js');
 const { getGuildMap, addAudioToMapQueue, moveVoiceChannel, deleteGuildToMap, scanQueueMap } = require('./functions/audioMap.js');
 const { talkFunc } = require('./functions/talkFunc.js');
 const { addAutoSpeechCounter, output } = require('./functions/talkLog.js');
+const { readGuildData, addGuildData, deleteGuildData, readGuildCommand, addGuildCommand } = require('./functions/commandDBIO.js');
 const cron = require('node-cron')
 const { execSync } = require('child_process');
 
@@ -21,23 +22,30 @@ var path = require('path');
 
 //************************************************************************************ */
 //json読み込み系
+
+var absolutePath = JSON.parse(
+    fs.readFileSync(
+        path.resolve(__dirname, "../path.json")
+    )
+);
+
 //トークンとかIDとか
 var tokens = JSON.parse(
     fs.readFileSync(
-        path.resolve(__dirname, "../tokens.json")
+        path.resolve(__dirname, absolutePath.tokens)
     )
 );
 
 //どのコマンドをどの鯖に登録するかのデータ取得
 var registerSet = JSON.parse(
     fs.readFileSync(
-        path.resolve(__dirname, "../commands.json")
+        path.resolve(__dirname, absolutePath.commands)
     )
 );
 
 var statConfig = JSON.parse(
     fs.readFileSync(
-        path.resolve(__dirname, "stat.json")
+        path.resolve(__dirname, absolutePath.stat)
     )
 );
 
@@ -45,10 +53,10 @@ var statConfig = JSON.parse(
 
 //コマンド用ファイルの読み込み->コマンドをリストにする
 const commands = {}
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'))
+const commandFiles = fs.readdirSync(absolutePath.commandsdir).filter(file => file.endsWith('.js'))
 
 for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
+    const command = require(`${absolutePath.commandsdir}/${file}`);
     commands[command.data.name] = command
 }
 
@@ -188,7 +196,7 @@ async function onVoiceStateUpdate(oldState, newState) {
                 // console.log("auto-disconnect");
                 newBotConnection.destroy();
                 deleteGuildToMap(newGuild.id);
-                return newGuild.systemChannel.send("空のボイスチャットに移動ました．自動退出します．");
+                return newGuild.systemChannel.send("空のボイスチャットに移動しました．自動退出します．");
             }
 
             //再接続処理
@@ -235,19 +243,21 @@ async function onGuildCreate(guild) {
     client.channels.cache.get(tokens.newGuildNotifyChannel).send('新規にサーバに参加しました．');
     // const serverIndex = registerSet.findIndex((v) => v.id === guild.id);
 
-    //基本形1ブロックを追加して
-    registerSet[guild.id] = {
-        "name": guild.name,
-        "registerCommands": []
-    };
+    await addGuildData(guild.id, guild.name);
+    // //基本形1ブロックを追加して
+    // registerSet[guild.id] = {
+    //     "name": guild.name,
+    //     "registerCommands": []
+    // };
 
-    //ファイルに書き込み 非同期
-    fs.writeFile(
-        path.resolve(__dirname, "../commands.json"),
-        JSON.stringify(registerSet, undefined, 4),
-        "utf-8",
-        (err) => { if (err) { console.log(err); } }
-    );
+    // //ファイルに書き込み 非同期
+    // fs.writeFile(
+    //     path.resolve(__dirname, absolutePath.commands),
+    //     JSON.stringify(registerSet, undefined, 4),
+    //     "utf-8",
+    //     (err) => { if (err) { console.log(err); } }
+    // );
+
     console.log("create default commands");
 
     guild.commands.set([commands["add"].data]);
@@ -290,6 +300,7 @@ async function onGuildDelete(guild) {
     client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
     client.channels.cache.get(tokens.newGuildNotifyChannel).send('サーバから退出しました．');
 
+    await deleteGuildData(guild.id);
     // registerSet = JSON.parse(
     //     fs.readFileSync(
     //         path.resolve(__dirname, "../commands.json")
@@ -297,15 +308,15 @@ async function onGuildDelete(guild) {
     // );
 
     //消す
-    delete registerSet[guild.id];
+    // delete registerSet[guild.id];
 
-    //非同期，readFileSyncで読み取り済み->上書き
-    fs.writeFile(
-        path.resolve(__dirname, "../commands.json"),
-        JSON.stringify(registerSet, undefined, 4),
-        "utf-8",
-        (err) => { if (err) { console.log(err); } }
-    );
+    // //非同期，readFileSyncで読み取り済み->上書き
+    // fs.writeFile(
+    //     path.resolve(__dirname, absolutePath.commands),
+    //     JSON.stringify(registerSet, undefined, 4),
+    //     "utf-8",
+    //     (err) => { if (err) { console.log(err); } }
+    // );
     // console.log("delete default commands");
 
     // const stdout = execSync('node register.js');
@@ -343,7 +354,7 @@ client.on('ready', () => {
         const idList = scanQueueMap(now);
         console.log(idList);
         for (const elem of idList) {
-            console.log(elem);
+            // console.log(elem);
             const botConnection = getVoiceConnection(elem);
             botConnection.destroy();
             deleteGuildToMap(elem);
@@ -368,11 +379,11 @@ client.on('ready', () => {
     });
 
     //4日以上連続稼働した場合の定期再起動
-    cron.schedule('0 12 */4 * *', () => {
+    cron.schedule('0 12 1,*/4 * *', () => {
         client.channels.cache.get(tokens.bootNotifyChannel).send('定期再起動を実行．');
         statConfig.reboot += 1;
         fs.writeFileSync(
-            path.resolve(__dirname, "stat.json"),
+            path.resolve(__dirname, absolutePath.stat),
             JSON.stringify(statConfig, undefined, 4),
             "utf-8"
         );

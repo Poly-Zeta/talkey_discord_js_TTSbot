@@ -1,5 +1,14 @@
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
+var fs = require('fs');
+var path = require('path');
+
+var absolutePath = JSON.parse(
+    fs.readFileSync(
+        path.resolve(__dirname, "../../path.json")
+    )
+);
+
 const talkCommandCounter = {
     score: 0,
     defaultScore: 0,
@@ -17,7 +26,7 @@ async function output(nowtime) {
     const data = [{ time: Date(nowtime), command: talkCommandCounter.score, auto: autoSpeechCounter.score }];
     console.log(data);
     const csvWriter = createCsvWriter({
-        path: '../talkLog.csv',
+        path: absolutePath.talklog,
         header: ['time', 'command', 'auto'],
         append: true
     });

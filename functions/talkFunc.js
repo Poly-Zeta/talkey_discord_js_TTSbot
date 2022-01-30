@@ -11,7 +11,7 @@ async function talkFunc(message) {
     let readTxt = message.content;
     //色々除去
     readTxt = textOperator(readTxt);
-    console.log(`chk1: ${readTxt}`);
+    // console.log(`chk1: ${readTxt}`);
 
     //名前があるかどうかで挙動を変える
     if (namePattern.test(readTxt)) {
@@ -20,7 +20,7 @@ async function talkFunc(message) {
             addAudioToMapQueue(message.guildId, readTxt, "f2");
         }
 
-        console.log(`namechk: ${readTxt}`);
+        // console.log(`namechk: ${readTxt}`);
 
         readTxt = readTxt.replace(namePattern, "");
 
@@ -34,7 +34,7 @@ async function talkFunc(message) {
         //応答をreplyで返す
         message.channel.send(apiResponseText);
     } else {
-        console.log("chk3");
+        // console.log("chk3");
         //名前が無ければ，ボイチャに接続しているかを確認して入力をそのままf1ボイスでqueueに追加
         if (botConnection != undefined) {
             addAudioToMapQueue(message.guildId, readTxt, "f1");

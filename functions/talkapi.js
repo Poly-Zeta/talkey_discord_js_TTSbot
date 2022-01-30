@@ -2,9 +2,15 @@ const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fet
 var fs = require('fs');
 var path = require('path');
 
+var absolutePath = JSON.parse(
+    fs.readFileSync(
+        path.resolve(__dirname, "../../path.json")
+    )
+);
+
 var tokens = JSON.parse(
     fs.readFileSync(
-        path.resolve(__dirname, "../../tokens.json")
+        path.resolve(__dirname, absolutePath.tokens)
     )
 );
 

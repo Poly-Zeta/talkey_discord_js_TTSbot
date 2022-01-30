@@ -3,15 +3,21 @@ const { execSync } = require('child_process');
 var fs = require('fs');
 var path = require('path');
 
+var absolutePath = JSON.parse(
+    fs.readFileSync(
+        path.resolve(__dirname, "../../path.json")
+    )
+);
+
 var tokens = JSON.parse(
     fs.readFileSync(
-        path.resolve(__dirname, "../../tokens.json")
+        path.resolve(__dirname, absolutePath.tokens)
     )
 );
 
 var statConfig = JSON.parse(
     fs.readFileSync(
-        path.resolve(__dirname, "../stat.json")
+        path.resolve(__dirname, absolutePath.stat)
     )
 );
 
@@ -46,7 +52,7 @@ module.exports = {
             statConfig.reboot += 1;
             //同期，上書き
             fs.writeFileSync(
-                path.resolve(__dirname, "../stat.json"),
+                path.resolve(__dirname, absolutePath.stat),
                 JSON.stringify(statConfig, undefined, 4),
                 "utf-8"
             );

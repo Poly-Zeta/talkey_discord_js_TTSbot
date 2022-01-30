@@ -30,7 +30,7 @@ module.exports = {
         let readTxt = interaction.options.get("message").value;
         //色々除去
         readTxt = textOperator(readTxt);
-        console.log(`chk1: ${readTxt}`);
+        // console.log(`chk1: ${readTxt}`);
 
         //名前があるかどうかで挙動を変える
         if (namePattern.test(readTxt)) {
@@ -39,7 +39,7 @@ module.exports = {
                 addAudioToMapQueue(interaction.guild.id, readTxt, "f2");
             }
 
-            console.log(`namechk: ${readTxt}`);
+            // console.log(`namechk: ${readTxt}`);
 
             //名前を適宜差し替えた文を生成->ちょっと無効化しておく
             // const nameRepraceThrethold = Math.floor(Math.random() * 100);
@@ -62,7 +62,7 @@ module.exports = {
             //応答をreplyで返す
             interaction.channel.send(apiResponseText);
         } else {
-            console.log("chk3");
+            // console.log("chk3");
             //名前が無ければ，ボイチャに接続しているかを確認して入力をそのままf1ボイスでqueueに追加
             if (botConnection != undefined) {
                 addTalkCommandCounter();
@@ -74,11 +74,11 @@ module.exports = {
         //ので適当に返信してすぐ消す
         //ここが返信
         await interaction.reply({ content: interaction.options.get("message").value, ephemeral: false })
-            .then(console.log)
+            // .then(console.log)
             .catch(console.error);
         //こっちで消す
         await interaction.deleteReply()
-            .then(console.log)
+            // .then(console.log)
             .catch(console.error);
         return;
     }

@@ -1,15 +1,22 @@
 var fs = require('fs');
 var path = require('path');
+const { readGuildData, addGuildData, deleteGuildData, readGuildCommand, addGuildCommand } = require('../functions/commandDBIO.js');
+
+var absolutePath = JSON.parse(
+    fs.readFileSync(
+        path.resolve(__dirname, "../../path.json")
+    )
+);
 
 //どのコマンドをどの鯖に登録するかのデータ取得
 var registerSet = JSON.parse(
     fs.readFileSync(
-        path.resolve(__dirname, "../../commands.json")
+        path.resolve(__dirname, absolutePath.commands)
     )
 );
 
 //コマンド自体の引数や処理部分について書いてあるファイル群の取得
-const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith('.js'));
+const commandFiles = fs.readdirSync(absolutePath.commandsdir).filter(file => file.endsWith('.js'));
 console.log(commandFiles);
 
 //addコマンドの引数に取れるコマンドのリストを作成する
@@ -22,7 +29,7 @@ for (const file of commandFiles) {
     if (file == "add.js") {
         continue;
     }
-    const command = require(`../commands/${file}`);
+    const command = require(`${absolutePath.commandsdir}/${file}`);
 
     //attrはadditionalだが，addの候補に出したくない物の除外設定
     //rebootは公式鯖限定
@@ -120,16 +127,20 @@ module.exports = {
             return interaction.editReply("addは各サーバ管理者限定のコマンドのため，実行できません");
         }
 
-        //IOが心配になるぐらいならDBにした方がいいのかもしれない
-        //shardingが必要な自体になってからでは遅いし
-        interaction.reply("working!");
-        registerSet = JSON.parse(
-            fs.readFileSync(
-                path.resolve(__dirname, "../../commands.json")
-            )
-        );
         //鯖IDを取得しておき，それをもとにcommand.jsonの該当部分を探す
         const guildID = interaction.guild.id;
+
+        //IOが心配になるぐらいならDBにした方がいいのかもしれない
+        //shardingが必要な自体になってからでは遅いし
+        await interaction.reply("working!");
+        // registerSet = JSON.parse(
+        //     fs.readFileSync(
+        //         path.resolve(__dirname, absolutePath.commands)
+        //     )
+        // );
+        const registerdGuildCommands = await readGuildCommand(guildID);
+        // console.log(registerdGuildCommands);
+
 
         //****************************************************************************************************************** */
         //追加コマンド(/addのオプションそのまま)のリストを，jsonのリストに直接突っ込んでから重複排除した方が速い説
@@ -159,7 +170,8 @@ module.exports = {
         const argumentsNoDuplicate = Array.from(new Set(arguments));
 
         //既存コマンドの一覧に書き足すため，追加したいコマンド一覧から既存コマンドと追加したいコマンドの重複を排除
-        const addOptions = argumentsNoDuplicate.filter(d => !registerSet[guildID].registerCommands.includes(d));
+        // const addOptions = argumentsNoDuplicate.filter(d => !registerSet[guildID].registerCommands.includes(d));
+        const addOptions = argumentsNoDuplicate.filter(d => !registerdGuildCommands.includes(d));
 
         //この時点で追加処理をやる必要があるかチェック
         if (addOptions.length == 0) {
@@ -167,16 +179,17 @@ module.exports = {
         }
         interaction.editReply(`${addOptions}コマンドを登録します．`);
 
+        await addGuildCommand(guildID, addOptions);
         //この状態でaddoptionsとregisterSet[serverIndex].registerCommandsを連結すればいいはず
-        registerSet[guildID].registerCommands = registerSet[guildID].registerCommands.concat(addOptions);
+        // registerSet[guildID].registerCommands = registerSet[guildID].registerCommands.concat(addOptions);
 
-        //readFileSyncで読み取り済み(上書き)，非同期
-        fs.writeFile(
-            path.resolve(__dirname, "../../commands.json"),
-            JSON.stringify(registerSet, undefined, 4),
-            "utf-8",
-            (err) => { if (err) { console.log(err); } }
-        );
+        // //readFileSyncで読み取り済み(上書き)，非同期
+        // fs.writeFile(
+        //     path.resolve(__dirname, absolutePath.commands),
+        //     JSON.stringify(registerSet, undefined, 4),
+        //     "utf-8",
+        //     (err) => { if (err) { console.log(err); } }
+        // );
         //これで，登録すべきコマンド一覧が完成
 
         //optionnalCommandsはこの後連結するが，add.jsは循環参照回避のためリストに含まれていないのでここでリストに追加
