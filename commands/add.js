@@ -1,6 +1,6 @@
 var fs = require('fs');
 var path = require('path');
-const { readGuildData, addGuildData, deleteGuildData, readGuildCommand, addGuildCommand } = require('../functions/commandDBIO.js');
+const { readGuildCommand, addGuildCommand } = require('../functions/commandDBIO.js');
 
 var absolutePath = JSON.parse(
     fs.readFileSync(

@@ -5,7 +5,7 @@ const { MessageEmbed } = require('discord.js');
 const { getGuildMap, addAudioToMapQueue, moveVoiceChannel, deleteGuildToMap, scanQueueMap } = require('./functions/audioMap.js');
 const { talkFunc } = require('./functions/talkFunc.js');
 const { addAutoSpeechCounter, output } = require('./functions/talkLog.js');
-const { readGuildData, addGuildData, deleteGuildData, readGuildCommand, addGuildCommand } = require('./functions/commandDBIO.js');
+const { addGuildData, deleteGuildData } = require('./functions/commandDBIO.js');
 const cron = require('node-cron')
 const { execSync } = require('child_process');
 
@@ -200,7 +200,7 @@ async function onVoiceStateUpdate(oldState, newState) {
             }
 
             //再接続処理
-            oldGuild.systemChannel.send("botの移動を検知しました．接続データを変更します．\nまた，お手数ですがbotの移動は/bye->/joinで行ってください．");
+            oldGuild.systemChannel.send("botの移動を検知しました．接続データを変更します．読み上げなくなった際は，/byeと/joinで再接続してみてください．");
             return await moveVoiceChannel(oldGuild, oldGuild.id, oldVc, newVc);
         }
         //ここに来たらbotのミュート
@@ -352,7 +352,7 @@ client.on('ready', () => {
     cron.schedule('0,15,30,45 * * * *', () => {
         const now = Date.now();
         const idList = scanQueueMap(now);
-        console.log(idList);
+        // console.log(idList);
         for (const elem of idList) {
             // console.log(elem);
             const botConnection = getVoiceConnection(elem);
