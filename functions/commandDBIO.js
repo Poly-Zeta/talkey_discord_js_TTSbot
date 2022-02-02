@@ -3,6 +3,9 @@
 //現在はギルドIDにギルド名と追加コマンドのリストが紐づいているが，
 //ID->名前，その他情報　のDBと ID->追加コマンド1つ　のDBにわかれる想定
 
+//DB側の参考
+//https://thr3a.hatenablog.com/entry/20200817/1597650222
+
 var fs = require('fs');
 var path = require('path');
 
