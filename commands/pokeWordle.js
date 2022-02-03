@@ -211,7 +211,24 @@ module.exports = {
                 return interaction.editReply(`失敗... 答えは${failureAns}でした．`);
             }
 
-            return interaction.editReply(`${replyText} ${guildData.log.length}/${wordleMaxChkCount}トライ`);
+            const embed = new MessageEmbed()
+                .setTitle('result')
+                .addFields(
+                    {
+                        name: "log",
+                        value: guildData.log.join('\n'),
+                        inline: false
+                    },
+                    {
+                        name: "message",
+                        value: `${replyText} ${guildData.log.length}/${wordleMaxChkCount}トライ`,
+                        inline: false
+                    }
+                )
+                .setColor('#00ff00');
+            interaction.editReply("finish!");
+            return await interaction.editReply({ embeds: [embed] });
+            // return interaction.editReply(`${replyText} ${guildData.log.length}/${wordleMaxChkCount}トライ`);
         } else {
             return interaction.reply("エラー");
         }
