@@ -15,8 +15,8 @@ var absolutePath = JSON.parse(
     )
 );
 
-function readData() {
-    const data = JSON.parse(
+async function readData() {
+    var data = JSON.parse(
         fs.readFileSync(
             path.resolve(__dirname, absolutePath.commands)
         )
@@ -24,7 +24,7 @@ function readData() {
     return data;
 }
 
-function writeData(data) {
+async function writeData(data) {
     fs.writeFile(
         path.resolve(__dirname, absolutePath.commands),
         JSON.stringify(data, undefined, 4),
@@ -56,7 +56,7 @@ async function addGuildData(guildId, guildName) {
         "name": guildName,
         "registerCommands": []
     };
-    writeData(data);
+    await writeData(data);
     return;
 }
 
@@ -64,7 +64,7 @@ async function addGuildData(guildId, guildName) {
 async function deleteGuildData(guildId) {
     const data = await readData();
     delete data[guildId];
-    writeData(data);
+    await writeData(data);
     return;
 }
 
@@ -80,7 +80,7 @@ async function readGuildCommand(guildId) {
 async function addGuildCommand(guildId, commands) {
     const data = await readData();
     data[guildId].registerCommands = data[guildId].registerCommands.concat(commands);
-    writeData(data);
+    await writeData(data);
     return;
 }
 

@@ -15,11 +15,11 @@ var tokens = JSON.parse(
 );
 
 //どのコマンドをどの鯖に登録するかのデータ取得
-var registerSet = JSON.parse(
-    fs.readFileSync(
-        path.resolve(__dirname, absolutePath.commands)
-    )
-);
+// var registerSet = JSON.parse(
+//     fs.readFileSync(
+//         path.resolve(__dirname, absolutePath.commands)
+//     )
+// );
 
 //コマンド自体の引数や処理部分について書いてあるファイル群の取得
 const commandFiles = fs.readdirSync(absolutePath.commandsdir).filter(file => file.endsWith('.js'));
@@ -183,9 +183,10 @@ module.exports = {
         if (addOptions.length == 0) {
             return interaction.editReply("新規に追加する必要のある拡張コマンドが存在しませんでした．");
         }
-        interaction.editReply(`${addOptions}コマンドを登録します．`);
 
         await addGuildCommand(guildID, addOptions);
+        await interaction.editReply(`${addOptions}コマンドを登録します．`);
+        const updatedGuildCommands = await readGuildCommand(guildID);
         //この状態でaddoptionsとregisterSet[serverIndex].registerCommandsを連結すればいいはず
         // registerSet[guildID].registerCommands = registerSet[guildID].registerCommands.concat(addOptions);
 
@@ -203,10 +204,12 @@ module.exports = {
 
         //additional,excluded,optionalの連結
         //additinal+excludedからはregistersetに無いコマンドを排除
+        console.log(additionalCommands.concat(excludedCommands).filter(item => updatedGuildCommands.includes(item.name)));
         const commandsToBeRegistlated = optionalCommands.concat(
             additionalCommands.concat(excludedCommands)
-                .filter(item => registerSet[guildID].registerCommands.includes(item.name))
+                .filter(item => updatedGuildCommands.includes(item.name))
         );
+        console.log(commandsToBeRegistlated);
 
         const commandList = Array.from(new Set(commandsToBeRegistlated));
         console.log(`add ${addOptions}`);
