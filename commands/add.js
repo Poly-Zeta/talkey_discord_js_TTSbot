@@ -8,6 +8,12 @@ var absolutePath = JSON.parse(
     )
 );
 
+var tokens = JSON.parse(
+    fs.readFileSync(
+        path.resolve(__dirname, absolutePath.tokens)
+    )
+);
+
 //どのコマンドをどの鯖に登録するかのデータ取得
 var registerSet = JSON.parse(
     fs.readFileSync(
