@@ -179,8 +179,26 @@ module.exports = {
 
             const chkAnsStr = chkAnsList.join("");
             if (chkAnsStr === "🟩🟩🟩🟩🟩") {
+                const counter = guildData.log.length + 1;
+                const finalLog = guildData.log.join('\n');
                 deleteGuildToGameMap(guildId);
-                return interaction.editReply(`${commandOption} -> 正解！ ${guildData.log.length + 1}回で成功`);
+                const embed = new MessageEmbed()
+                    .setTitle('result')
+                    .addFields(
+                        {
+                            name: "log",
+                            value: finalLog,
+                            inline: false
+                        },
+                        {
+                            name: "message",
+                            value: `${commandOption} -> 正解！ ${counter}回で成功`,
+                            inline: false
+                        }
+                    )
+                    .setColor('#00ff00');
+                interaction.editReply("finish!");
+                return await interaction.editReply({ embeds: [embed] });
             }
 
             const replyText = `${commandOption} -> ${chkAnsStr}`;
