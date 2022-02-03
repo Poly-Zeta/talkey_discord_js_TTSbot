@@ -62,19 +62,19 @@ exports.getResponseofTalkAPI = async function (txt) {
     const talkData = await talkRes.json();
     if (talkData.message == "ok") {
         let reply = talkData.results[0].reply;
-        const proofreadingRes = await fetch(
-            `https://api.a3rt.recruit.co.jp/proofreading/v2/typo?apikey=${proofreadingAPIKey}&sentence=${reply}&sensitivity=high`
-        );
-        const proofreadingData = await proofreadingRes.json();
-        if (proofreadingData.status > 1) {
-            reply = `リプライの生成時にエラーが発生しました．[proofreading]エラーコード:${proofreadingData.status}`;
-        } else if (proofreadingData.status === 1) {
-            let proofreadingReply = talkData.results[0].reply;
-            proofreadingData.alerts.forEach(element => {
-                proofreadingReply = proofreadingReply.slice(0, element.pos) + element.suggestions[0] + proofreadingReply.slice(element.pos + element.word.length);
-            });
-            reply = proofreadingReply;
-        }
+        // const proofreadingRes = await fetch(
+        //     `https://api.a3rt.recruit.co.jp/proofreading/v2/typo?apikey=${proofreadingAPIKey}&sentence=${reply}&sensitivity=high`
+        // );
+        // const proofreadingData = await proofreadingRes.json();
+        // if (proofreadingData.status > 1) {
+        //     reply = `リプライの生成時にエラーが発生しました．[proofreading]エラーコード:${proofreadingData.status}`;
+        // } else if (proofreadingData.status === 1) {
+        //     let proofreadingReply = talkData.results[0].reply;
+        //     proofreadingData.alerts.forEach(element => {
+        //         proofreadingReply = proofreadingReply.slice(0, element.pos) + element.suggestions[0] + proofreadingReply.slice(element.pos + element.word.length);
+        //     });
+        //     reply = proofreadingReply;
+        // }
         return reply;
     } else {
         return `リプライの生成時にエラーが発生しました．[talk]エラーコード:${talkData.status}`;
