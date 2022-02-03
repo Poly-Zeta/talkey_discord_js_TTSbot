@@ -3,12 +3,13 @@ const { addAudioToMapQueue } = require('../functions/audioMap.js');
 const { textOperator } = require('../functions/textOperator.js');
 const { getResponseofTalkAPI } = require('../functions/talkapi.js');
 
-async function talkFunc(message) {
+// async function talkFunc(message) {
+async function talkFunc(readTxt, botConnection) {
     const namePattern = /たーきーちゃん|ターキーちゃん|たーきーくん|ターキーくん/;
-    const botConnection = getVoiceConnection(message.guildId);
+    // const botConnection = getVoiceConnection(message.guildId);
 
-    //引数のメッセージを取得
-    let readTxt = message.content;
+    // //引数のメッセージを取得
+    // let readTxt = message.content;
     //色々除去
     readTxt = textOperator(readTxt);
     // console.log(`chk1: ${readTxt}`);

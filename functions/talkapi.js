@@ -60,24 +60,23 @@ exports.getResponseofTalkAPI = async function (txt) {
         }
     );
     const talkData = await talkRes.json();
-    const reply = talkData.results[0].reply;
     if (talkData.message == "ok") {
+        let reply = talkData.results[0].reply;
         const proofreadingRes = await fetch(
             `https://api.a3rt.recruit.co.jp/proofreading/v2/typo?apikey=${proofreadingAPIKey}&sentence=${reply}&sensitivity=high`
         );
         const proofreadingData = await proofreadingRes.json();
-        // console.log(proofreadingData.status);
-        if (proofreadingData.status === 1) {
-            // console.log("proof 1");
-            let proofreadingReply = reply;
+        if (proofreadingData.status > 1) {
+            reply = `リプライの生成時にエラーが発生しました．[proofreading]エラーコード:${proofreadingData.status}`;
+        } else if (proofreadingData.status === 1) {
+            let proofreadingReply = talkData.results[0].reply;
             proofreadingData.alerts.forEach(element => {
-                // console.log(element.word);
                 proofreadingReply = proofreadingReply.slice(0, element.pos) + element.suggestions[0] + proofreadingReply.slice(element.pos + element.word.length);
             });
-            // console.log(proofreadingReply);
+            reply = proofreadingReply;
         }
-        return talkData.results[0].reply;
+        return reply;
     } else {
-        return `リプライの生成時にエラーが発生しました．エラーコード:${talkData.status}`;
+        return `リプライの生成時にエラーが発生しました．[talk]エラーコード:${talkData.status}`;
     }
 }
