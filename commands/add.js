@@ -210,6 +210,7 @@ module.exports = {
 
         const commandList = Array.from(new Set(commandsToBeRegistlated));
         console.log(`add ${addOptions}`);
+        console.log(commandList);
         return interaction.guild.commands.set(commandList);
 
     }
