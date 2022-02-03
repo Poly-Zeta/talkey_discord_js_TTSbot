@@ -444,7 +444,8 @@ async function onMessage(message) {
     }
 
     addAutoSpeechCounter();
-    await talkFunc(message);
+    // await talkFunc(message);
+    await talkFunc(message.content, message.guildId, message.channel, botConnection);
     return;
 }
 

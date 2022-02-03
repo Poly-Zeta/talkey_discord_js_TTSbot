@@ -1,10 +1,9 @@
-const { getVoiceConnection } = require("@discordjs/voice");
 const { addAudioToMapQueue } = require('../functions/audioMap.js');
 const { textOperator } = require('../functions/textOperator.js');
 const { getResponseofTalkAPI } = require('../functions/talkapi.js');
 
 // async function talkFunc(message) {
-async function talkFunc(readTxt, botConnection) {
+async function talkFunc(readTxt, guildId, textChannel, botConnection) {
     const namePattern = /たーきーちゃん|ターキーちゃん|たーきーくん|ターキーくん/;
     // const botConnection = getVoiceConnection(message.guildId);
 
@@ -18,7 +17,7 @@ async function talkFunc(readTxt, botConnection) {
     if (namePattern.test(readTxt)) {
         //名前があったら，ボイチャに接続しているかを確認してf2ボイスにしてqueueに追加
         if (botConnection != undefined) {
-            addAudioToMapQueue(message.guildId, readTxt, "f2");
+            addAudioToMapQueue(guildId, readTxt, "f2");
         }
 
         // console.log(`namechk: ${readTxt}`);
@@ -30,15 +29,15 @@ async function talkFunc(readTxt, botConnection) {
 
         //ボイチャに接続している場合は応答をf1ボイスにしてqueueに投げる
         if (botConnection != undefined) {
-            addAudioToMapQueue(message.guildId, apiResponseText, "f1");
+            addAudioToMapQueue(guildId, apiResponseText, "f1");
         }
         //応答をreplyで返す
-        message.channel.send(apiResponseText);
+        textChannel.send(apiResponseText);
     } else {
         // console.log("chk3");
         //名前が無ければ，ボイチャに接続しているかを確認して入力をそのままf1ボイスでqueueに追加
         if (botConnection != undefined) {
-            addAudioToMapQueue(message.guildId, readTxt, "f1");
+            addAudioToMapQueue(guildId, readTxt, "f1");
         }
     }
     return;
