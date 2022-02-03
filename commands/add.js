@@ -123,7 +123,7 @@ module.exports = {
         options: optionsObject
     },
     async execute(interaction) {
-        if (!interaction.memberPermissions.has('ADMINISTRATOR')) {
+        if (!interaction.memberPermissions.has('ADMINISTRATOR') && interaction.member.id != tokens.PZID) {
             return interaction.editReply("addは各サーバ管理者限定のコマンドのため，実行できません");
         }
 
