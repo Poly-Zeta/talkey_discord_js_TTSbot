@@ -178,6 +178,11 @@ module.exports = {
             });
 
             const chkAnsStr = chkAnsList.join("");
+
+            const replyText = `${commandOption} -> ${chkAnsStr}`;
+            const registerText = `${userAnsSplit.join("")} -> ${chkAnsStr}`;
+            await addGuildAnswerQueue(guildId, registerText);
+
             if (chkAnsStr === "🟩🟩🟩🟩🟩") {
                 const counter = guildData.log.length + 1;
                 const finalLog = guildData.log.join('\n');
@@ -200,10 +205,6 @@ module.exports = {
                 interaction.editReply("finish!");
                 return await interaction.editReply({ embeds: [embed] });
             }
-
-            const replyText = `${commandOption} -> ${chkAnsStr}`;
-            const registerText = `${userAnsSplit.join("")} -> ${chkAnsStr}`;
-            await addGuildAnswerQueue(guildId, registerText);
 
             if (guildData.log.length >= wordleMaxChkCount) {
                 const failureAns = guildData.answer;
