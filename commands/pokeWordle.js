@@ -184,7 +184,7 @@ module.exports = {
             await addGuildAnswerQueue(guildId, registerText);
 
             if (chkAnsStr === "🟩🟩🟩🟩🟩") {
-                const counter = guildData.log.length + 1;
+                const counter = guildData.log.length;
                 const finalLog = guildData.log.join('\n');
                 deleteGuildToGameMap(guildId);
                 const embed = new MessageEmbed()
