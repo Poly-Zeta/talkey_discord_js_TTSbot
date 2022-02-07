@@ -25,7 +25,7 @@ module.exports = {
         const botConnection = getVoiceConnection(guildId);
 
         //ユーザアカウントに偽装したwebhookを送る
-        await sendMessage(interaction).catch(e => console.error(e));
+        await sendMessage("🔊", interaction).catch(e => console.error(e));
         if (botConnection != undefined) {
             addTalkCommandCounter();
         }

@@ -5,7 +5,7 @@
 //webhookのキャッシュ
 const cacheWebhooks = new Map();
 
-exports.sendMessage = async function (interaction) {
+exports.sendMessage = async function (opt, interaction) {
     //メッセージ発信者の名前とアバターURL
     const nickname = interaction.member.displayName//nickname ?? interaction.user.username;
     const avatarURL = interaction.user.avatarURL({ dynamic: true });
@@ -13,7 +13,7 @@ exports.sendMessage = async function (interaction) {
     const webhook = await getWebhookInChannel(interaction.channel).catch(e => console.error(e));
     //メッセージ送信。usernameとavatarURLをメッセージ発信者のものに指定するのがミソ
     webhook.send({
-        content: interaction.options.get("message").value,
+        content: `${opt} : ${interaction.options.get("message").value}`,
         username: nickname,
         avatarURL: avatarURL,
     }).catch(e => console.error(e));

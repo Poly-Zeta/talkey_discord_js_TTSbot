@@ -16,7 +16,7 @@ module.exports = {
     },
     async execute(interaction) {
         //ユーザアカウントに偽装したwebhookを送る
-        await sendMessage(interaction).catch(e => console.error(e));
+        await sendMessage("🔇", interaction).catch(e => console.error(e));
 
         //ここまでで必要な動作は全て済んでいるが，interactionに返答しないとアプリ側にエラーが出てうざい
         //ので適当に返信してすぐ消す
