@@ -125,7 +125,9 @@ async function playGuildAudio(guildId) {
     const guildData = queueMap.get(guildId);
     if (!guildData?.speakQueue[0]) return;
     const defaultNickname = guildData.me.displayName;
-    await guildData.me.setNickname(guildData.speakQueue[0].nickname);
+
+    //これオンにすると読み上げの際に名前が入力者の名前になる 実際動かすか迷う
+    // await guildData.me.setNickname(guildData.speakQueue[0].nickname);
 
     // let playResource;
     // if (process.platform == "linux") {
@@ -150,7 +152,10 @@ async function playGuildAudio(guildId) {
 
     await entersState(guildData.player, AudioPlayerStatus.Playing, 10 * 1000);
     await entersState(guildData.player, AudioPlayerStatus.Idle, 2 * 60 * 1000);
-    await guildData.me.setNickname(defaultNickname);
+
+    //アイコンを元に戻す
+    // await guildData.me.setNickname(defaultNickname);
+
     guildData.speakQueue.shift();
     // console.log(`queue length: ${guildData.speakQueue.length}`);
     playGuildAudio(guildId);
