@@ -15,7 +15,6 @@ const client = new Discord.Client({
 
 process.on('unhandledRejection', error => {
     console.log(error);
-    client.channels.cache.get("858965226245193768").send(error);
 });
 
 var fs = require('fs');
