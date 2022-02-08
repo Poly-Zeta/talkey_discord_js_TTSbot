@@ -124,7 +124,7 @@ function scanQueueMap(now) {
 async function playGuildAudio(guildId) {
     const guildData = queueMap.get(guildId);
     if (!guildData?.speakQueue[0]) return;
-    const defaultNickname = guildData.me.displayName();
+    const defaultNickname = guildData.me.displayName;
     await guildData.me.setNickname(guildData.speakQueue[0].nickname);
 
     // let playResource;
