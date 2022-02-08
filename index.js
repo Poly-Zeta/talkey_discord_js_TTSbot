@@ -9,12 +9,13 @@ const { addGuildData, deleteGuildData } = require('./functions/commandDBIO.js');
 const cron = require('node-cron')
 const { execSync } = require('child_process');
 
-process.on('unhandledRejection', error => {
-    console.log(error);
-});
-
 const client = new Discord.Client({
     intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES"],
+});
+
+process.on('unhandledRejection', error => {
+    console.log(error);
+    client.channels.cache.get("858965226245193768").send(error);
 });
 
 var fs = require('fs');
