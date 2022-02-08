@@ -33,7 +33,7 @@ module.exports = {
         //引数のメッセージを取得
         let readTxt = interaction.options.get("message").value;
 
-        await talkFunc(readTxt, guildId, interaction.channel, botConnection);
+        await talkFunc(readTxt, guildId, interaction.channel, botConnection, interaction.member.displayName);
 
         // //色々除去
         // readTxt = textOperator(readTxt);
