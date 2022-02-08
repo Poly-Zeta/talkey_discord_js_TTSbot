@@ -50,7 +50,7 @@ module.exports = {
         }
         if (botConnection != undefined) {
             const replyText = textOperator(reply);
-            addAudioToMapQueue(interaction.guild.id, replyText, "f1");
+            addAudioToMapQueue(interaction.guild.id, interaction.member.displayName, replyText, "f1");
         }
         return interaction.reply(reply);
     }

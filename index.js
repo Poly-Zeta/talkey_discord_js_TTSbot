@@ -105,7 +105,7 @@ async function onVoiceStateUpdate(oldState, newState) {
             //ユーザの参加したギルドにbotは居る，ではユーザの参加したvcにbotは居る？
             if (newGuildBotVcData.voiceChannelId === newVcId) {
                 // console.log("im participating in");
-                return addAudioToMapQueue(newGuild.id, `${updateMember.user.username}さんが通話に参加しました`, "f1");
+                return addAudioToMapQueue(newGuild.id, "システム", `${updateMember.user.username}さんが通話に参加しました`, "f1");
             }
             return;
         } else {
@@ -135,7 +135,7 @@ async function onVoiceStateUpdate(oldState, newState) {
                 }
 
                 //ユーザが退出したvcにbotが居て，まだ他のユーザが居るので退出メッセージ
-                return addAudioToMapQueue(oldGuild.id, `${updateMember.user.username}さんが通話から退出しました`, "f1");;
+                return addAudioToMapQueue(oldGuild.id, "システム", `${updateMember.user.username}さんが通話から退出しました`, "f1");;
             }
 
             //ユーザの退出したギルドにbotは居るが，同一vcではないので処理しない
@@ -178,10 +178,10 @@ async function onVoiceStateUpdate(oldState, newState) {
                         return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
                     }
                     //空になってないので退出通知
-                    return addAudioToMapQueue(oldGuild.id, `${updateMember.user.username}さんが通話から退出しました`, "f1");
+                    return addAudioToMapQueue(oldGuild.id, "システム", `${updateMember.user.username}さんが通話から退出しました`, "f1");
                 }
                 //ユーザの移動先vcにbotが居る状態なので入室通知
-                return addAudioToMapQueue(newGuild.id, `${updateMember.user.username}さんが通話に参加しました`, "f1");
+                return addAudioToMapQueue(newGuild.id, "システム", `${updateMember.user.username}さんが通話に参加しました`, "f1");
             }
             return;
         }
@@ -222,11 +222,11 @@ async function onVoiceStateUpdate(oldState, newState) {
             return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
         }
         //空になってないので退出通知
-        return addAudioToMapQueue(oldGuild.id, `${updateMember.user.username}さんが通話から退出しました`, "f1");
+        return addAudioToMapQueue(oldGuild.id, "システム", `${updateMember.user.username}さんが通話から退出しました`, "f1");
     }
 
     if (newBotConnection !== undefined) {
-        return addAudioToMapQueue(newGuild.id, `${updateMember.user.username}さんが通話に参加しました`, "f1");
+        return addAudioToMapQueue(newGuild.id, "システム", `${updateMember.user.username}さんが通話に参加しました`, "f1");
     }
     return;
 }
@@ -446,7 +446,7 @@ async function onMessage(message) {
 
     addAutoSpeechCounter();
     // await talkFunc(message);
-    await talkFunc(message.content, message.guildId, message.channel, botConnection);
+    await talkFunc(message.content, message.guildId, message.channel, botConnection, message.member.displayName);
     return;
 }
 

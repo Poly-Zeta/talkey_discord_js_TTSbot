@@ -37,10 +37,11 @@ async function deleteMember(guildId, deleteMemberId) {
     return;
 }
 
-async function addGuildToMap(guildId, voiceChannelId, connection, player) {
-    const beforeSize = queueMap.size;
+async function addGuildToMap(me, guildId, voiceChannelId, connection, player) {
+    // const beforeSize = queueMap.size;
     const timestump = Date.now();
     queueMap.set(guildId, {
+        me,
         voiceChannelId,
         speakQueue: [],
         memberId: new Map(),
@@ -54,7 +55,7 @@ async function addGuildToMap(guildId, voiceChannelId, connection, player) {
 }
 
 async function moveVoiceChannel(guild, guildId, oldChannel, newChannel) {
-    const beforeSize = queueMap.size;
+    // const beforeSize = queueMap.size;
     const mapBefore = queueMap.get(guildId);
     // console.log(`move before ${mapBefore.voiceChannelId}`);
     // console.log("================movestart================");
@@ -70,29 +71,30 @@ async function moveVoiceChannel(guild, guildId, oldChannel, newChannel) {
     });
     const newPlayer = mapBefore.player;
     connection.subscribe(newPlayer);
+    const newme = mapBefore.me;
 
     deleteGuildToMap(guildId);
-    addGuildToMap(guildId, newChannel.id, connection, newPlayer);
+    addGuildToMap(newme, guildId, newChannel.id, connection, newPlayer);
 
     // console.log("================moveend================");
 
-    const mapAfter = queueMap.get(guildId);
+    // const mapAfter = queueMap.get(guildId);
     // console.log(`move after ${mapAfter.voiceChannelId}`);
     // console.log(`before:${beforeSize}->after:${queueMap.size}`);
     return;
 }
 
 async function deleteGuildToMap(guildId) {
-    const beforeSize = queueMap.size;
+    // const beforeSize = queueMap.size;
     queueMap.delete(guildId);
     // console.log(`delete before:${beforeSize}->after:${queueMap.size}`);
     return;
 }
 
-async function addAudioToMapQueue(guildId, text, voiceOption) {
+async function addAudioToMapQueue(guildId, nickname, text, voiceOption) {
     const serverQueue = queueMap.get(guildId);
     const startlength = serverQueue.speakQueue.length;
-    serverQueue.speakQueue.push({ text, voiceOption });
+    serverQueue.speakQueue.push({ nickname, text, voiceOption });
     serverQueue.timestump = Date.now();
     // console.log(`queue length: ${serverQueue.speakQueue.length}, ${serverQueue.timestump}`);
     if (startlength == 0) {
@@ -122,6 +124,8 @@ function scanQueueMap(now) {
 async function playGuildAudio(guildId) {
     const guildData = queueMap.get(guildId);
     if (!guildData?.speakQueue[0]) return;
+    const defaultNickname = guildData.me.displayName();
+    await guildData.me.setNickname(guildData.speakQueue[0].nickname);
 
     // let playResource;
     // if (process.platform == "linux") {
@@ -146,7 +150,7 @@ async function playGuildAudio(guildId) {
 
     await entersState(guildData.player, AudioPlayerStatus.Playing, 10 * 1000);
     await entersState(guildData.player, AudioPlayerStatus.Idle, 2 * 60 * 1000);
-
+    await guildData.me.setNickname(defaultNickname);
     guildData.speakQueue.shift();
     // console.log(`queue length: ${guildData.speakQueue.length}`);
     playGuildAudio(guildId);

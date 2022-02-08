@@ -79,7 +79,7 @@ module.exports = {
             });
             const player = createAudioPlayer({ behaviors: { noSubscriber: NoSubscriberBehavior.Pause, } });
             connection.subscribe(player);
-            addGuildToMap(guild.id, memberVC.id, connection, player);
+            addGuildToMap(guild.me, guild.id, memberVC.id, connection, player);
             return interaction.reply({ embeds: [embed] });
             // return interaction.reply(replyMessage);
         }
