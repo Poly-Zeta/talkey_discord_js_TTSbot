@@ -160,21 +160,74 @@ module.exports = {
                 return interaction.editReply("適切な回答をを2~5文字で入力してください．");
             }
 
-            const correctAnsSplit = guildData.answer.split("");
+            // const sampleStr="abcaa";
+            // const sampleSplit=sampleStr.split("");
+            // const sampleMatrix=[];
+            // sampleMatrix.push(sampleSplit);
+            // const countUp=[];
+
+            // sampleSplit.forEach((element,index)=>{
+            //     //console.log(sampleSplit[index]);
+            //     //console.log(sampleSplit.slice(0,index+1).join(""));
+            //     countUp.push((sampleSplit.slice(0,index+1).join("").match( new RegExp(sampleSplit[index], "g" ) )).length);
+            // });
+
+            // sampleMatrix.push(countUp);
+            // console.log(sampleMatrix);
+            const transpose = a => a[0].map((_, c) => a.map(r => r[c]));
+
+            //答え文字列
+            const correctAns = guildData.answer;
+            //答え文字列を文字単位で分割
+            const correctAnsSplit = correctAns.split("");
+            //分割した文字列と出現数のリストを保存する用
+            const correctAnsMatrix = [];
+            //分割した文字列は先に入れておく
+            correctAnsMatrix.push(correctAnsSplit);
+            //出現数のリスト
+            const correctAnsSplitCountUp = [];
+            //出現数カウント．"aabca"->[1,2,1,1,3]となる
+            correctAnsSplit.forEach((element, index) => {
+                correctAnsSplitCountUp.push((correctAnsSplit.slice(0, index + 1).join("").match(new RegExp(correctAnsSplit[index], "g"))).length);
+            });
+            //出現数リストを保管
+            correctAnsMatrix.push(correctAnsSplitCountUp);
+            //転置
+            const correctAnsMatrixT = transpose(correctAnsMatrix);
+
             const userAnsSplit = commandOption.split("");
-
             for (; userAnsSplit.length < 5; userAnsSplit.push("＿"));
-            // console.log(userAnsSplit);
-
-            let chkAnsList = ["⬜", "⬜", "⬜", "⬜", "⬜"];
-            //⬜ 🟨 🟩
+            const userAnsMatrix = [];
+            userAnsMatrix.push(userAnsSplit);
+            const userAnsSplitCountUp = [];
             userAnsSplit.forEach((element, index) => {
-                if (correctAnsSplit.includes(element)) {
-                    chkAnsList[index] = "🟨";
+                userAnsSplitCountUp.push((userAnsSplit.slice(0, index + 1).join("").match(new RegExp(userAnsSplit[index], "g"))).length);
+            });
+            userAnsMatrix.push(userAnsSplitCountUp);
+            const userAnsMatrixT = transpose(userAnsMatrix);
+
+
+            // let chkAnsList = ["⬜", "⬜", "⬜", "⬜", "⬜"];
+            const chkAnsList = [];
+            //⬜ 🟨 🟩
+            userAnsMatrixT.forEach((element, index) => {
+                //解答n文字目=ユーザの答えn文字目？
+                if (correctAnsMatrixT[index][0] === element[0]) {
+                    chkAnsList.push("🟩");
                 }
-                if (element === correctAnsSplit[index]) {
-                    chkAnsList[index] = "🟩";
+                //ユーザの答えと回答に同じ文字で同じ出現回数かつその文字が緑判定でない項目がある？
+                else if (correctAnsMatrixT.some((cElement, cIndex) => cElement[0] === element[0] && cElement[1] === element[1] && cElement[0] !== userAnsMatrixT[cIndex][0])) {
+                    chkAnsList.push("🟨");
+                } else {
+                    chkAnsList.push("⬜");
                 }
+                // if (correctAnsSplit.includes(element)) {
+                //     chkAnsList[index] = "🟨";
+                //     if (correctAnsSplit[index]===element) {
+                //         chkAnsList[index] = "🟩";
+                //     }
+
+                // }
             });
 
             const chkAnsStr = chkAnsList.join("");
