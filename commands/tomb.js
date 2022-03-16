@@ -27,7 +27,7 @@ module.exports = {
     async execute(interaction) {
         const subCommand = interaction.options.getSubcommand(false);
         console.log(subCommand);
-        if (subCommand == "deafult") {
+        if (subCommand == "default") {
             const reply = "†┏┛墓┗┓†";
             return interaction.reply(reply);
         } else if (subCommand == "insert") {

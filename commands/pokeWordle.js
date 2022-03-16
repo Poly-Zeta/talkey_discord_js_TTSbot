@@ -261,8 +261,26 @@ module.exports = {
 
             if (guildData.log.length >= wordleMaxChkCount) {
                 const failureAns = guildData.answer;
+                const finalLog = guildData.log.join('\n');
                 deleteGuildToGameMap(guildId);
-                return interaction.editReply(`失敗... 答えは${failureAns}でした．`);
+                // return interaction.editReply(`失敗... 答えは${failureAns}でした．`);
+                const embed = new MessageEmbed()
+                    .setTitle('result')
+                    .addFields(
+                        {
+                            name: "log",
+                            value: finalLog,
+                            inline: false
+                        },
+                        {
+                            name: "message",
+                            value: `${commandOption} -> 失敗... 答えは${failureAns}でした．`,
+                            inline: false
+                        }
+                    )
+                    .setColor('#ff0000');
+                interaction.editReply("finish!");
+                return await interaction.editReply({ embeds: [embed] });
             }
 
             const embed = new MessageEmbed()
