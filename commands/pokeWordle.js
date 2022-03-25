@@ -157,7 +157,7 @@ module.exports = {
             // console.log(commandOption);
 
             if (!pokewordleAllList.includes(commandOption)) {
-                return interaction.editReply("適切な回答をを2~5文字で入力してください．");
+                return interaction.editReply("適切な回答を2~5文字で入力してください．");
             }
 
             // const sampleStr="abcaa";
