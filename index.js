@@ -395,7 +395,9 @@ async function onMessage(message) {
     //token削除
     //参考
     //https://qiita.com/minecraftomato1/items/50fac64d500ea98941f4
-    if (message.content.match(/[a-zA-Z0-9]{23}.[a-zA-Z0-9]{6}/)) {
+    const startsWithHTTP=message.content.startsWith("http");
+    const findTOKEN=message.content.match(/[a-zA-Z0-9]{23}.[a-zA-Z0-9]{6}/);
+    if (findTOKEN && !startsWithHTTP) {
         message.delete()
             .then(() => message.channel.send("tokenを検出したため削除"))
             .catch(e => message.channel.send(`エラー${e.message}`));
