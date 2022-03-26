@@ -32,7 +32,13 @@ module.exports = {
     },
     async execute(interaction) {
         const cmdOption=interaction.options.get("insert",false);
-        const insertText=cmdOption.value ?? "墓";
+        let insertText;
+        if(cmdOption!==null){
+            insertText=cmdOption.value;
+        }else{
+            insertText="墓";
+        }
+        
         const reply = `†┏┛${insertText}┗┓†`;
         return interaction.reply(reply);
 
