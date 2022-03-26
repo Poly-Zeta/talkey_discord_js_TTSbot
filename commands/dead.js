@@ -36,7 +36,7 @@ module.exports = {
         const regex2Byte = /[^\x01-\x7E\xA1-\xDF]/g;
         const regex1Byte = /[\x01-\x7E\xA1-\xDF]/g;
         // const subCommand = interaction.options.getSubcommand(false);
-        console.log(subCommand);
+        // console.log(subCommand);
         const cmdOption=interaction.options.get("insert",false);
         let insertText;
         if(cmdOption!==null){
