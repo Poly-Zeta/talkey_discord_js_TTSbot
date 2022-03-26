@@ -61,7 +61,7 @@ module.exports = {
         const splitDPattern = /D{1}/gi;
 
         // const subCommand = interaction.options.getSubcommand(false);
-        console.log(subCommand);
+        // console.log(subCommand);
 
         const cmdOption=interaction.options.get("ndn",false);
         let ndn;
