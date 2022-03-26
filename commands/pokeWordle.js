@@ -66,8 +66,13 @@ module.exports = {
         options: [
             {
                 type: "SUB_COMMAND",
+                name: "newgame",
+                description: "ゲームの開始",
+            },
+            {
+                type: "SUB_COMMAND",
                 name: "config",
-                description: "ゲームの開始，進行チェック，ヘルプ",
+                description: "進行チェック，ヘルプ",
                 options: [
                     {
                         type: "STRING",
@@ -75,10 +80,10 @@ module.exports = {
                         description: "どの操作を実行するか指定",
                         required: true,
                         choices: [
-                            {
-                                name: "newgame",
-                                value: "newgame"
-                            },
+                            // {
+                            //     name: "newgame",
+                            //     value: "newgame"
+                            // },
                             {
                                 name: "status",
                                 value: "status"
@@ -112,18 +117,28 @@ module.exports = {
         const guildId = interaction.guild.id;
         const guildData = await getGuildGame(guildId);
 
-        if (subCommand === "config") {
+        if (subCommand === "newgame") {
+            await interaction.reply("working!");
+            if (guildData === undefined) {
+                await addGuildToGameMap(guildId);
+                return interaction.editReply("新規ゲームを開始しました．/pokewordle checkコマンドで解答してください．");
+            } else {
+                return interaction.editReply("既にゲームが開始されています．");
+            }
+        }else if (subCommand === "config") {
+        // if (subCommand === "config") {
             const commandOption = interaction.options.get("option").value;
             console.log(commandOption);
-            if (commandOption === "newgame") {
-                await interaction.reply("working!");
-                if (guildData === undefined) {
-                    await addGuildToGameMap(guildId);
-                    return interaction.editReply("新規ゲームを開始しました．/pokewordle checkコマンドで解答してください．");
-                } else {
-                    return interaction.editReply("既にゲームが開始されています．");
-                }
-            } else if (commandOption === "status") {
+            // if (commandOption === "newgame") {
+            //     await interaction.reply("working!");
+            //     if (guildData === undefined) {
+            //         await addGuildToGameMap(guildId);
+            //         return interaction.editReply("新規ゲームを開始しました．/pokewordle checkコマンドで解答してください．");
+            //     } else {
+            //         return interaction.editReply("既にゲームが開始されています．");
+            //     }
+            // } else if (commandOption === "status") {
+            if (commandOption === "status") {
                 await interaction.reply("working!");
                 if (guildData === undefined) {
                     return interaction.editReply("このギルドで進行中のゲームは存在しません．");
