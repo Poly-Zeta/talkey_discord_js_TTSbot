@@ -27,6 +27,7 @@ module.exports = {
         //コマンド送信者のVC状況をチェック
         const memberVC = interaction.member.voice.channel;
         const guild = interaction.guild;
+        const textChannelId=interaction.channelId;
         // const member = await guild.members.fetch(interaction.member.id);
         // const memberVC = member.voice.channel;
 
@@ -79,7 +80,7 @@ module.exports = {
             });
             const player = createAudioPlayer({ behaviors: { noSubscriber: NoSubscriberBehavior.Pause, } });
             connection.subscribe(player);
-            addGuildToMap(guild.me, guild.id, memberVC.id, connection, player);
+            addGuildToMap(guild.me, guild.id,textChannelId, memberVC.id, connection, player);
             return interaction.reply({ embeds: [embed] });
             // return interaction.reply(replyMessage);
         }

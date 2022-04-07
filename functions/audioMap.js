@@ -37,11 +37,12 @@ async function deleteMember(guildId, deleteMemberId) {
     return;
 }
 
-async function addGuildToMap(me, guildId, voiceChannelId, connection, player) {
+async function addGuildToMap(me, guildId, textChannelId,voiceChannelId, connection, player) {
     // const beforeSize = queueMap.size;
     const timestump = Date.now();
     queueMap.set(guildId, {
         me,
+        textChannelId,
         voiceChannelId,
         speakQueue: [],
         memberId: new Map(),
@@ -54,7 +55,7 @@ async function addGuildToMap(me, guildId, voiceChannelId, connection, player) {
     return;
 }
 
-async function moveVoiceChannel(guild, guildId, oldChannel, newChannel) {
+async function moveVoiceChannel(guild, guildId, oldVoiceChannel, newVoiceChannel) {
     // const beforeSize = queueMap.size;
     const mapBefore = queueMap.get(guildId);
     // console.log(`move before ${mapBefore.voiceChannelId}`);
@@ -65,16 +66,17 @@ async function moveVoiceChannel(guild, guildId, oldChannel, newChannel) {
 
     const connection = joinVoiceChannel({
         guildId: guildId,
-        channelId: newChannel.id,
+        channelId: newVoiceChannel.id,
         adapterCreator: guild.voiceAdapterCreator,
         selfMute: false,
     });
     const newPlayer = mapBefore.player;
     connection.subscribe(newPlayer);
     const newme = mapBefore.me;
+    const newTextChannelId=mapBefore.textChannelId;
 
     deleteGuildToMap(guildId);
-    addGuildToMap(newme, guildId, newChannel.id, connection, newPlayer);
+    addGuildToMap(newme, guildId,newTextChannelId, newVoiceChannel.id, connection, newPlayer);
 
     // console.log("================moveend================");
 

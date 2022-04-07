@@ -131,7 +131,9 @@ async function onVoiceStateUpdate(oldState, newState) {
                     // console.log("auto-disconnect");
                     oldBotConnection.destroy();
                     deleteGuildToMap(oldGuild.id);
-                    return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
+                    // return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
+                    return oldGuildBotVcData.textChannelId.send("ボイスチャットが空になりました．自動退出します．");
+
                 }
 
                 //ユーザが退出したvcにbotが居て，まだ他のユーザが居るので退出メッセージ
@@ -141,7 +143,7 @@ async function onVoiceStateUpdate(oldState, newState) {
             //ユーザの退出したギルドにbotは居るが，同一vcではないので処理しない
             return;
         } else {
-            console.log("i disconnect");
+            // console.log("i disconnect");
             return;
         }
     }
@@ -175,7 +177,8 @@ async function onVoiceStateUpdate(oldState, newState) {
                         // console.log("auto-disconnect");
                         oldBotConnection.destroy();
                         deleteGuildToMap(oldGuild.id);
-                        return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
+                        // return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
+                        return oldGuildBotVcData.textChannelId.send("ボイスチャットが空になりました．自動退出します．");
                     }
                     //空になってないので退出通知
                     return addAudioToMapQueue(oldGuild.id, "システム", `${updateMember.user.username}さんが通話から退出しました`, "f1");
@@ -197,11 +200,13 @@ async function onVoiceStateUpdate(oldState, newState) {
                 // console.log("auto-disconnect");
                 newBotConnection.destroy();
                 deleteGuildToMap(newGuild.id);
-                return newGuild.systemChannel.send("空のボイスチャットに移動しました．自動退出します．");
+                // return newGuild.systemChannel.send("空のボイスチャットに移動しました．自動退出します．");
+                return newGuildBotVcData.textChannelId.send("空のボイスチャットに移動しました．自動退出します．");
             }
 
             //再接続処理
-            oldGuild.systemChannel.send("botの移動を検知しました．接続データを変更します．読み上げなくなった際は，/byeと/joinで再接続してみてください．");
+            // oldGuild.systemChannel.send("botの移動を検知しました．接続データを変更します．読み上げなくなった際は，/byeと/joinで再接続してみてください．");
+            oldGuildBotVcData.textChannelId.send("botの移動を検知しました．接続データを変更します．読み上げなくなった際は，/byeと/joinで再接続してみてください．");
             return await moveVoiceChannel(oldGuild, oldGuild.id, oldVc, newVc);
         }
         //ここに来たらbotのミュート
@@ -219,7 +224,8 @@ async function onVoiceStateUpdate(oldState, newState) {
             // console.log("auto-disconnect");
             oldBotConnection.destroy();
             deleteGuildToMap(oldGuild.id);
-            return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
+            // return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
+            return oldGuildBotVcData.textChannelId.send("ボイスチャットが空になりました．自動退出します．");
         }
         //空になってないので退出通知
         return addAudioToMapQueue(oldGuild.id, "システム", `${updateMember.user.username}さんが通話から退出しました`, "f1");
@@ -356,11 +362,13 @@ client.on('ready', () => {
         // console.log(idList);
         for (const elem of idList) {
             // console.log(elem);
+            const botVcData = await getGuildMap(elem);
             const botConnection = getVoiceConnection(elem);
             botConnection.destroy();
             deleteGuildToMap(elem);
             const guild = client.guilds.cache.get(elem);
-            guild.systemChannel.send('一定時間読み上げ指示が無かったため，切断しました．');
+            // guild.systemChannel.send('一定時間読み上げ指示が無かったため，切断しました．');
+            botVcData.textChannelId.send('一定時間読み上げ指示が無かったため，切断しました．');
         }
         client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
     });
