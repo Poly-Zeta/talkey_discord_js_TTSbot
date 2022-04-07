@@ -362,7 +362,11 @@ client.on('ready', () => {
         // console.log(idList);
         for (const elem of idList) {
             // console.log(elem);
-            const botVcData = await getGuildMap(elem);
+
+            //これ本当にawait無しで大丈夫なのかわからん
+            const botVcData = getGuildMap(elem);
+            
+            
             const botConnection = getVoiceConnection(elem);
             botConnection.destroy();
             deleteGuildToMap(elem);
