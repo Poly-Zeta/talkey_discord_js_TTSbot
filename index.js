@@ -90,6 +90,20 @@ async function onVoiceStateUpdate(oldState, newState) {
     const oldGuildBotVcData = await getGuildMap(oldGuild.id);
     const newGuildBotVcData = await getGuildMap(newGuild.id);
 
+    let oldTextChannelId;
+    let newTextChannelId
+    try{
+        oldTextChannelId=oldGuildBotVcData.textChannelId;
+    }catch(e){
+        // console.log("入退室メッセージ関連のError,問題はない");
+    }
+    try{
+        newTextChannelId=newGuildBotVcData.textChannelId;
+    }catch(e){
+        // console.log("入退室メッセージ関連のError,問題はない");
+    }
+
+
     // console.log(oldState.channelId, newState.channelId, (oldState.member.id == tokens.myID), (newState.member.id == tokens.myID), oldGuild.id, newGuild.id);
 
     //確実に参加
@@ -132,8 +146,7 @@ async function onVoiceStateUpdate(oldState, newState) {
                     oldBotConnection.destroy();
                     deleteGuildToMap(oldGuild.id);
                     // return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
-                    return oldGuildBotVcData.textChannelId.send("ボイスチャットが空になりました．自動退出します．");
-
+                    return client.channels.cache.get(oldTextChannelId).send("ボイスチャットが空になりました．自動退出します．");
                 }
 
                 //ユーザが退出したvcにbotが居て，まだ他のユーザが居るので退出メッセージ
@@ -178,7 +191,7 @@ async function onVoiceStateUpdate(oldState, newState) {
                         oldBotConnection.destroy();
                         deleteGuildToMap(oldGuild.id);
                         // return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
-                        return oldGuildBotVcData.textChannelId.send("ボイスチャットが空になりました．自動退出します．");
+                        return client.channels.cache.get(oldTextChannelId).send("ボイスチャットが空になりました．自動退出します．");
                     }
                     //空になってないので退出通知
                     return addAudioToMapQueue(oldGuild.id, "システム", `${updateMember.user.username}さんが通話から退出しました`, "f1");
@@ -201,12 +214,12 @@ async function onVoiceStateUpdate(oldState, newState) {
                 newBotConnection.destroy();
                 deleteGuildToMap(newGuild.id);
                 // return newGuild.systemChannel.send("空のボイスチャットに移動しました．自動退出します．");
-                return newGuildBotVcData.textChannelId.send("空のボイスチャットに移動しました．自動退出します．");
+                return client.channels.cache.get(newTextChannelId).send("空のボイスチャットに移動しました．自動退出します．");
             }
 
             //再接続処理
             // oldGuild.systemChannel.send("botの移動を検知しました．接続データを変更します．読み上げなくなった際は，/byeと/joinで再接続してみてください．");
-            oldGuildBotVcData.textChannelId.send("botの移動を検知しました．接続データを変更します．読み上げなくなった際は，/byeと/joinで再接続してみてください．");
+            client.channels.cache.get(oldTextChannelId).send("botの移動を検知しました．接続データを変更します．読み上げなくなった際は，/byeと/joinで再接続してみてください．");
             return await moveVoiceChannel(oldGuild, oldGuild.id, oldVc, newVc);
         }
         //ここに来たらbotのミュート
@@ -225,7 +238,7 @@ async function onVoiceStateUpdate(oldState, newState) {
             oldBotConnection.destroy();
             deleteGuildToMap(oldGuild.id);
             // return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
-            return oldGuildBotVcData.textChannelId.send("ボイスチャットが空になりました．自動退出します．");
+            return client.channels.cache.get(oldTextChannelId).send("ボイスチャットが空になりました．自動退出します．");
         }
         //空になってないので退出通知
         return addAudioToMapQueue(oldGuild.id, "システム", `${updateMember.user.username}さんが通話から退出しました`, "f1");
