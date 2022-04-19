@@ -33,7 +33,7 @@ client.on('ready', () => {
     .then(() => {
         console.log("rollback!");
         client.destroy();
-        const stdout = execSync(`git revert ${tokens.oldRepository}`);
+        const stdout = execSync(`git revert ${tokens.oldRepository} --no-edit`);
         process.exit(0);
     });
 });
