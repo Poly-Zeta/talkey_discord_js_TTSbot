@@ -60,6 +60,7 @@ module.exports = {
 
         //更新後にエラー吐いたとき用に，現在動いているコードのコミットのhashを保存する．
         if (subCommand == "upgrade") {
+            console.log("upgrade");
             tokens.oldRepository=tokens.nowRepository;
             fs.writeFileSync(
                 path.resolve(__dirname, absolutePath.tokens),
