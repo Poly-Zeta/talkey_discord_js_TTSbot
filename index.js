@@ -64,7 +64,7 @@ var statConfig = JSON.parse(
 const commands = {}
 const commandFiles = fs.readdirSync(absolutePath.commandsdir).filter(file => file.endsWith('.js'))
 
-for (const あああああああああああああああああああああああfile of commandFiles) {
+for (const file of commandFiles) {
     const command = require(`${absolutePath.commandsdir}/${file}`);
     commands[command.data.name] = command
 }
