@@ -37,7 +37,8 @@ var tokens = JSON.parse(
 );
 
 //自動ロールバック機能の兼ね合いでコミットのhash保存が必要になった
-tokens.nowRepository= execSync("git rev-parse HEAD").toString();
+const stdout=execSync("git rev-parse HEAD");
+tokens.nowRepository= stdout.toString();
 fs.writeFileSync(
     path.resolve(__dirname, absolutePath.tokens),
     JSON.stringify(tokens, undefined, 4),
