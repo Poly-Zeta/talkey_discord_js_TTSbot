@@ -46,11 +46,11 @@ fs.writeFileSync(
 );
 
 //どのコマンドをどの鯖に登録するかのデータ取得
-var registerSet = JSON.parse(
-    fs.readFileSync(
-        path.resolve(__dirname, absolutePath.commands)
-    )
-);
+// var registerSet = JSON.parse(
+//     fs.readFileSync(
+//         path.resolve(__dirname, absolutePath.commands)
+//     )
+// );
 
 var statConfig = JSON.parse(
     fs.readFileSync(
