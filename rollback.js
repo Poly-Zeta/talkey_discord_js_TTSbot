@@ -26,7 +26,7 @@ var tokens = JSON.parse(
 );
 
 client.on('ready', () => {
-    client.channels.cache.get(tokens.bootNotifyChannel).send('ロールバックします．')
+    client.channels.cache.get(tokens.bootNotifyChannel).send('エラーによりロールバックします．')
     .catch((e) => {
         console.log(e);
     })
