@@ -58,7 +58,7 @@ module.exports = {
             );
         }
 
-        //更新後にエラー吐いたとき用に，現在動いているコードのコミットのhashを保存する
+        //更新後にエラー吐いたとき用に，現在動いているコードのコミットのhashを保存する．
         if (subCommand == "upgrade") {
             tokens.oldRepository=tokens.nowRepository;
             fs.writeFileSync(
