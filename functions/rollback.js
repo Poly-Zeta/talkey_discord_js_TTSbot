@@ -23,8 +23,8 @@ var statConfig = JSON.parse(
 
 async function rollback(){
     console.log("called rollback function.");
-    
-    client.channels.cache.get(tokens.bootNotifyChannel).send('ロールバックします．');
+
+    await client.channels.cache.get(tokens.bootNotifyChannel).send('ロールバックします．');
     const stdout = execSync("git reset --hard HEAD@{1}");
 
     return;
