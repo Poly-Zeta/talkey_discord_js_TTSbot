@@ -14,7 +14,7 @@ const client = new Discord.Client({
 });
 
 process.on('unhandledRejection', error => {
-    console.log(error);
+    console.log(`index:${error}`);
 });
 
 var fs = require('fs');
