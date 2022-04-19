@@ -9,6 +9,7 @@
   },
   "main": "main.js",
   "scripts": {
+    "start": "nodemon -x 'node index.js||node rollback.js'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
