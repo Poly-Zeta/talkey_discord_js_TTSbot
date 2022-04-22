@@ -17,22 +17,22 @@ module.exports = {
                 },
                 {
                     name: "太字",
-                    value: "\**で文章を囲むと**太字**にできます．",
+                    value: "\\**で文章を囲むと**太字**にできます．",
                     inline: false
                 },
                 {
                     name: "下線",
-                    value: "\__で文章を囲むと__下線__を引けます．",
+                    value: "\\__で文章を囲むと__下線__を引けます．",
                     inline: false
                 },
                 {
                     name: "打消し線",
-                    value: "\~~で文章を囲むと~~打消し線~~を引けます．",
+                    value: "\\~~で文章を囲むと~~打消し線~~を引けます．",
                     inline: false
                 },
                 {
                     name: "ネタばれ隠し",
-                    value: "\||で文章を囲むと||ネタばれ||を隠せます．",
+                    value: "\\||で文章を囲むと||ネタばれ||を隠せます．",
                     inline: false
                 },
                 {
@@ -42,7 +42,7 @@ module.exports = {
                 },
                 {
                     name: "コードブロック",
-                    value: "\```で文章を囲むと```print('code block')```になります．",
+                    value: "\\```で文章を囲むと```print('code block')```になります．",
                     inline: false
                 },
                 {
@@ -52,7 +52,7 @@ module.exports = {
                 },
                 {
                     name: "無効化",
-                    value: "\の**後**に入力された装飾は__無効化__されます．",
+                    value: "'\'の\\**後\\**に入力された装飾は\\__無効化\\__されます．",
                     inline: false
                 },
             )
