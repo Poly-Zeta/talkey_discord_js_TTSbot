@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 const { readGuildCommand, addGuildCommand } = require('../functions/commandDBIO.js');
+const cmdUpdate = require('./cmdUpdate.js');
 
 var absolutePath = JSON.parse(
     fs.readFileSync(
@@ -38,10 +39,10 @@ for (const file of commandFiles) {
     const command = require(`${absolutePath.commandsdir}/${file}`);
 
     //attrはadditionalだが，addの候補に出したくない物の除外設定
-    //rebootは公式鯖限定
+    //reboot,cmdupdateは公式鯖限定
     //beniコマンドは完全身内ネタなので無条件に登録されたら困る
     //これらは管理者が直接command.jsonを書き換えて登録する
-    const commandsToBeExcluded = ["reboot", "beni"];
+    const commandsToBeExcluded = ["reboot", "beni","cmdupdate"];
 
     //全サーバに自動導入させたいけど，即時反映させたいのでguildコマンドとして登録するもの(attrがoption)はここ
     if (command.attr == "option") {
