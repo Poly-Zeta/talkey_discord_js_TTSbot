@@ -105,7 +105,7 @@ if (maxNumOfAdditionalCommand > additionalCommands.length) {
 const optionsOfChoiceObject = [];
 for (let i = 0; i < lengthOfAdditionalCommandList; i = (i + 1) | 0) {
     optionsOfChoiceObject[optionsOfChoiceObject.length] = {
-        name: `${additionalCommands[i].name}`,
+        name: `${additionalCommands[i].name} : ${additionalCommands[i].description}`,
         value: `${additionalCommands[i].name}`,
     };
 }
@@ -161,9 +161,7 @@ module.exports = {
 
             if (interactionOpt != null) {
                 console.log(`command${i + 1}opt:${interactionOpt.value}`);
-                let tmp=interactionOpt.value.split(" ");
-                // arguments[arguments.length] = interactionOpt.value;
-                arguments[arguments.length] = tmp[0];
+                arguments[arguments.length] = interactionOpt.value;
             }
         }
 

@@ -88,7 +88,7 @@ async function main() {
             new Set(
                 optionalCommands.concat(
                     // additionalCommands.filter(item => registerSet[id].registerCommands.includes(item.name))
-                    additionalCommands.filter(item => registerSet[id].registerCommands.includes(`${item.name} : ${item.description}`))
+                    additionalCommands.filter(item => registerSet[id].registerCommands.includes(`${item.name}`))
                 )
             )
         );
