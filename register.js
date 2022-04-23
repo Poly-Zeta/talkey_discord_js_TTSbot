@@ -87,7 +87,8 @@ async function main() {
         const commandList = Array.from(
             new Set(
                 optionalCommands.concat(
-                    additionalCommands.filter(item => registerSet[id].registerCommands.includes(item.name))
+                    // additionalCommands.filter(item => registerSet[id].registerCommands.includes(item.name))
+                    additionalCommands.filter(item => registerSet[id].registerCommands.includes(`${item.name} : ${item.description}`))
                 )
             )
         );

@@ -161,7 +161,9 @@ module.exports = {
 
             if (interactionOpt != null) {
                 console.log(`command${i + 1}opt:${interactionOpt.value}`);
-                arguments[arguments.length] = interactionOpt.value;
+                let tmp=interactionOpt.value.split(" ");
+                // arguments[arguments.length] = interactionOpt.value;
+                arguments[arguments.length] = tmp[0];
             }
         }
 
@@ -173,7 +175,7 @@ module.exports = {
             return interaction.editReply("addコマンドに引数が与えられませんでした．");
         }
 
-        //引数の重複している要素を排除
+        //引数同士の重複している要素を排除
         const argumentsNoDuplicate = Array.from(new Set(arguments));
 
         //既存コマンドの一覧に書き足すため，追加したいコマンド一覧から既存コマンドと追加したいコマンドの重複を排除
