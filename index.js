@@ -416,13 +416,19 @@ client.on('ready', () => {
     //3日以上連続稼働した場合の定期再起動
     cron.schedule('0 12 */3 * *', () => {
         console.log("perform periodic reboots.");
-        client.channels.cache.get(tokens.bootNotifyChannel).send('定期再起動を実行．');
-        statConfig.reboot += 1;
-        fs.writeFileSync(
-            path.resolve(__dirname, absolutePath.stat),
-            JSON.stringify(statConfig, undefined, 4),
-            "utf-8"
-        );
+        client.channels.cache.get(tokens.bootNotifyChannel).send('定期再起動を実行．')
+        .then(() => {
+            console.log("reboot!");
+            statConfig.reboot += 1;
+            fs.writeFileSync(
+                path.resolve(__dirname, absolutePath.stat),
+                JSON.stringify(statConfig, undefined, 4),
+                "utf-8"
+            );
+        })
+        .catch((e) => {
+            console.log(e);
+        });
     });
 });
 

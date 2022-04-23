@@ -2,7 +2,7 @@ module.exports = {
     attr: "base",
     data: {
         name: "ping",
-        description: "Replies with Pong!",
+        description: "ぴんぽん",
     },
     async execute(interaction) {
         const now = Date.now();
