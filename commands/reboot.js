@@ -35,7 +35,12 @@ module.exports = {
             {
                 type: "SUB_COMMAND",
                 name: "upgrade",
-                description: "gitから最新版をpull",
+                description: "gitから最新安定版をpull",
+            },
+            {
+                type: "SUB_COMMAND",
+                name: "develop",
+                description: "gitから開発版をpull",
             },
         ]
     },
@@ -68,6 +73,18 @@ module.exports = {
                 "utf-8"
             );
             const stdout = execSync("git pull origin master");
+        }
+
+        //更新後にエラー吐いたとき用に，現在動いているコードのコミットのhashを保存する．
+        if (subCommand == "develop") {
+            console.log("develop");
+            tokens.oldRepository=tokens.nowRepository;
+            fs.writeFileSync(
+                path.resolve(__dirname, absolutePath.tokens),
+                JSON.stringify(tokens, undefined, 4),
+                "utf-8"
+            );
+            const stdout = execSync("git pull origin develop:master");
         }
 
         return;
