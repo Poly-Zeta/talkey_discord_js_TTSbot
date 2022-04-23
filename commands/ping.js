@@ -7,7 +7,7 @@ module.exports = {
     async execute(interaction) {
         const now = Date.now();
         const msg = [
-            "pong!-dev",
+            "pong!",
             "",
             `gateway: ${interaction.client.ws.ping}ms`,
         ];
