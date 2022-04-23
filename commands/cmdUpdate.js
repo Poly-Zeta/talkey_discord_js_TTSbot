@@ -27,7 +27,7 @@ module.exports = {
         }
         await interaction.reply("execute register.js");
 
-        const stdout = execSync("node .\\register.js");
+        const stdout = execSync("node register.js");
 
         return;
     }
