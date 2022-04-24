@@ -11,6 +11,7 @@ module.exports = {
             "",
             `gateway: ${interaction.client.ws.ping}ms`,
         ];
+        throw new Error("test");
         await interaction.reply({ content: msg.join("\n") });
         await interaction.editReply([...msg, `往復: ${Date.now() - now}ms`].join("\n"));
         return;
