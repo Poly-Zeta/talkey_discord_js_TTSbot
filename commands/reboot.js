@@ -45,7 +45,7 @@ module.exports = {
         ]
     },
     async execute(interaction) {
-        console.log(tokens.errorNotifyChannel);
+        // console.log(tokens.errorNotifyChannel);
         if (interaction.member.id != tokens.PZID) {
             return interaction.reply("作者限定のコマンド");
         }
@@ -77,23 +77,23 @@ module.exports = {
         }
 
         //更新後にエラー吐いたとき用に，現在動いているコードのコミットのhashを保存する．
-        console.log("a");
-        console.log(tokens.errorNotifyChannel);
+        // console.log("a");
+        // console.log(tokens.errorNotifyChannel);
         
         if (subCommand == "develop") {
             console.log("develop");
-            console.log("b");
-            console.log(tokens.errorNotifyChannel);
+            // console.log("b");
+            // console.log(tokens.errorNotifyChannel);
             tokens.oldRepository=tokens.nowRepository;
-            console.log("c");
-            console.log(tokens.errorNotifyChannel);
+            // console.log("c");
+            // console.log(tokens.errorNotifyChannel);
             fs.writeFileSync(
                 path.resolve(__dirname, absolutePath.tokens),
                 JSON.stringify(tokens, undefined, 4),
                 "utf-8"
             );
-            console.log("d");
-            console.log(tokens.errorNotifyChannel);
+            // console.log("d");
+            // console.log(tokens.errorNotifyChannel);
             const stdout = execSync("git pull origin develop:master");
         }
 
