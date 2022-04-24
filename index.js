@@ -14,11 +14,13 @@ const client = new Discord.Client({
 });
 
 process.on('unhandledRejection', error => {
-    console.log(`index:${error}`);
+    console.log(`unhandledRejection:\n${error}`);
+    exit(1);
 });
 
 var fs = require('fs');
 var path = require('path');
+const { exit } = require("process");
 
 //************************************************************************************ */
 //json読み込み系
