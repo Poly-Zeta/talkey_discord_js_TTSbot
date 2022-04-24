@@ -16,7 +16,7 @@ const client = new Discord.Client({
 var fs = require('fs');
 var path = require('path');
 const { exit } = require("process");
-const { channel } = require("diagnostics_channel");
+// const { channel } = require("diagnostics_channel");
 
 process.on('unhandledRejection', error => {
     console.log(`unhandledRejection:\n${error}`);
