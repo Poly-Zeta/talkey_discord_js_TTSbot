@@ -498,6 +498,7 @@ async function onMessage(message) {
 async function errorViewer(eventName,err){
     console.error(err);
     const errCh=await client.channels.cache.get(tokens.errorNotifyChannel);
+    console.log(errCh);
     errCh.send(`${eventName} : \n${err}`);
     console.log("index.js:rollback");
     exit(1);
