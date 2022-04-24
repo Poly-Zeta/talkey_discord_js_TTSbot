@@ -13,14 +13,14 @@ const client = new Discord.Client({
     intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES"],
 });
 
+var fs = require('fs');
+var path = require('path');
+const { exit } = require("process");
+
 process.on('unhandledRejection', error => {
     console.log(`unhandledRejection:\n${error}`);
     exit(1);
 });
-
-var fs = require('fs');
-var path = require('path');
-const { exit } = require("process");
 
 //************************************************************************************ */
 //json読み込み系
