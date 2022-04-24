@@ -16,6 +16,7 @@ const client = new Discord.Client({
 var fs = require('fs');
 var path = require('path');
 const { exit } = require("process");
+const { channel } = require("diagnostics_channel");
 
 process.on('unhandledRejection', error => {
     console.log(`unhandledRejection:\n${error}`);
@@ -495,13 +496,14 @@ async function onMessage(message) {
     return;
 }
 
-async function errorViewer(eventName,err){
+function errorViewer(eventName,err){
     console.error(err);
-    const errCh=await client.channels.cache.get(tokens.errorNotifyChannel);
-    console.log(errCh);
-    errCh.send(`${eventName} : \n${err}`);
-    console.log("index.js:rollback");
-    exit(1);
+    client.channels.cache.get(tokens.errorNotifyChannel)
+    .then(channel => {
+        channel.send(`${eventName} : \n${err}`);
+        console.log("index.js:rollback");
+        exit(1);
+    });
 }
 
 client.on("interactionCreate", interaction => onInteraction(interaction)
