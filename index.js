@@ -497,8 +497,12 @@ async function onMessage(message) {
 
 async function errorViewer(eventName,err){
     console.error(err);
-    await client.channels.cache.get(tokens.errorNotifyChannel).send(`${eventName} : \n${err}`);
-    exit(1);
+    client.channels.cache.get(tokens.errorNotifyChannel)
+    .send(`${eventName} : \n${err}`)
+    .then(() => {
+        console.log("index.js:rollback");
+        exit(1);
+    })
 }
 
 client.on("interactionCreate", interaction => onInteraction(interaction)
