@@ -40,13 +40,17 @@ var tokens = JSON.parse(
 );
 
 //自動ロールバック機能の兼ね合いでコミットのhash保存が必要になった
+console.log(tokens.errorNotifyChannel);
 const stdout=execSync("git rev-parse HEAD").toString()
+console.log(tokens.errorNotifyChannel);
 tokens.nowRepository= stdout;
+console.log(tokens.errorNotifyChannel);
 fs.writeFileSync(
     path.resolve(__dirname, absolutePath.tokens),
     JSON.stringify(tokens, undefined, 4),
     "utf-8"
 );
+console.log(tokens.errorNotifyChannel);
 
 //どのコマンドをどの鯖に登録するかのデータ取得
 // var registerSet = JSON.parse(
