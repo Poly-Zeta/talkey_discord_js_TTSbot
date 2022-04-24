@@ -496,7 +496,7 @@ async function onMessage(message) {
     return;
 }
 
-function errorViewer(eventName,err){
+async function errorViewer(eventName,err){
     console.error(err);
     client.channels.cache.get(tokens.errorNotifyChannel)
     .then(channel => {
