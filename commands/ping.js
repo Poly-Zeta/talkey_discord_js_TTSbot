@@ -1,5 +1,3 @@
-const { exit } = require("process");
-
 module.exports = {
     attr: "base",
     data: {
@@ -13,7 +11,6 @@ module.exports = {
             "",
             `gateway: ${interaction.client.ws.ping}ms`,
         ];
-        exit(-1);
         await interaction.reply({ content: msg.join("\n") });
         await interaction.editReply([...msg, `往復: ${Date.now() - now}ms`].join("\n"));
         return;

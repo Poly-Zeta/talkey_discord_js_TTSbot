@@ -495,11 +495,41 @@ async function onMessage(message) {
     return;
 }
 
-client.on("interactionCreate", interaction => onInteraction(interaction).catch(err => console.error(err)));
-client.on("voiceStateUpdate", (oldState, newState) => onVoiceStateUpdate(oldState, newState).catch(err => console.error(err)));
-client.on('guildCreate', guild => onGuildCreate(guild).catch(err => console.error(err)));
-client.on('guildDelete', guild => onGuildDelete(guild).catch(err => console.error(err)));
-client.on('messageCreate', message => onMessage(message).catch(err => console.error(err)));
+async function errorViewer(eventName,err){
+    console.error(err);
+    await client.channels.cache.get(tokens.errorNotifyChannel).send(`${eventName} : \n${err}`);
+    exit(1);
+}
+
+client.on("interactionCreate", interaction => onInteraction(interaction)
+    .catch(err => {
+        errorViewer("interactionCreate",err);
+    })
+);
+
+client.on("voiceStateUpdate", (oldState, newState) => onVoiceStateUpdate(oldState, newState)
+    .catch(err => {
+        errorViewer("voiceStateUpdate",err);
+    })
+);
+
+client.on('guildCreate', guild => onGuildCreate(guild)
+    .catch(err => {
+        errorViewer('guildCreate',err);
+    })
+);
+
+client.on('guildDelete', guild => onGuildDelete(guild)
+    .catch(err => {
+        errorViewer('guildDelete',err);
+    })
+);
+
+client.on('messageCreate', message => onMessage(message)
+    .catch(err => {
+        errorViewer('messageCreate',err);
+    })
+);
 
 client.login(tokens.bot).catch(err => {
     console.error(err);
