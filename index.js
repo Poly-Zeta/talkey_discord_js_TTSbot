@@ -38,6 +38,7 @@ var tokens = JSON.parse(
         path.resolve(__dirname, absolutePath.tokens)
     )
 );
+console.log("s");
 console.log(tokens.errorNotifyChannel);
 
 //自動ロールバック機能の兼ね合いでコミットのhash保存が必要になった
