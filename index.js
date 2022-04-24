@@ -20,7 +20,9 @@ const { exit } = require("process");
 
 process.on('unhandledRejection', error => {
     console.log(`unhandledRejection:\n${error}`);
-    exit(1);
+    if(error!="AbortError: The operation was aborted"){
+        exit(1);
+    }
 });
 
 //************************************************************************************ */
@@ -503,8 +505,10 @@ async function errorViewer(eventName,err){
     console.error(err);
     client.channels.cache.get(tokens.errorNotifyChannel).send(`${eventName} : \n${err}`)
     .then(() => {
-        console.log("index.js:rollback");
-        exit(1);
+        if(err!="AbortError: The operation was aborted"){
+            console.log("index.js:rollback");
+            exit(1);
+        }
     })
 }
 
