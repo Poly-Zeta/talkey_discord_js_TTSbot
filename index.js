@@ -162,8 +162,13 @@ async function onVoiceStateUpdate(oldState, newState) {
                     // console.log("auto-disconnect");
                     oldBotConnection.destroy();
                     deleteGuildToMap(oldGuild.id);
-                    // return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
-                    return client.channels.cache.get(oldTextChannelId).send("ボイスチャットが空になりました．自動退出します．");
+                    try {
+                        client.channels.cache.get(oldTextChannelId).send("ボイスチャットが空になりました．自動退出します．");
+                        return;
+                    } catch (error) {
+                        oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
+                        return;
+                    }
                 }
 
                 //ユーザが退出したvcにbotが居て，まだ他のユーザが居るので退出メッセージ
