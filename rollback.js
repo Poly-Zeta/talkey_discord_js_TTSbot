@@ -25,6 +25,12 @@ var tokens = JSON.parse(
     )
 );
 
+var statConfig = JSON.parse(
+    fs.readFileSync(
+        path.resolve(__dirname, absolutePath.stat)
+    )
+);
+
 client.on('ready', () => {
     client.channels.cache.get(tokens.bootNotifyChannel).send('エラーによりロールバックします．')
     .catch((e) => {
@@ -35,6 +41,14 @@ client.on('ready', () => {
         client.destroy();
         // const stdout = execSync(`git revert ${tokens.oldRepository} --no-edit`);
         const stdout = execSync(`git checkout ${tokens.oldRepository}`);
+        
+        //git利用したロールバックでコードの変更がなかった場合，nodemonが検知しないのでファイルを書き換え
+        statConfig.reboot += 1;
+        fs.writeFileSync(
+            path.resolve(__dirname, absolutePath.stat),
+            JSON.stringify(statConfig, undefined, 4),
+            "utf-8"
+        );
     }).then(()=>{
         process.exit(0);
     });
