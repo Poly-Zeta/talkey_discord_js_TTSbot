@@ -20,7 +20,9 @@ const { exit } = require("process");
 
 process.on('unhandledRejection', error => {
     console.log(`unhandledRejection:\n${error}`);
-    if(error!="AbortError: The operation was aborted"){
+    if(error=="AbortError: The operation was aborted"){
+        console.log("aborterr");
+    }else{
         exit(1);
     }
 });
@@ -160,9 +162,9 @@ async function onVoiceStateUpdate(oldState, newState) {
                 //そのvcは空になった？
                 if (oldVc.members.size >= 1 && oldVc.members.filter(member => !member.user.bot).size == 0) {
                     // console.log("auto-disconnect");
-                    oldBotConnection.destroy();
-                    deleteGuildToMap(oldGuild.id);
                     try {
+                        deleteGuildToMap(oldGuild.id);
+                        oldBotConnection.destroy();
                         client.channels.cache.get(oldTextChannelId).send("ボイスチャットが空になりました．自動退出します．");
                         return;
                     } catch (error) {
