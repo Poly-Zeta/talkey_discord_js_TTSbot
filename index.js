@@ -18,13 +18,23 @@ var path = require('path');
 const { exit } = require("process");
 // const { channel } = require("diagnostics_channel");
 
+async function errorViewer(eventName,error){
+    console.error(error);
+    client.channels.cache.get(tokens.errorNotifyChannel).send(`${eventName} : \n${error}`)
+    .then(() => {
+        if(error=="AbortError: The operation was aborted"){
+            console.log("abort error");
+        }else if(error=="DiscordAPIError: Missing Access"){
+            console.log("missing access");
+        }else{
+            exit(1);
+        }
+    })
+}
+
 process.on('unhandledRejection', error => {
     console.log(`unhandledRejection:\n${error}`);
-    if(error=="AbortError: The operation was aborted"){
-        console.log("aborterr");
-    }else{
-        exit(1);
-    }
+    errorViewer('unhandled',error);
 });
 
 //************************************************************************************ */
@@ -506,17 +516,6 @@ async function onMessage(message) {
     // await talkFunc(message);
     await talkFunc(message.content, message.guildId, message.channel, botConnection, message.member.displayName);
     return;
-}
-
-async function errorViewer(eventName,err){
-    console.error(err);
-    client.channels.cache.get(tokens.errorNotifyChannel).send(`${eventName} : \n${err}`)
-    .then(() => {
-        if(err!="AbortError: The operation was aborted"){
-            console.log("index.js:rollback");
-            exit(1);
-        }
-    })
 }
 
 client.on("interactionCreate", interaction => onInteraction(interaction)
