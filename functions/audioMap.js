@@ -10,7 +10,7 @@ const queueMap = new Map();
 const { spawn } = require('child_process');
 
 async function getGuildMap(guildId) {
-    const guildMap = queueMap.get(guildId);
+    const guildMap = await queueMap.get(guildId);
     if (guildMap === undefined) {
         return;
     }
