@@ -26,6 +26,8 @@ async function errorViewer(eventName,error){
             console.log("abort error");
         }else if(error=="DiscordAPIError: Missing Access"){
             console.log("missing access");
+        }else if(error=="DiscordAPIError: Unknown interaction"){
+            console.log("unknown interaction");
         }else{
             exit(1);
         }

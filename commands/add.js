@@ -131,7 +131,7 @@ module.exports = {
     },
     async execute(interaction) {
         if (!interaction.memberPermissions.has('ADMINISTRATOR') && interaction.member.id != tokens.PZID) {
-            return interaction.editReply("addは各サーバ管理者限定のコマンドのため，実行できません");
+            return interaction.reply("addは各サーバ管理者限定のコマンドのため，実行できません");
         }
 
         //鯖IDを取得しておき，それをもとにcommand.jsonの該当部分を探す
