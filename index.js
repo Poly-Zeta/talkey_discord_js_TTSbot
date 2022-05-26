@@ -415,6 +415,7 @@ client.on('ready', () => {
 
             //これ本当にawait無しで大丈夫なのかわからん
             const botVcData = getGuildMap(elem);
+            console.log(botVcData);
             
             const botConnection = getVoiceConnection(elem);
             deleteGuildToMap(elem);
