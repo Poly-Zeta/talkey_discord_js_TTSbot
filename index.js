@@ -410,18 +410,7 @@ client.on('ready', () => {
         const idList = scanQueueMap(now);
         // console.log(idList);
         for (const elem of idList) {
-            // console.log(elem);
-
-            //これ本当にawait無しで大丈夫なのかわからん
-            const botVcData = getGuildMap(elem);
-            
-            
-            const botConnection = getVoiceConnection(elem);
-            botConnection.destroy();
-            deleteGuildToMap(elem);
-            const guild = client.guilds.cache.get(elem);
-            // guild.systemChannel.send('一定時間読み上げ指示が無かったため，切断しました．');
-            botVcData.textChannelId.send('一定時間読み上げ指示が無かったため，切断しました．');
+            vcAutoDisconnect(elem);
         }
         client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
     });
@@ -458,6 +447,17 @@ client.on('ready', () => {
         });
     });
 });
+
+async function vcAutoDisconnect(elem){
+    console.log(`elem:${elem}`);
+    const botVcData = await getGuildMap(elem)
+    console.log(botVcData);
+    await deleteGuildToMap(elem);
+    await client.channels.cache.get(botVcData.textChannelId).send('一定時間読み上げ指示が無かったため，切断しました．')
+    console.log(`textChannelId:${textChannelId}`);
+    const botConnection = getVoiceConnection(elem);
+    botConnection.destroy();
+}
 
 async function onMessage(message) {
     //token削除
