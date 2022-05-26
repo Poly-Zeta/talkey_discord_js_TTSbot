@@ -417,14 +417,14 @@ client.on('ready', () => {
             const botVcData = getGuildMap(elem);
             console.log(botVcData);
             
+            // guild.systemChannel.send('一定時間読み上げ指示が無かったため，切断しました．');
+            client.channels.cache.get(botVcData.textChannelId).send('一定時間読み上げ指示が無かったため，切断しました．').then(()=>{
+                console.log(`textChannelId:${textChannelId}`);
+            });
+            
             const botConnection = getVoiceConnection(elem);
             botConnection.destroy().then(()=>{
                 deleteGuildToMap(elem);
-                const guild = client.guilds.cache.get(elem);
-            }).then(()=>{
-                // guild.systemChannel.send('一定時間読み上げ指示が無かったため，切断しました．');
-                client.channels.cache.get(botVcData.textChannelId).send('一定時間読み上げ指示が無かったため，切断しました．');
-                console.log(`textChannelId:${textChannelId}`);
             });
         }
         client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
