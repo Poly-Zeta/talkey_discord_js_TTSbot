@@ -405,7 +405,8 @@ client.on('ready', () => {
     console.log(process.memoryUsage().heapUsed);
 
     //毎分，vcで放置されていないかチェック
-    cron.schedule('* * * * *', () => {
+    cron.schedule('0,30 * * * * *', () => {
+        console.log("chk");
         const now = Date.now();
         const idList = scanQueueMap(now);
         // console.log(idList);
