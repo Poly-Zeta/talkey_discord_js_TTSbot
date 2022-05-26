@@ -404,17 +404,16 @@ client.on('ready', () => {
     client.channels.cache.get(tokens.bootNotifyChannel).send('起動しました．');
     console.log(process.memoryUsage().heapUsed);
 
-    //15分に1回(毎時0,15,30,45分)，vcで放置されていないかチェック
-    cron.schedule('0,15,30,45 * * * *', () => {
+    //毎分，vcで放置されていないかチェック
+    cron.schedule('* * * * *', () => {
         const now = Date.now();
         const idList = scanQueueMap(now);
         // console.log(idList);
         for (const elem of idList) {
-            // console.log(elem);
+            console.log(`elem:${elem}`);
 
             //これ本当にawait無しで大丈夫なのかわからん
             const botVcData = getGuildMap(elem);
-            
             
             const botConnection = getVoiceConnection(elem);
             botConnection.destroy();
@@ -422,6 +421,7 @@ client.on('ready', () => {
             const guild = client.guilds.cache.get(elem);
             // guild.systemChannel.send('一定時間読み上げ指示が無かったため，切断しました．');
             client.channels.cache.get(botVcData.textChannelId).send('一定時間読み上げ指示が無かったため，切断しました．');
+            console.log(`textChannelId:${textChannelId}`);
         }
         client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
     });
@@ -526,11 +526,11 @@ client.on("interactionCreate", interaction => onInteraction(interaction)
     })
 );
 
-client.on("voiceStateUpdate", (oldState, newState) => onVoiceStateUpdate(oldState, newState)
-    .catch(err => {
-        errorViewer("voiceStateUpdate",err);
-    })
-);
+// client.on("voiceStateUpdate", (oldState, newState) => onVoiceStateUpdate(oldState, newState)
+//     .catch(err => {
+//         errorViewer("voiceStateUpdate",err);
+//     })
+// );
 
 client.on('guildCreate', guild => onGuildCreate(guild)
     .catch(err => {

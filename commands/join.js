@@ -34,12 +34,13 @@ module.exports = {
         const botConnection = getVoiceConnection(interaction.guild.id);
 
         //そもそも参加していない場合
-        if (!memberVC) {
-            const replyMessage = "コマンド送信者がボイスチャットに参加している必要があります．";
-            return interaction.reply(replyMessage);
-        }
+        // if (!memberVC) {
+        //     const replyMessage = "コマンド送信者がボイスチャットに参加している必要があります．";
+        //     return interaction.reply(replyMessage);
+        // }
         //botが既に参加している場合
-        else if (botConnection != undefined) {
+        // else 
+        if (botConnection != undefined) {
             const replyMessage = "botは既にボイスチャットに接続しています．";
             return interaction.reply(replyMessage);
         }
