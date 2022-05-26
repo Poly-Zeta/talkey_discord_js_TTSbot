@@ -39,23 +39,22 @@ module.exports = {
         //     return interaction.reply(replyMessage);
         // }
         //botが既に参加している場合
-        // else 
-        if (botConnection != undefined) {
-            const replyMessage = "botは既にボイスチャットに接続しています．";
-            return interaction.reply(replyMessage);
-        }
-        //botが参加できない場合
-        else if (!memberVC.joinable) {
-            const replyMessage = "botがボイスチャットに接続できませんでした．";
-            return interaction.reply(replyMessage);
-        }
-        //botに音声再生権限が無い場合
-        else if (!memberVC.speakable) {
-            const replyMessage = "botに音声再生権限がありません．";
-            return interaction.reply(replyMessage);
-        }
+        // else if (botConnection != undefined) {
+        //     const replyMessage = "botは既にボイスチャットに接続しています．";
+        //     return interaction.reply(replyMessage);
+        // }
+        // //botが参加できない場合
+        // else if (!memberVC.joinable) {
+        //     const replyMessage = "botがボイスチャットに接続できませんでした．";
+        //     return interaction.reply(replyMessage);
+        // }
+        // //botに音声再生権限が無い場合
+        // else if (!memberVC.speakable) {
+        //     const replyMessage = "botに音声再生権限がありません．";
+        //     return interaction.reply(replyMessage);
+        // }
         //全部違ったら接続
-        else {
+        // else {
             const embed = new MessageEmbed()
                 .setTitle('ボイスチャンネルに参加します')
                 .setColor('#0000ff')
@@ -84,6 +83,6 @@ module.exports = {
             addGuildToMap(guild.me, guild.id,textChannelId,"927893226696880170", connection, player);
             return interaction.reply({ embeds: [embed] });
             // return interaction.reply(replyMessage);
-        }
+        // }
     }
 }
