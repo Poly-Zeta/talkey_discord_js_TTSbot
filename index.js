@@ -414,11 +414,10 @@ client.on('ready', () => {
             console.log(`elem:${elem}`);
 
             //これ本当にawait無しで大丈夫なのかわからん
-            const botVcData = getGuildMap(elem);
-            console.log(botVcData);
-            
-            // guild.systemChannel.send('一定時間読み上げ指示が無かったため，切断しました．');
-            client.channels.cache.get(botVcData.textChannelId).send('一定時間読み上げ指示が無かったため，切断しました．').then(()=>{
+            const botVcData = getGuildMap(elem).then(()=>{
+                console.log(botVcData);
+                client.channels.cache.get(botVcData.textChannelId).send('一定時間読み上げ指示が無かったため，切断しました．')
+            }).then(()=>{
                 console.log(`textChannelId:${textChannelId}`);
             });
             
