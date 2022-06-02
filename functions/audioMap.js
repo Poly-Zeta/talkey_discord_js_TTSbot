@@ -112,7 +112,7 @@ function scanQueueMap(now) {
 
     //放置の閾値 ms単位なので 1000(ms->sec)*60(sec->min)*xでx分を閾値としている
     //チェック頻度はindex.jsのclient.on内のcronで決まっている
-    const threshold = 1000;
+    const threshold = 1000*60*120;
 
     for (let [key, value] of queueMap.entries()) {
         if (now - value.timestump > threshold) {
