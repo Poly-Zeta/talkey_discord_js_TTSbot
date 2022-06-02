@@ -454,7 +454,7 @@ async function vcAutoDisconnect(elem){
     console.log(botVcData);
     await deleteGuildToMap(elem);
     await client.channels.cache.get(botVcData.textChannelId).send('一定時間読み上げ指示が無かったため，切断しました．')
-    console.log(`textChannelId:${textChannelId}`);
+    console.log(`textChannelId:${botVcData.textChannelId}`);
     const botConnection = getVoiceConnection(elem);
     botConnection.destroy();
 }
