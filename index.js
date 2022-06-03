@@ -94,11 +94,11 @@ for (const file of commandFiles) {
 //************************************************************************************ */
 //interactionイベント時
 async function onInteraction(interaction) {
-    // console.log(interaction);
+    console.log(interaction.channel);
     if (!interaction.isCommand()) {
         return;
     }
-    interaction.channel.sendTyping();
+    // interaction.channel.sendTyping();
     console.log(interaction.commandName);
     return commands[interaction.commandName].execute(interaction);
 }
@@ -460,6 +460,7 @@ async function vcAutoDisconnect(elem){
 }
 
 async function onMessage(message) {
+    console.log(message.channel);
     //token削除
     //参考
     //https://qiita.com/minecraftomato1/items/50fac64d500ea98941f4
