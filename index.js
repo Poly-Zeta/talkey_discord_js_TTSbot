@@ -98,7 +98,7 @@ async function onInteraction(interaction) {
     if (!interaction.isCommand()) {
         return;
     }
-    interaction.channel.sendTyping();
+    // interaction.channel.sendTyping();
     console.log(interaction.commandName);
     return commands[interaction.commandName].execute(interaction);
 }
