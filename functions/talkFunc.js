@@ -23,6 +23,7 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname) 
         // console.log(`namechk: ${readTxt}`);
         var apiResponseText="";
         const apiRandomizer = Math.floor(Math.random() * 100);
+        console.log(apiRandomizer);
         if (apiRandomizer< 40) {
             console.log("chaplus");
             readTxt = readTxt.replace(namePattern, "たーきーちゃん");
