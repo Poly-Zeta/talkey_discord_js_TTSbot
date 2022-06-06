@@ -49,8 +49,8 @@ async function getResponseofChaplus(txt,userName){
         utterance: input_txt,
         username: userName,
         AgentState: {
-            agentName: "たーきー",
-            age: "10"
+            agentName: "たーきーちゃん",
+            age: "5歳"
         },
     };
     const talkRes = await fetch(
