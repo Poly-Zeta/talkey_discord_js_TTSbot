@@ -80,7 +80,7 @@ module.exports = {
         //ここまでで必要な動作は全て済んでいるが，interactionに返答しないとアプリ側にエラーが出てうざい
         //ので適当に返信してすぐ消す
         //ここが返信
-        await interaction.reply({ content: interaction.options.get("message").value, ephemeral: false })
+        await interaction.reply({ content: readTxt, ephemeral: false })
             // .then(console.log)
             .catch(console.error);
         //こっちで消す

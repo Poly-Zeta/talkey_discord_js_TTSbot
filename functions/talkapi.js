@@ -43,13 +43,13 @@ async function getResponseofTalkAPI(txt) {
     }
 }
 
-async function getResponseofChaplus(txt){
+async function getResponseofChaplus(txt,userName){
     const input_txt = txt;
     const jsonbody = {
         utterance: input_txt,
-        username: "test",
+        username: userName,
         AgentState: {
-            agentName: "BOT",
+            agentName: "たーきーちゃん",
             age: "15"
         },
     };
@@ -63,13 +63,12 @@ async function getResponseofChaplus(txt){
     );
     const talkData = await talkRes.json();
     console.log(talkData);
-    return "てすと";
-    // if (talkData.message == "ok") {
-    //     let reply = talkData.results[0].reply;
-    //     return reply;
-    // } else {
-    //     return `リプライの生成時にエラーが発生しました．[talk]エラーコード:${talkData.status}`;
-    // }
+    if (talkData.message == "ok") {
+        let reply = talkData.bestResponse.utterance;
+        return reply;
+    } else {
+        return `リプライの生成時にエラーが発生しました．`;
+    }
 }
 
 module.exports={

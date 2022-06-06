@@ -22,7 +22,8 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname) 
 
         // console.log(`namechk: ${readTxt}`);
 
-        const apiResponseText = await getResponseofChaplus(readTxt);
+        readTxt = readTxt.replace(namePattern, "たーきーちゃん");
+        const apiResponseText = await getResponseofChaplus(readTxt,nickname);
         // readTxt = readTxt.replace(namePattern, "");
         // //a3rtに投げる
         // const apiResponseText = await getResponseofTalkAPI(readTxt);
