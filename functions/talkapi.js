@@ -48,10 +48,6 @@ async function getResponseofChaplus(txt,userName){
     const jsonbody = {
         utterance: input_txt,
         username: userName,
-        AgentState: {
-            agentName: "たーきーちゃん",
-            age: "5歳"
-        },
     };
     const talkRes = await fetch(
         `https://www.chaplus.jp/v1/chat?apikey=${chaplusKey}`,
