@@ -63,6 +63,7 @@ async function getResponseofChaplus(txt){
     );
     const talkData = await talkRes.json();
     console.log(talkData);
+    return "てすと";
     // if (talkData.message == "ok") {
     //     let reply = talkData.results[0].reply;
     //     return reply;

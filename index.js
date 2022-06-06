@@ -94,7 +94,7 @@ for (const file of commandFiles) {
 //************************************************************************************ */
 //interactionイベント時
 async function onInteraction(interaction) {
-    console.log(interaction.channel);
+    // console.log(interaction.channel);
     if (!interaction.isCommand()) {
         return;
     }
