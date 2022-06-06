@@ -1,6 +1,6 @@
 const { addAudioToMapQueue } = require('../functions/audioMap.js');
 const { textOperator } = require('../functions/textOperator.js');
-const { getResponseofTalkAPI } = require('../functions/talkapi.js');
+const { getResponseofTalkAPI ,getResponseofChaplus} = require('../functions/talkapi.js');
 
 // async function talkFunc(message) {
 async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname) {
@@ -22,10 +22,10 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname) 
 
         // console.log(`namechk: ${readTxt}`);
 
-        readTxt = readTxt.replace(namePattern, "");
-
-        //a3rtに投げる
-        const apiResponseText = await getResponseofTalkAPI(readTxt);
+        const apiResponseText = await getResponseofChaplus(readTxt);
+        // readTxt = readTxt.replace(namePattern, "");
+        // //a3rtに投げる
+        // const apiResponseText = await getResponseofTalkAPI(readTxt);
 
         //ボイチャに接続している場合は応答をf1ボイスにしてqueueに投げる
         if (botConnection != undefined) {
