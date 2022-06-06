@@ -460,7 +460,7 @@ async function vcAutoDisconnect(elem){
 }
 
 async function onMessage(message) {
-    console.log(message.channel);
+    // console.log(message.channel);
     //token削除
     //参考
     //https://qiita.com/minecraftomato1/items/50fac64d500ea98941f4
