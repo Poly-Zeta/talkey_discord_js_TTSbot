@@ -62,7 +62,7 @@ async function getResponseofChaplus(txt,userName){
         }
     );
     const talkData = await talkRes.json();
-    console.log(talkData);
+    // console.log(talkData);
     if (talkData.bestResponse.utterance != undefined) {
         let reply = talkData.bestResponse.utterance;
         return reply;
