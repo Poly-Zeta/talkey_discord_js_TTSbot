@@ -49,7 +49,7 @@ async function getResponseofChaplus(txt,userName){
         utterance: input_txt,
         username: userName,
         AgentState: {
-            agentName: "たーきーちゃん",
+            agentName: "たーきー",
             age: "15"
         },
     };
@@ -63,7 +63,7 @@ async function getResponseofChaplus(txt,userName){
     );
     const talkData = await talkRes.json();
     console.log(talkData);
-    if (talkData.message == "ok") {
+    if (talkData.bestResponse.utterance != undefined) {
         let reply = talkData.bestResponse.utterance;
         return reply;
     } else {
