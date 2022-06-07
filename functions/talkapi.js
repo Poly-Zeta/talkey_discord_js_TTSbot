@@ -85,17 +85,18 @@ async function getResponseofMebo(txt,userId){
             headers: { 'Content-Type': 'application/json' },
         }
     );
-    // if(talkRes.ok){
-    //     const talkData = await talkRes.json();
-    //     if (talkData.bestResponse.utterance != undefined) {
-    //         let reply = talkData.bestResponse.utterance;
-    //         return reply;
-    //     } else {
-    //         return `リプライの生成時にエラーが発生しました．`;
-    //     }
-    // }else{
+    if(talkRes.ok){
+        const talkData = await talkRes.json();
+        if (talkData.bestResponse.utterance != undefined) {
+            let reply = talkData.bestResponse.utterance;
+            reply = reply.replace("。", "").replace("、","，");
+            return reply;
+        } else {
+            return `リプライの生成時にエラーが発生しました．`;
+        }
+    }else{
         return await getResponseofTalkAPI(input_txt);
-    // }
+    }
 }
 
 module.exports={
