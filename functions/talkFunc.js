@@ -1,9 +1,9 @@
 const { addAudioToMapQueue } = require('../functions/audioMap.js');
 const { textOperator } = require('../functions/textOperator.js');
-const { getResponseofTalkAPI ,getResponseofChaplus} = require('../functions/talkapi.js');
+const { getResponseofTalkAPI ,getResponseofChaplus,getResponseofMebo} = require('../functions/talkapi.js');
 
 // async function talkFunc(message) {
-async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname) {
+async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,uid) {
     const namePattern = /たーきーちゃん|ターキーちゃん|たーきーくん|ターキーくん/;
     // const botConnection = getVoiceConnection(message.guildId);
 
@@ -23,16 +23,18 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname) 
         // console.log(`namechk: ${readTxt}`);
         var apiResponseText="";
         const apiRandomizer = Math.floor(Math.random() * 100);
-        if (apiRandomizer< 40) {
-            console.log("chaplus");
-            readTxt = readTxt.replace(namePattern, "たーきーちゃん");
-            apiResponseText = await getResponseofChaplus(readTxt,nickname);
-        }else{
-            console.log("a3rt");
-            readTxt = readTxt.replace(namePattern, "");
-            //a3rtに投げる
-            apiResponseText = await getResponseofTalkAPI(readTxt);
-        }
+        readTxt = readTxt.replace(namePattern, "talkeyちゃん");
+        apiResponseText = await getResponseofMebo(readTxt,uid);
+        // if (apiRandomizer< 40) {
+        //     console.log("chaplus");
+        //     readTxt = readTxt.replace(namePattern, "たーきーちゃん");
+        //     apiResponseText = await getResponseofChaplus(readTxt,nickname);
+        // }else{
+        //     console.log("a3rt");
+        //     readTxt = readTxt.replace(namePattern, "");
+        //     //a3rtに投げる
+        //     apiResponseText = await getResponseofTalkAPI(readTxt);
+        // }
 
         //ボイチャに接続している場合は応答をf1ボイスにしてqueueに投げる
         if (botConnection != undefined) {

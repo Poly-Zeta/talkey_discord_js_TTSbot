@@ -43,7 +43,7 @@ module.exports = {
             // .then(console.log)
             .catch(console.error);
 
-        await talkFunc(readTxt, guildId, interaction.channel, botConnection, interaction.member.displayName);
+        await talkFunc(readTxt, guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id);
 
         return;
     }

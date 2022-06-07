@@ -19,6 +19,8 @@ const summarizeAPIKey = tokens.a3rtsummarize;
 const suggestAPIKey = tokens.a3rtSuggest;
 const proofreadingAPIKey = tokens.a3rtProofreading;
 const chaplusKey=tokens.chaplus;
+const meboAPIKey=tokens.meboKey;
+const meboAgentId=tokens.meboId;
 
 async function getResponseofTalkAPI(txt) {
     // const inputTextRandomThrethold = Math.floor(Math.random() * 100);
@@ -67,7 +69,35 @@ async function getResponseofChaplus(txt,userName){
     }
 }
 
+async function getResponseofMebo(txt,userId){
+    const input_txt = txt;
+    const jsonbody = {
+        api_key:meboAPIKey,
+        agent_id:meboAgentId,
+        utterance: input_txt,
+        uid: userId,
+    };
+    const talkRes = await fetch(
+        `https://api-mebo.dev/api`,
+        {
+            method: 'POST',
+            body:    JSON.stringify(jsonbody),
+            headers: { 'Content-Type': 'application/json' },
+        }
+    );
+    console.log(talkRes);
+    const talkData = await talkRes.json();
+    console.log(talkRes);
+    if (talkData.bestResponse.utterance != undefined) {
+        let reply = talkData.bestResponse.utterance;
+        return reply;
+    } else {
+        return `リプライの生成時にエラーが発生しました．`;
+    }
+}
+
 module.exports={
     getResponseofTalkAPI,
-    getResponseofChaplus
+    getResponseofChaplus,
+    getResponseofMebo
 }
