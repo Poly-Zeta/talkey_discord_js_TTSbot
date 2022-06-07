@@ -89,7 +89,7 @@ async function getResponseofMebo(txt,userId){
         const talkData = await talkRes.json();
         if (talkData.bestResponse.utterance != undefined) {
             let reply = talkData.bestResponse.utterance;
-            reply = reply.replace("。", "").replace("、","，");
+            reply = reply.replace('。','').replace('、','，');
             return reply;
         } else {
             return `リプライの生成時にエラーが発生しました．`;

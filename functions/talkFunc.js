@@ -15,6 +15,7 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,u
 
     //名前があるかどうかで挙動を変える
     if (namePattern.test(readTxt)) {
+        textChannel.sendTyping();
         //名前があったら，ボイチャに接続しているかを確認してf2ボイスにしてqueueに追加
         if (botConnection != undefined) {
             addAudioToMapQueue(guildId, nickname, readTxt, "f2");
@@ -22,7 +23,7 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,u
 
         // console.log(`namechk: ${readTxt}`);
         var apiResponseText="";
-        const apiRandomizer = Math.floor(Math.random() * 100);
+        // const apiRandomizer = Math.floor(Math.random() * 100);
         readTxt = readTxt.replace(namePattern, "talkeyちゃん");
         apiResponseText = await getResponseofMebo(readTxt,uid);
         // if (apiRandomizer< 40) {
