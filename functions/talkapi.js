@@ -85,7 +85,7 @@ async function getResponseofMebo(txt,userId){
             headers: { 'Content-Type': 'application/json' },
         }
     );
-    console.log(talkRes[1].status);
+    console.log(talkRes[1]);
     const talkData = await talkRes.json();
     if (talkData.bestResponse.utterance != undefined) {
         let reply = talkData.bestResponse.utterance;
