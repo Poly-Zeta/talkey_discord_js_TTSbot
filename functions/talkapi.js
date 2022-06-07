@@ -41,7 +41,7 @@ async function getResponseofTalkAPI(txt) {
         let reply = talkData.results[0].reply;
         return reply;
     } else {
-        return `リプライの生成時にエラーが発生しました．[talk]エラーコード:${talkData.status}`;
+        return `リプライの生成時にエラーが発生しました．`;
     }
 }
 
@@ -85,9 +85,8 @@ async function getResponseofMebo(txt,userId){
             headers: { 'Content-Type': 'application/json' },
         }
     );
-    console.log(talkRes);
+    console.log(talkRes[1].status);
     const talkData = await talkRes.json();
-    console.log(talkRes);
     if (talkData.bestResponse.utterance != undefined) {
         let reply = talkData.bestResponse.utterance;
         return reply;
