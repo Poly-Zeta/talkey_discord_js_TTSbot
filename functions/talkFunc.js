@@ -25,6 +25,7 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,u
         var apiResponseText="";
         // const apiRandomizer = Math.floor(Math.random() * 100);
         readTxt = readTxt.replace(namePattern, "talkeyちゃん");
+        console.log(readTxt);
         apiResponseText = await getResponseofMebo(readTxt,uid);
         // if (apiRandomizer< 40) {
         //     console.log("chaplus");
