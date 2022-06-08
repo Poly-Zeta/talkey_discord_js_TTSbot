@@ -36,22 +36,26 @@ module.exports = {
         //そもそも参加していない場合
         if (!memberVC) {
             const replyMessage = "コマンド送信者がボイスチャットに参加している必要があります．";
-            return interaction.reply(replyMessage);
+            // return interaction.reply(replyMessage);
+            return interaction.editReply(replyMessage);
         }
         //botが既に参加している場合
         else if (botConnection != undefined) {
             const replyMessage = "botは既にボイスチャットに接続しています．";
-            return interaction.reply(replyMessage);
+            // return interaction.reply(replyMessage);
+            return interaction.editReply(replyMessage);
         }
         //botが参加できない場合
         else if (!memberVC.joinable) {
             const replyMessage = "botがボイスチャットに接続できませんでした．";
-            return interaction.reply(replyMessage);
+            // return interaction.reply(replyMessage);
+            return interaction.editReply(replyMessage);
         }
         //botに音声再生権限が無い場合
         else if (!memberVC.speakable) {
             const replyMessage = "botに音声再生権限がありません．";
-            return interaction.reply(replyMessage);
+            // return interaction.reply(replyMessage);
+            return interaction.editReply(replyMessage);
         }
         //全部違ったら接続
         else {
@@ -81,7 +85,8 @@ module.exports = {
             const player = createAudioPlayer({ behaviors: { noSubscriber: NoSubscriberBehavior.Pause, } });
             connection.subscribe(player);
             addGuildToMap(guild.me, guild.id,textChannelId, memberVC.id, connection, player);
-            return interaction.reply({ embeds: [embed] });
+            await interaction.editReply("finish!");
+            return await interaction.editReply({ embeds: [embed] });
             // return interaction.reply(replyMessage);
         }
     }

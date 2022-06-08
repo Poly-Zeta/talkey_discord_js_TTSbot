@@ -8,7 +8,7 @@ module.exports = {
         description: "Call of Cthulhuのキャラジェネレータ"
     },
     async execute(interaction) {
-        await interaction.reply("working!");
+        // await interaction.reply("working!");
 
         const STR = ndnDiceRoll(3, 6);
         const POW = ndnDiceRoll(3, 6);

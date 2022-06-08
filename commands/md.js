@@ -57,7 +57,8 @@ module.exports = {
                 },
             )
             .setColor('#00ff00');
-        return await interaction.reply({ embeds: [embed] });
+        await interaction.editReply("finish!");
+        return await interaction.editReply({ embeds: [embed] });
 
     }
 }

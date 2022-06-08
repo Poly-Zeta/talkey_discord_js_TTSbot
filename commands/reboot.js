@@ -47,12 +47,14 @@ module.exports = {
     async execute(interaction) {
         // console.log(tokens.errorNotifyChannel);
         if (interaction.member.id != tokens.PZID) {
-            return interaction.reply("作者限定のコマンド");
+            // return interaction.reply("作者限定のコマンド");
+            return interaction.editReply("作者限定のコマンド");
         }
         const subCommand = interaction.options.getSubcommand(false);
         console.log(subCommand);
 
-        await interaction.reply(`${subCommand} : 再起動します`);
+        // await interaction.reply(`${subCommand} : 再起動します`);
+        await interaction.editReply(`${subCommand} : 再起動します`);
 
         if (subCommand == "default") {
             statConfig.reboot += 1;

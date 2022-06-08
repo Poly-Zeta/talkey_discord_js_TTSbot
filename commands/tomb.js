@@ -40,7 +40,8 @@ module.exports = {
         }
         
         const reply = `†┏┛${insertText}┗┓†`;
-        return interaction.reply(reply);
+        // return interaction.reply(reply);
+        return interaction.editReply(reply);
 
         // const subCommand = interaction.options.getSubcommand(false);
         // console.log(subCommand);

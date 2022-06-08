@@ -66,29 +66,35 @@ module.exports = {
                         value: "このオプションを付けて/ttslist を実行すると，実行時点でのそのサーバの常時読み上げ対象者のリストをテキストチャットに表示します．"
                     }
                 );
-            return interaction.reply({ embeds: [embed] });
+            await interaction.editReply('finish!');
+            // return interaction.reply({ embeds: [embed] });
+            return interaction.editReply({ embeds: [embed] });
         }
 
         if (!interaction.member.voice.channel) {
             const replyMessage = "コマンド送信者がボイスチャットに参加している必要があります．";
-            return interaction.reply(replyMessage);
+            // return interaction.reply(replyMessage);
+            return interaction.editReply(replyMessage);
         }
 
         if (botConnection == undefined) {
             const replyMessage = "botがボイスチャットに参加している必要があります．/joinでbotを参加させることができます．";
-            return interaction.reply(replyMessage);
+            // return interaction.reply(replyMessage);
+            return interaction.editReply(replyMessage);
         }
 
         //異なるvcからコマンドを送ってきた場合
         if (botConnection.joinConfig.channelId != interaction.member.voice.channel.id) {
             const replyMessage = "botと同じボイスチャットに参加していないユーザーは，このコマンドを使用できません．";
-            return interaction.reply(replyMessage);
+            // return interaction.reply(replyMessage);
+            return interaction.editReply(replyMessage);
         }
 
         if (commandOption == "add") {
             if (guildData.memberId !== undefined) {
                 if (guildData.memberId.has(interaction.user.id)) {
-                    return interaction.reply(`${interaction.user.username}さんは既に読み上げ対象です．/ttslist statusでリストを確認できます．`);
+                    // return interaction.reply(`${interaction.user.username}さんは既に読み上げ対象です．/ttslist statusでリストを確認できます．`);
+                    return interaction.editReply(`${interaction.user.username}さんは既に読み上げ対象です．/ttslist statusでリストを確認できます．`);
                 }
                 // if (guildData.memberId.includes(interaction.user.id)) {
                 //     return interaction.reply(`${interaction.user.username}さんは既に読み上げ対象です．/ttslist statusでリストを確認できます．`);
@@ -97,20 +103,24 @@ module.exports = {
             // console.log(interaction.username);
             addMember(interaction.guild.id, interaction.user.id, interaction.user.username);
             // addMember(interaction.guild.id, interaction.user.id);
-            return interaction.reply(`${interaction.user.username}さんを読み上げ対象に追加しました．/ttslist statusでリストを確認できます．\n読み上げさせずにテキストチャットへの書き込みをしたい場合は/noread コマンドを使用してください．`);
+            // return interaction.reply(`${interaction.user.username}さんを読み上げ対象に追加しました．/ttslist statusでリストを確認できます．\n読み上げさせずにテキストチャットへの書き込みをしたい場合は/noread コマンドを使用してください．`);
+            return interaction.editReply(`${interaction.user.username}さんを読み上げ対象に追加しました．/ttslist statusでリストを確認できます．\n読み上げさせずにテキストチャットへの書き込みをしたい場合は/noread コマンドを使用してください．`);
 
         } else if (commandOption == "delete") {
             if (guildData.memberId.size == 0) {
-                return interaction.reply(`空のリストからユーザを削除することはできません．/ttslist statusでリストを確認できます．`);
+                // return interaction.reply(`空のリストからユーザを削除することはできません．/ttslist statusでリストを確認できます．`);
+                return interaction.editReply(`空のリストからユーザを削除することはできません．/ttslist statusでリストを確認できます．`);
             }
             if (!guildData.memberId.has(interaction.user.id)) {
-                return interaction.reply(`${interaction.user.username}さんは読み上げ対象ではありません．/ttslist statusでリストを確認できます．`);
+                // return interaction.reply(`${interaction.user.username}さんは読み上げ対象ではありません．/ttslist statusでリストを確認できます．`);
+                return interaction.editReply(`${interaction.user.username}さんは読み上げ対象ではありません．/ttslist statusでリストを確認できます．`);
             }
             deleteMember(interaction.guild.id, interaction.user.id);
-            return interaction.reply(`${interaction.user.username}さんを読み上げ対象から除外しました．/ttslist statusでリストを確認できます．`);
+            // return interaction.reply(`${interaction.user.username}さんを読み上げ対象から除外しました．/ttslist statusでリストを確認できます．`);
+            return interaction.editReply(`${interaction.user.username}さんを読み上げ対象から除外しました．/ttslist statusでリストを確認できます．`);
         } else if (commandOption == "status") {
             // const guildData = getGuildMap(interaction.guild.id);
-            await interaction.reply("working!");
+            // await interaction.reply("working!");
             const nameList = (guildData.memberId.size == 0) ? "無し" : [...guildData.memberId.values()];
             // const nameList=guildData.memberId.forEach(element => {
 

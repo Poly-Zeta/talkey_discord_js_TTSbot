@@ -84,6 +84,7 @@ module.exports = {
             // console.log(ans);
             reply = `${option.value}->${filterdWeapons[ans - 1].name.ja_JP}`;
         }
-        return interaction.reply(reply);
+        // return interaction.reply(reply);
+        return interaction.editReply(reply);
     }
 }

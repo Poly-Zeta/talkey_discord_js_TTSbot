@@ -23,9 +23,11 @@ module.exports = {
     },
     async execute(interaction) {
         if (interaction.member.id != tokens.PZID) {
-            return interaction.reply("作者限定のコマンド");
+            // return interaction.reply("作者限定のコマンド");
+            return interaction.editReply("作者限定のコマンド");
         }
-        await interaction.reply("execute register.js");
+        // await interaction.reply("execute register.js");
+        await interaction.editReply("execute register.js");
 
         const stdout = execSync("node register.js");
 

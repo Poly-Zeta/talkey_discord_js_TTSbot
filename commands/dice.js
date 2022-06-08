@@ -73,9 +73,11 @@ module.exports = {
         
         if (nDnPattern.test(ndn)) {
             const arg = ndn.split(splitDPattern);
-            return interaction.reply(`${ndn}->${ndnDiceRoll(+arg[0], +arg[1])}`);
+            // return interaction.reply(`${ndn}->${ndnDiceRoll(+arg[0], +arg[1])}`);
+            return interaction.editReply(`${ndn}->${ndnDiceRoll(+arg[0], +arg[1])}`);
         } else {
-            return interaction.reply(`引数が指定の形式に一致していないため，1D100を実行しました．\n1D100->${ndnDiceRoll(1, 100)}`);
+            // return interaction.reply(`引数が指定の形式に一致していないため，1D100を実行しました．\n1D100->${ndnDiceRoll(1, 100)}`);
+            return interaction.editReply(`引数が指定の形式に一致していないため，1D100を実行しました．\n1D100->${ndnDiceRoll(1, 100)}`);
         }
 
         //オプション無し

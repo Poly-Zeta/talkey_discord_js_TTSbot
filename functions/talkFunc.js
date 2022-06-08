@@ -9,8 +9,6 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,u
 
     // //引数のメッセージを取得
     // let readTxt = message.content;
-    //色々除去
-    readTxt = textOperator(readTxt);
     // console.log(`chk1: ${readTxt}`);
 
     //名前があるかどうかで挙動を変える
@@ -18,7 +16,9 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,u
         textChannel.sendTyping();
         //名前があったら，ボイチャに接続しているかを確認してf2ボイスにしてqueueに追加
         if (botConnection != undefined) {
-            addAudioToMapQueue(guildId, nickname, readTxt, "f2");
+            //色々除去
+            const readreq = textOperator(readTxt);
+            addAudioToMapQueue(guildId, nickname, readreq, "f2");
         }
 
         // console.log(`namechk: ${readTxt}`);
@@ -46,6 +46,8 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,u
     } else {
         // console.log("chk3");
         //名前が無ければ，ボイチャに接続しているかを確認して入力をそのままf1ボイスでqueueに追加
+        //色々除去
+        readTxt = textOperator(readTxt);
         if (botConnection != undefined) {
             addAudioToMapQueue(guildId, nickname, readTxt, "f1");
         }

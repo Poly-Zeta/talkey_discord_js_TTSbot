@@ -23,25 +23,27 @@ module.exports = {
         const guildId = interaction.guild.id;
         const namePattern = /たーきーちゃん|ターキーちゃん|たーきーくん|ターキーくん/;
         const botConnection = getVoiceConnection(guildId);
-
+        
         //引数のメッセージを取得
         let readTxt = interaction.options.get("message").value;
+        
+        //interactionに返答しないとアプリ側にエラーが出てうざい
+        //ので適当に返信してすぐ消す
+        //ここが返信
+        // await interaction.reply({ content: readTxt, ephemeral: false })
+        //     // .then(console.log)
+        //     .catch(console.error);
+        //こっちで消す
+        await interaction.deleteReply()
+            // .then(console.log)
+            .catch(console.error);
+
 
         //ユーザアカウントに偽装したwebhookを送る
         await sendMessage("🔊", interaction).catch(e => console.error(e));
         if (botConnection != undefined) {
             addTalkCommandCounter();
         }
-        //interactionに返答しないとアプリ側にエラーが出てうざい
-        //ので適当に返信してすぐ消す
-        //ここが返信
-        await interaction.reply({ content: readTxt, ephemeral: false })
-            // .then(console.log)
-            .catch(console.error);
-        //こっちで消す
-        await interaction.deleteReply()
-            // .then(console.log)
-            .catch(console.error);
 
         await talkFunc(readTxt, guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id);
 

@@ -118,7 +118,7 @@ module.exports = {
         const guildData = await getGuildGame(guildId);
 
         if (subCommand === "newgame") {
-            await interaction.reply("working!");
+            // await interaction.reply("working!");
             if (guildData === undefined) {
                 await addGuildToGameMap(guildId);
                 return interaction.editReply("新規ゲームを開始しました．/pokewordle checkコマンドで解答してください．");
@@ -139,7 +139,7 @@ module.exports = {
             //     }
             // } else if (commandOption === "status") {
             if (commandOption === "status") {
-                await interaction.reply("working!");
+                // await interaction.reply("working!");
                 if (guildData === undefined) {
                     return interaction.editReply("このギルドで進行中のゲームは存在しません．");
                 } else {
@@ -157,16 +157,19 @@ module.exports = {
                     return await interaction.editReply({ embeds: [embed] });
                 }
             } else if (commandOption === "help") {
-                return interaction.reply("https://ja.wikipedia.org/wiki/Wordle");
+                // return interaction.reply("https://ja.wikipedia.org/wiki/Wordle");
+                return interaction.editReply("https://ja.wikipedia.org/wiki/Wordle");
             } else {
-                return interaction.reply("エラー");
+                // return interaction.reply("エラー");
+                return interaction.editReply("エラー");
             }
         }
         else if (subCommand === "check") {
             if (guildData === undefined) {
-                return interaction.reply("このギルドではゲームが開始されていません．/pokewordle config newgameで開始してください．");
+                // return interaction.reply("このギルドではゲームが開始されていません．/pokewordle config newgameで開始してください．");
+                return interaction.editReply("このギルドではゲームが開始されていません．/pokewordle config newgameで開始してください．");
             }
-            await interaction.reply("working!");
+            // await interaction.reply("working!");
 
             const commandOption = interaction.options.get("answer").value;
             // console.log(commandOption);
@@ -270,7 +273,7 @@ module.exports = {
                         }
                     )
                     .setColor('#00ff00');
-                interaction.editReply("finish!");
+                await interaction.editReply("finish!");
                 return await interaction.editReply({ embeds: [embed] });
             }
 
@@ -294,7 +297,7 @@ module.exports = {
                         }
                     )
                     .setColor('#ff0000');
-                interaction.editReply("finish!");
+                await interaction.editReply("finish!");
                 return await interaction.editReply({ embeds: [embed] });
             }
 
@@ -313,11 +316,12 @@ module.exports = {
                     }
                 )
                 .setColor('#00ff00');
-            interaction.editReply("finish!");
+            await interaction.editReply("finish!");
             return await interaction.editReply({ embeds: [embed] });
             // return interaction.editReply(`${replyText} ${guildData.log.length}/${wordleMaxChkCount}トライ`);
         } else {
-            return interaction.reply("エラー");
+            // return interaction.reply("エラー");
+            return interaction.editReply("エラー");
         }
     }
 }

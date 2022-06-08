@@ -48,7 +48,8 @@ module.exports = {
         const rep2 = rep1.replace(regex1Byte, 'a');
         const stdout = execSync(`echo-sd ${rep2}`);
         const reply = stdout.toString().replace(rep2, insertText);
-        return interaction.reply(reply);
+        // return interaction.reply(reply);
+        return interaction.editReply(reply);
         
         // if (subCommand == "default") {
         //     const stdout = execSync('echo-sd 突然の死');
