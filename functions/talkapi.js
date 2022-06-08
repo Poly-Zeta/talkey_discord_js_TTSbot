@@ -87,7 +87,7 @@ async function getResponseofMebo(txt,userId){
     );
     if(talkRes.ok){
         const talkData = await talkRes.json();
-        console.log(talkData);
+        // console.log(talkData);
         if (talkData.bestResponse.utterance != undefined) {
             let reply = talkData.bestResponse.utterance;
             reply = reply.replace(/。|、/g,'');
