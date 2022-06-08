@@ -90,7 +90,7 @@ async function getResponseofMebo(txt,userId){
         // console.log(talkData);
         if (talkData.bestResponse.utterance != undefined) {
             let reply = talkData.bestResponse.utterance;
-            reply = reply.replace(/。/g,'．').replace(/、/g,'，');
+            reply = reply.replace(/うん。/g,'').replace(/。/g,'．').replace(/、/g,'，');
             return reply;
         } else {
             return `リプライの生成時にエラーが発生しました．`;
