@@ -75,7 +75,7 @@ async function getResponseofMebo(txt,userId){
         api_key:meboAPIKey,
         agent_id:meboAgentId,
         utterance: input_txt,
-        uid: userId,
+        uid: userId+1,
     };
     const talkRes = await fetch(
         `https://api-mebo.dev/api`,
@@ -90,7 +90,7 @@ async function getResponseofMebo(txt,userId){
         // console.log(talkData);
         if (talkData.bestResponse.utterance != undefined) {
             let reply = talkData.bestResponse.utterance;
-            reply = reply.replace(/。|、/g,'');
+            reply = reply.replace(/。/g,'．').replace(/、/g,'，');
             return reply;
         } else {
             return `リプライの生成時にエラーが発生しました．`;
