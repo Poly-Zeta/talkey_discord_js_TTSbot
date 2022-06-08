@@ -75,7 +75,7 @@ async function getResponseofMebo(txt,userId){
         api_key:meboAPIKey,
         agent_id:meboAgentId,
         utterance: input_txt,
-        uid: userId+1,
+        uid: `discord_to_mebo_${userId}`,
     };
     const talkRes = await fetch(
         `https://api-mebo.dev/api`,
