@@ -23,20 +23,19 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,u
 
         // console.log(`namechk: ${readTxt}`);
         var apiResponseText="";
-        // const apiRandomizer = Math.floor(Math.random() * 100);
-        readTxt = readTxt.replace(namePattern, "talkeyちゃん");
-        // console.log(readTxt);
-        apiResponseText = await getResponseofMebo(readTxt,uid);
-        // if (apiRandomizer< 40) {
-        //     console.log("chaplus");
-        //     readTxt = readTxt.replace(namePattern, "たーきーちゃん");
-        //     apiResponseText = await getResponseofChaplus(readTxt,nickname);
-        // }else{
-        //     console.log("a3rt");
-        //     readTxt = readTxt.replace(namePattern, "");
-        //     //a3rtに投げる
-        //     apiResponseText = await getResponseofTalkAPI(readTxt);
-        // }
+        const apiRandomizer = Math.floor(Math.random() * 100);
+
+
+
+        if (apiRandomizer< 70) {
+            readTxt = readTxt.replace(namePattern, "talkeyちゃん");
+            apiResponseText = await getResponseofMebo(readTxt,uid);
+        }else{
+            console.log("a3rt");
+            readTxt = readTxt.replace(namePattern, "");
+            //a3rtに投げる
+            apiResponseText = await getResponseofTalkAPI(readTxt);
+        }
 
         //ボイチャに接続している場合は応答をf1ボイスにしてqueueに投げる
         if (botConnection != undefined) {
