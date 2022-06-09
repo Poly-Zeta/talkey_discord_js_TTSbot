@@ -1,6 +1,6 @@
 const { NoSubscriberBehavior, joinVoiceChannel, getVoiceConnection, createAudioPlayer } = require("@discordjs/voice");
 const { addGuildToMap } = require('../functions/audioMap.js');
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed,MessageAttachment } = require('discord.js');
 
 var fs = require('fs');
 var path = require('path');
@@ -63,10 +63,10 @@ module.exports = {
                 .setTitle('ボイスチャンネルに参加します')
                 .setColor('#0000ff')
                 .addFields(
-                    {
-                        name: "簡単な使い方",
-                        value: "ボイスチャットに参加している間は，/talk コマンドを使用した書き込みがあった場合ゆっくりボイスで読み上げます．\n詳しい使い方は下記のサーバからどうぞ．"
-                    },
+                    // {
+                    //     name: "簡単な使い方",
+                    //     value: "ボイスチャットに参加している間は，/talk コマンドを使用した書き込みがあった場合ゆっくりボイスで読み上げます．\n詳しい使い方は下記のサーバからどうぞ．"
+                    // },
                     {
                         name: "詳細説明",
                         value: `詳しい使い方やアプデ情報，質問はここから: ${tokens.officialServerURL}`
@@ -85,8 +85,11 @@ module.exports = {
             const player = createAudioPlayer({ behaviors: { noSubscriber: NoSubscriberBehavior.Pause, } });
             connection.subscribe(player);
             addGuildToMap(guild.me, guild.id,textChannelId, memberVC.id, connection, player);
+
+            const attachment = new MessageAttachment('../how_to_use.png','how_to_use.png');
+            embed.setImage('attachment://how_to_use.png');
             await interaction.editReply("finish!");
-            return await interaction.editReply({ embeds: [embed] });
+            return await interaction.editReply({ files: [attachment], embeds: [embed] });
             // return interaction.reply(replyMessage);
         }
     }
