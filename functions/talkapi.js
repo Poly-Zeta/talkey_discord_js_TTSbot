@@ -69,13 +69,14 @@ async function getResponseofChaplus(txt,userName){
     }
 }
 
-async function getResponseofMebo(txt,userId){
+async function getResponseofMebo(txt,userName,userId){
     const input_txt = txt;
     const jsonbody = {
         api_key:meboAPIKey,
         agent_id:meboAgentId,
         utterance: input_txt,
         uid: `discord_to_mebo_${userId}`,
+        username: userName,
     };
     const talkRes = await fetch(
         `https://api-mebo.dev/api`,

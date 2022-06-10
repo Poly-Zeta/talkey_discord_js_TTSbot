@@ -29,7 +29,7 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,u
 
         if (apiRandomizer< 70) {
             readTxt = readTxt.replace(namePattern, "talkeyちゃん");
-            apiResponseText = await getResponseofMebo(readTxt,uid);
+            apiResponseText = await getResponseofMebo(readTxt,nickname,uid);
         }else{
             console.log("a3rt");
             readTxt = readTxt.replace(namePattern, "");
