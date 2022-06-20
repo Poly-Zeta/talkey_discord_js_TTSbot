@@ -25,8 +25,6 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,u
         var apiResponseText="";
         const apiRandomizer = Math.floor(Math.random() * 100);
 
-
-
         if (apiRandomizer< 70) {
             readTxt = readTxt.replace(namePattern, "talkeyちゃん");
             apiResponseText = await getResponseofMebo(readTxt,nickname,uid);
