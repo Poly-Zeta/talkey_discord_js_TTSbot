@@ -27,7 +27,7 @@ module.exports = {
         //コマンド送信者のVC状況をチェック
         const memberVC = interaction.member.voice.channel;
         const guild = interaction.guild;
-        const textChannelId=interaction.channelId;
+        const textChannelId=interaction.channel.id;
         // const member = await guild.members.fetch(interaction.member.id);
         // const memberVC = member.voice.channel;
 
