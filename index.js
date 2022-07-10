@@ -406,7 +406,7 @@ client.on('ready', () => {
     console.log(process.memoryUsage().heapUsed);
 
     //15分に1回(毎時0,15,30,45分)，vcで放置されていないかチェック
-    cron.schedule('0,15,30,45 * * * *', () => {
+    cron.schedule('0,15,30,45 * * * * *', () => {
         const now = Date.now();
         const idList = scanQueueMap(now);
         // console.log(idList);
@@ -417,8 +417,7 @@ client.on('ready', () => {
     });
 
     //1時間に1回(00分)にコマンドと自動読み上げの回数をファイル出力，ついでに稼働状態をテキストチャンネルに書き込み
-    cron.schedule('0 * * * * *', () => {
-    // cron.schedule('0 * * * *', () => {
+    cron.schedule('0 * * * *', () => {
         const reportChannel = client.channels.cache.get(tokens.reportingChannel);
         const now = Date.now();
         const vcMessage = statusMessageGen(getVoiceConnections().size, client.guilds.cache.size);
