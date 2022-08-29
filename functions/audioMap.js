@@ -88,7 +88,7 @@ async function moveVoiceChannel(guild, guildId, oldVoiceChannel, newVoiceChannel
 
 async function deleteGuildToMap(guildId) {
     // const beforeSize = queueMap.size;
-    queueMap.delete(guildId);
+    await queueMap.delete(guildId);
     // console.log(`delete before:${beforeSize}->after:${queueMap.size}`);
     return;
 }
