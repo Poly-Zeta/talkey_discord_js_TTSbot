@@ -225,8 +225,8 @@ async function onVoiceStateUpdate(oldState, newState) {
                     //oldはその移動で空になった？
                     if (oldVc.members.size >= 1 && oldVc.members.filter(member => !member.user.bot).size == 0) {
                         // console.log("auto-disconnect");
-                        oldBotConnection.destroy();
                         deleteGuildToMap(oldGuild.id);
+                        oldBotConnection.destroy();
                         // return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
                         return await client.channels.cache.get(oldTextChannelId).send("ボイスチャットが空になりました．自動退出します．");
                     }
@@ -248,8 +248,8 @@ async function onVoiceStateUpdate(oldState, newState) {
             //移動先は空？
             if (newVc.members.size >= 1 && newVc.members.filter(member => !member.user.bot).size == 0) {
                 // console.log("auto-disconnect");
-                newBotConnection.destroy();
                 deleteGuildToMap(newGuild.id);
+                newBotConnection.destroy();
                 // return newGuild.systemChannel.send("空のボイスチャットに移動しました．自動退出します．");
                 return await client.channels.cache.get(newTextChannelId).send("空のボイスチャットに移動しました．自動退出します．");
             }
@@ -272,8 +272,8 @@ async function onVoiceStateUpdate(oldState, newState) {
         //oldはその移動で空になった？
         if (oldVc.members.size >= 1 && oldVc.members.filter(member => !member.user.bot).size == 0) {
             // console.log("auto-disconnect");
-            oldBotConnection.destroy();
             deleteGuildToMap(oldGuild.id);
+            oldBotConnection.destroy();
             // return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
             return await client.channels.cache.get(oldTextChannelId).send("ボイスチャットが空になりました．自動退出します．");
         }
