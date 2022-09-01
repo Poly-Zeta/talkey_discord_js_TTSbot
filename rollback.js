@@ -4,10 +4,29 @@
 //git rivertで特定の(hash保存済み)commitに戻って再起動する
 
 const { execSync } = require('child_process');
-const Discord = require("discord.js");
-
+// const Discord = require("discord.js");
+const {
+    Client,
+    EmbedBuilder ,
+    ActivityType,
+    GatewayIntentBits: {
+        Guilds,
+        GuildMessages,
+        MessageContent,
+        GuildMembers,
+        GuildWebhooks,
+        GuildVoiceStates
+    }
+} = require("discord.js");
 const client = new Discord.Client({
-    intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES"],
+    intents: [
+        Guilds,
+        GuildMessages,
+        MessageContent,
+        GuildMembers,
+        GuildWebhooks,
+        GuildVoiceStates
+    ],
 });
 
 var fs = require('fs');
