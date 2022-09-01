@@ -13,7 +13,7 @@ const {
         Guilds,
         GuildMessages,
         MessageContent,
-        GuildMembers,
+        // GuildMembers,
         GuildWebhooks,
         GuildVoiceStates
     }
@@ -23,7 +23,7 @@ const client = new Discord.Client({
         Guilds,
         GuildMessages,
         MessageContent,
-        GuildMembers,
+        // GuildMembers,
         GuildWebhooks,
         GuildVoiceStates
     ],
