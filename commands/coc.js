@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { ndnDiceRoll } = require('../functions/diceroll.js');
 
 module.exports = {
@@ -72,7 +72,7 @@ module.exports = {
 
 
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle('status')
             .addFields(
                 {

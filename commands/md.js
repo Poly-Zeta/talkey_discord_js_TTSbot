@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     attr: "additional",
@@ -7,7 +7,7 @@ module.exports = {
         description: "discordで使用できるMarkDownのチートシート"
     },
     async execute(interaction) {
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle('discord MarkDown')
             .addFields(
                 {

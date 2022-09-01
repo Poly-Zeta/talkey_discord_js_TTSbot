@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { parse } = require('csv-parse/sync');
 var fs = require('fs');
 var path = require('path');
@@ -143,7 +143,7 @@ module.exports = {
                 if (guildData === undefined) {
                     return interaction.editReply("このギルドで進行中のゲームは存在しません．");
                 } else {
-                    const embed = new MessageEmbed()
+                    const embed = new EmbedBuilder()
                         .setTitle('status')
                         .addFields(
                             {
@@ -258,7 +258,7 @@ module.exports = {
                 const counter = guildData.log.length;
                 const finalLog = guildData.log.join('\n');
                 deleteGuildToGameMap(guildId);
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                     .setTitle('result')
                     .addFields(
                         {
@@ -282,7 +282,7 @@ module.exports = {
                 const finalLog = guildData.log.join('\n');
                 deleteGuildToGameMap(guildId);
                 // return interaction.editReply(`失敗... 答えは${failureAns}でした．`);
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                     .setTitle('result')
                     .addFields(
                         {
@@ -301,7 +301,7 @@ module.exports = {
                 return await interaction.editReply({ embeds: [embed] });
             }
 
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle('result')
                 .addFields(
                     {

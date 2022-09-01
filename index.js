@@ -1,10 +1,11 @@
 const { generateDependencyReport, getVoiceConnection, getVoiceConnections } = require("@discordjs/voice");
 console.log(generateDependencyReport());
 const Discord = require("discord.js");
-// const { MessageEmbed } = require('discord.js');
+// const { EmbedBuilder } = require('discord.js');
 const {
     Client,
-    MessageEmbed ,
+    EmbedBuilder ,
+    ActivityType,
     GatewayIntentBits: {
         Guilds,
         GuildMessages,
@@ -126,7 +127,7 @@ async function onInteraction(interaction) {
 //vcのステータスアップデート時
 async function onVoiceStateUpdate(oldState, newState) {
     // console.log(oldState.channelId, newState.channelId, (oldState.member.id == tokens.myID), (newState.member.id == tokens.myID));
-    client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
+    client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: ActivityType.Listening});
 
     const updateMember = oldState.member;
     const oldGuild = oldState.guild;
@@ -314,7 +315,7 @@ function statusMessageGen(vcCount, guildSize) {
 //新規にサーバに参加した際の処理
 async function onGuildCreate(guild) {
     console.log(`Create ${guild.name} ${guild.id}`);
-    client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
+    client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), {type: ActivityType.Listening});
     client.channels.cache.get(tokens.newGuildNotifyChannel).send('新規にサーバに参加しました．');
     // const serverIndex = registerSet.findIndex((v) => v.id === guild.id);
 
@@ -338,7 +339,7 @@ async function onGuildCreate(guild) {
     guild.commands.set([commands["add"].data]);
     console.log("created");
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
         .setTitle('新規利用ありがとうございます．')
         .setColor('#0000ff')
         .addFields(
@@ -372,7 +373,7 @@ async function onGuildCreate(guild) {
 //サーバから退出したり，サーバが爆散したりしたときの処理
 async function onGuildDelete(guild) {
     console.log(`Delete ${guild.name} ${guild.id}`);
-    client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
+    client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), {type: ActivityType.Listening});
     client.channels.cache.get(tokens.newGuildNotifyChannel).send('サーバから退出しました．');
 
     await deleteGuildData(guild.id);
@@ -419,7 +420,7 @@ client.on('ready', () => {
         'Node.js:': process.version,
         'Plattform:': process.platform + '|' + process.arch
     });
-    client.user.setActivity(statusMessageGen(getVoiceConnections().size, guildNum), { type: 'LISTENING' });
+    client.user.setActivity(statusMessageGen(getVoiceConnections().size, guildNum), { type: ActivityType.Listening});
     client.channels.cache.get(tokens.bootNotifyChannel).send('起動しました．');
     console.log(process.memoryUsage().heapUsed);
 
@@ -431,7 +432,7 @@ client.on('ready', () => {
         for (const elem of idList) {
             vcAutoDisconnect(elem);
         }
-        client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: 'LISTENING' });
+        client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), {type: ActivityType.Listening});
     });
 
     //1時間に1回(00分)にコマンドと自動読み上げの回数をファイル出力，ついでに稼働状態をテキストチャンネルに書き込み

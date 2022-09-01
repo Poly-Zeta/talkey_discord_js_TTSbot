@@ -1,6 +1,6 @@
 const { NoSubscriberBehavior, joinVoiceChannel, getVoiceConnection, createAudioPlayer } = require("@discordjs/voice");
 const { addGuildToMap } = require('../functions/audioMap.js');
-const { MessageEmbed,MessageAttachment } = require('discord.js');
+const { EmbedBuilder,AttachmentBuilder } = require('discord.js');
 
 var fs = require('fs');
 var path = require('path');
@@ -59,7 +59,7 @@ module.exports = {
         }
         //全部違ったら接続
         else {
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle('ボイスチャンネルに参加します')
                 .setColor('#0000ff')
                 .addFields(
@@ -86,7 +86,7 @@ module.exports = {
             connection.subscribe(player);
             addGuildToMap(guild.me, guild.id,textChannelId, memberVC.id, connection, player);
 
-            const attachment = new MessageAttachment('../how_to_use.png','how_to_use.png');
+            const attachment = new AttachmentBuilder('../how_to_use.png','how_to_use.png');
             embed.setImage('attachment://how_to_use.png');
             await interaction.editReply("finish!");
             return await interaction.editReply({ files: [attachment], embeds: [embed] });

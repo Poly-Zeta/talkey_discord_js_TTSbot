@@ -1,6 +1,6 @@
 const { getVoiceConnection } = require("@discordjs/voice");
 const { addMember, deleteMember, getGuildMap } = require('../functions/audioMap.js');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     attr: "base",
@@ -45,7 +45,7 @@ module.exports = {
         // console.log(`guildData['memberId']:${guildData["memberId"]}`);
 
         if (commandOption == "help") {
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle('ttslistコマンドの詳細説明')
                 .setColor('#0000ff')
                 .addFields(
@@ -125,7 +125,7 @@ module.exports = {
             // const nameList=guildData.memberId.forEach(element => {
 
             // });
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle('読み上げ対象')
                 .setColor('#0000ff')
                 .addFields(

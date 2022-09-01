@@ -74,7 +74,7 @@ module.exports = {
         let reply = "";
         if (option == null) {
             const ans = ndnDiceRoll(1, weaponData.length);
-            reply = weaponData[ans].name.ja_JP;
+            reply = weaponData[ans-1].name.ja_JP;
         } else {
             var filterdWeapons = weaponData.filter(function (item, index) {
                 if (item.type.key == option.value) return true;
