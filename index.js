@@ -1,7 +1,18 @@
 const { generateDependencyReport, getVoiceConnection, getVoiceConnections } = require("@discordjs/voice");
 console.log(generateDependencyReport());
 const Discord = require("discord.js");
-const { MessageEmbed } = require('discord.js');
+// const { MessageEmbed } = require('discord.js');
+const {
+    Client,
+    MessageEmbed ,
+    GatewayIntentBits: {
+        Guilds,
+        GuildMessages,
+        MessageContent,
+        GuildWebhooks,
+        GuildVoiceStates
+    }
+} = require("discord.js");
 const { getGuildMap, addAudioToMapQueue, moveVoiceChannel, deleteGuildToMap, scanQueueMap } = require('./functions/audioMap.js');
 const { talkFunc } = require('./functions/talkFunc.js');
 const { addAutoSpeechCounter, output } = require('./functions/talkLog.js');
@@ -10,7 +21,13 @@ const cron = require('node-cron')
 const { execSync } = require('child_process');
 
 const client = new Discord.Client({
-    intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES"],
+    intents: [
+        Guilds,
+        GuildMessages,
+        MessageContent,
+        GuildWebhooks,
+        GuildVoiceStates
+    ],
 });
 
 var fs = require('fs');
@@ -94,7 +111,8 @@ for (const file of commandFiles) {
 //************************************************************************************ */
 //interactionイベント時
 async function onInteraction(interaction) {
-    if (!interaction.isCommand()) {
+    // if (!interaction.isCommand()) {
+    if (!interaction.isChatInputCommand()) {
         return;
     }
     await interaction.reply('working!');
