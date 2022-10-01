@@ -6,6 +6,7 @@ const {
     Client,
     EmbedBuilder ,
     ActivityType,
+    ClientApplication,
     GatewayIntentBits: {
         Guilds,
         GuildMessages,

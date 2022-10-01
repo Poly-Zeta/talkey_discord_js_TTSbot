@@ -29,13 +29,31 @@ const commandFiles = fs.readdirSync(absolutePath.commandsdir).filter(file => fil
 
 //準備
 const Discord = require("discord.js");
-// const { EmbedBuilder } = require('discord.js');
 const {
     Client,
-    ClientApplication
+    EmbedBuilder ,
+    ActivityType,
+    ClientApplication,
+    GatewayIntentBits: {
+        Guilds,
+        GuildMessages,
+        MessageContent,
+        // GuildMembers,
+        GuildWebhooks,
+        GuildVoiceStates
+    }
 } = require("discord.js");
 
-const client = new Discord.Client({});
+const client = new Discord.Client({
+    intents: [
+        Guilds,
+        GuildMessages,
+        MessageContent,
+        // GuildMembers,
+        GuildWebhooks,
+        GuildVoiceStates
+    ],
+});
 
 //bot動作トークン
 client.token = tokens.bot;
@@ -74,7 +92,6 @@ for (const file of commandFiles) {
 
 
 async function main() {
-    client.token = tokens.bot;
     console.log("REG");
     client.application = new ClientApplication(client, {});
     await client.application.fetch();
