@@ -46,20 +46,28 @@ module.exports = {
         }
 
         const msgAry=readTxt.split(/[.,]/);
+        console.log(`msgAry:${msgAry}`);
         gearPowerBig=parseInt(msgAry[0], 10);
         gearPowerSmall=parseInt(msgAry[1], 10);
+        console.log(`big:${gearPowerBig},small:${gearPowerSmall}`);
 
         if(option.value=="effect"){
             let pow=gearPowerBig+gearPowerSmall*0.1;
             let big=0;
             let small=0;
-            if(pow%10==0){big=pow/10;}
-            else{
-                if(pow%3==0){small=pow/3;}
-                else{
+            console.log(`pow:${pow},big:${big},small:${small}`);
+            if(pow%10==0){
+                big=pow/10;
+                console.log(`pow:${pow},big:${big},small:${small}`);
+            }else{
+                if(pow%3==0){
+                    small=pow/3;
+                    console.log(`pow:${pow},big:${big},small:${small}`);
+                }else{
                     if((pow%10)%3==0){
                         big=~~(pow/10);
                         small=(pow%10)/3;
+                        console.log(`pow:${pow},big:${big},small:${small}`);
                     }
                     else{
                         big=-1;
