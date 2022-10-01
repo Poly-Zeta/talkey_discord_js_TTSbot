@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 const { readGuildCommand, addGuildCommand } = require('../functions/commandDBIO.js');
 const cmdUpdate = require('./cmdUpdate.js');
+const { PermissionsBitField } = require('discord.js');
 
 var absolutePath = JSON.parse(
     fs.readFileSync(
@@ -130,7 +131,8 @@ module.exports = {
         options: optionsObject
     },
     async execute(interaction) {
-        if (!interaction.memberPermissions.has('ADMINISTRATOR') && interaction.member.id != tokens.PZID) {
+        if (!interaction.memberPermissions.has(PermissionsBitField.Flags.Administrator) && interaction.member.id != tokens.PZID) {
+        // if (!interaction.memberPermissions.has('ADMINISTRATOR') && interaction.member.id != tokens.PZID) {
             // return interaction.reply("addは各サーバ管理者限定のコマンドのため，実行できません");
             return interaction.editReply("addは各サーバ管理者限定のコマンドのため，実行できません");
         }
