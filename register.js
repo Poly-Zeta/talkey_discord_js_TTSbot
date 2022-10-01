@@ -28,9 +28,31 @@ var registerSet = JSON.parse(
 const commandFiles = fs.readdirSync(absolutePath.commandsdir).filter(file => file.endsWith('.js'));
 
 //準備
-const { Client, ClientApplication } = require("discord.js");
-const client = new Client({
-    intents: 0,
+const Discord = require("discord.js");
+// const { EmbedBuilder } = require('discord.js');
+const {
+    Client,
+    EmbedBuilder ,
+    ActivityType,
+    GatewayIntentBits: {
+        Guilds,
+        GuildMessages,
+        MessageContent,
+        // GuildMembers,
+        GuildWebhooks,
+        GuildVoiceStates
+    }
+} = require("discord.js");
+
+const client = new Discord.Client({
+    intents: [
+        Guilds,
+        GuildMessages,
+        MessageContent,
+        // GuildMembers,
+        GuildWebhooks,
+        GuildVoiceStates
+    ],
 });
 
 //bot動作トークン
