@@ -32,29 +32,10 @@ const Discord = require("discord.js");
 // const { EmbedBuilder } = require('discord.js');
 const {
     Client,
-    EmbedBuilder ,
-    ActivityType,
-    ClientApplication,
-    GatewayIntentBits: {
-        Guilds,
-        GuildMessages,
-        MessageContent,
-        // GuildMembers,
-        GuildWebhooks,
-        GuildVoiceStates
-    }
+    ClientApplication
 } = require("discord.js");
 
-const client = new Discord.Client({
-    intents: [
-        Guilds,
-        GuildMessages,
-        MessageContent,
-        // GuildMembers,
-        GuildWebhooks,
-        GuildVoiceStates
-    ],
-});
+const client = new Discord.Client({});
 
 //bot動作トークン
 client.token = tokens.bot;
@@ -93,6 +74,7 @@ for (const file of commandFiles) {
 
 
 async function main() {
+    client.token = tokens.bot;
     console.log("REG");
     client.application = new ClientApplication(client, {});
     await client.application.fetch();
