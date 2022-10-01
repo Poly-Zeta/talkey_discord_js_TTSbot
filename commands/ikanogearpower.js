@@ -64,14 +64,14 @@ module.exports = {
                 big=pow/10;
                 console.log(`a:pow:${pow},big:${big},small:${small}`);
             }else{
-                if(pow%3==0){
-                    small=pow/3;
-                    console.log(`b:pow:${pow},big:${big},small:${small}`);
+                if((pow%10)%3==0){
+                    big=~~(pow/10);
+                    small=(pow%10)/3;
+                    console.log(`c:pow:${pow},big:${big},small:${small}`);
                 }else{
-                    if((pow%10)%3==0){
-                        big=~~(pow/10);
-                        small=(pow%10)/3;
-                        console.log(`c:pow:${pow},big:${big},small:${small}`);
+                    if(pow%3==0){
+                        small=pow/3;
+                        console.log(`b:pow:${pow},big:${big},small:${small}`);
                     }
                     else{
                         big=-1;
