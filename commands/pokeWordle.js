@@ -65,17 +65,17 @@ module.exports = {
         description: "サーバごとに1件まで，pokewordleを実行する．",
         options: [
             {
-                type: "SUB_COMMAND",
+                type: 1,//"SUB_COMMAND",
                 name: "newgame",
                 description: "ゲームの開始",
             },
             {
-                type: "SUB_COMMAND",
+                type: 1,//"SUB_COMMAND",
                 name: "config",
                 description: "進行チェック，ヘルプ",
                 options: [
                     {
-                        type: "STRING",
+                        type: 3,//"STRING",
                         name: "option",
                         description: "どの操作を実行するか指定",
                         required: true,
@@ -97,12 +97,12 @@ module.exports = {
                 ]
             },
             {
-                type: "SUB_COMMAND",
+                type: 1,//"SUB_COMMAND",
                 name: "check",
                 description: "ゲーム実行中，解答を送信する",
                 options: [
                     {
-                        type: "STRING",
+                        type: 3,//"STRING",
                         name: "answer",
                         description: "解答",
                         required: true

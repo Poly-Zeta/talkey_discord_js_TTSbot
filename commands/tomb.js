@@ -5,7 +5,7 @@ module.exports = {
         description: "某AAを表示する",
         options: [
             {
-                type:"STRING",
+                type:3,//"STRING",
                 name:"insert",
                 description: "表示する内容を一部差し換える",
                 required:false,

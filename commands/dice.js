@@ -7,7 +7,7 @@ module.exports = {
         description: "ダイスロール．引数未指定なら1D100を実行",
         options: [
             {
-                type:"STRING",
+                type:3,//"STRING",
                 name:"ndn",
                 description: "nDnダイスを実行(n<1000)",
                 required:false,

@@ -7,7 +7,7 @@ module.exports = {
         description: "このコマンドを使用すると，ttsListに登録済みのユーザでもbotに読み上げられない",
         options: [
             {
-                type: "STRING",
+                type: 3,//"STRING",
                 name: "message",
                 required: true,
                 description: "テキストチャットにはこの引数の内容が送信される",

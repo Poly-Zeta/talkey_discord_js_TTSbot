@@ -113,7 +113,7 @@ for (let i = 0; i < lengthOfAdditionalCommandList; i = (i + 1) | 0) {
 const optionsObject = [];
 for (let i = 0; i < lengthOfAdditionalCommandList; i = (i + 1) | 0) {
     optionsObject[optionsObject.length] = {
-        type: "STRING",
+        type: 3,//"STRING",
         name: `command${i + 1}`,
         description: `追加するコマンド${i + 1}`,
         choices: optionsOfChoiceObject

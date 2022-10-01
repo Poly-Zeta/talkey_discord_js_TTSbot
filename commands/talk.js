@@ -12,7 +12,7 @@ module.exports = {
         description: "このコマンドの引数をbotが読み上げる",
         options: [
             {
-                type: "STRING",
+                type: 3,//"STRING",
                 name: "message",
                 description: "読み上げさせたいテキスト",
                 required: true

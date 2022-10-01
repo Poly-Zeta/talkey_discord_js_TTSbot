@@ -9,7 +9,7 @@ module.exports = {
         description: "常時読み上げ対象ユーザのリストを編集する．",
         options: [
             {
-                type: "STRING",
+                type: 3,//"STRING",
                 name: "option",
                 description: "詳しくはhelpオプションからどうぞ．",
                 required: true,

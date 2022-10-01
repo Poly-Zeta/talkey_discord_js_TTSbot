@@ -28,17 +28,17 @@ module.exports = {
         description: "再起動",
         options: [
             {
-                type: "SUB_COMMAND",
+                type: 1,//"SUB_COMMAND",
                 name: "default",
                 description: "再起動",
             },
             {
-                type: "SUB_COMMAND",
+                type: 1,//"SUB_COMMAND",
                 name: "upgrade",
                 description: "gitから最新安定版をpull",
             },
             {
-                type: "SUB_COMMAND",
+                type: 1,//"SUB_COMMAND",
                 name: "develop",
                 description: "gitから開発版をpull",
             },

@@ -7,7 +7,7 @@ module.exports = {
         description: "スプラのギアパワー表記変換ツール",
         options: [
             {
-                type: "STRING",
+                type: 3,//"STRING",
                 name: "type",
                 description: "変換前のギアパワー表記",
                 choices: [
@@ -23,7 +23,7 @@ module.exports = {
                 required: true
             },
             {
-                type: "STRING",
+                type: 3,//"STRING",
                 name: "power",
                 description: "ギアパワー",
                 required: true

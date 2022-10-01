@@ -21,7 +21,7 @@ module.exports = {
         description: "スプラ2のブキランダマイザ",
         options: [
             {
-                type: "STRING",
+                type: 3,//"STRING",
                 name: "filter",
                 description: "ブキカテゴリのフィルタ",
                 choices: [

@@ -9,17 +9,17 @@ module.exports = {
         description: "某身内ミームを表示する",
         options: [
             {
-                type: "SUB_COMMAND",
+                type: 1,//"SUB_COMMAND",
                 name: "normal",
                 description: "通常バージョン",
             },
             {
-                type: "SUB_COMMAND",
+                type: 1,//"SUB_COMMAND",
                 name: "insert",
                 description: "内容を一部差し換える",
                 options: [
                     {
-                        type: "STRING",
+                        type: 3,//"STRING",
                         name: "text",
                         description: "差し替え先",
                         required: true
@@ -27,7 +27,7 @@ module.exports = {
                 ]
             },
             {
-                type: "SUB_COMMAND",
+                type: 1,//"SUB_COMMAND",
                 name: "long",
                 description: "ロングバージョン",
             }

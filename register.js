@@ -31,28 +31,12 @@ const commandFiles = fs.readdirSync(absolutePath.commandsdir).filter(file => fil
 const Discord = require("discord.js");
 const {
     Client,
-    EmbedBuilder ,
-    ActivityType,
-    ClientApplication,
-    GatewayIntentBits: {
-        Guilds,
-        GuildMessages,
-        MessageContent,
-        // GuildMembers,
-        GuildWebhooks,
-        GuildVoiceStates
-    }
+    ClientApplication
 } = require("discord.js");
+const { exit } = require('process');
 
 const client = new Discord.Client({
-    intents: [
-        Guilds,
-        GuildMessages,
-        MessageContent,
-        // GuildMembers,
-        GuildWebhooks,
-        GuildVoiceStates
-    ],
+    intents: 0
 });
 
 //bot動作トークン
@@ -93,11 +77,12 @@ for (const file of commandFiles) {
 
 async function main() {
     console.log("REG");
-    client.token = tokens.bot;
+    client.login(tokens.bot);
     client.application = new ClientApplication(client, {});
     const app=await client.application.fetch();
 
     //鯖IDをnullにしてregister->globalコマンドの登録
+    console.log(baseCommands);
     await register(client, baseCommands, null);
     console.log(baseCommands);
     console.log(`global : registration succeed!`);
@@ -122,5 +107,7 @@ async function main() {
         console.log(commandList);
         console.log(`${registerSet[id].name} : registration succeed!`);
     };
+    client.destroy();
+    exit();
 }
 main().catch(err => console.error(err));
