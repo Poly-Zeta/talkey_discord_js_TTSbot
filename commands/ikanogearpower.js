@@ -52,22 +52,26 @@ module.exports = {
         console.log(`big:${gearPowerBig},small:${gearPowerSmall}`);
 
         if(option.value=="effect"){
+            if(gearPowerBig*10+gearPowerSmall>57){
+                reply="効果量の数値は5.7を超えないように入力してください．"
+                return interaction.editReply(reply);
+            }
             let pow=gearPowerBig*10+gearPowerSmall;
             let big=0;
             let small=0;
             console.log(`pow:${pow},big:${big},small:${small}`);
             if(pow%10==0){
                 big=pow/10;
-                console.log(`pow:${pow},big:${big},small:${small}`);
+                console.log(`a:pow:${pow},big:${big},small:${small}`);
             }else{
                 if(pow%3==0){
                     small=pow/3;
-                    console.log(`pow:${pow},big:${big},small:${small}`);
+                    console.log(`b:pow:${pow},big:${big},small:${small}`);
                 }else{
                     if((pow%10)%3==0){
                         big=~~(pow/10);
                         small=(pow%10)/3;
-                        console.log(`pow:${pow},big:${big},small:${small}`);
+                        console.log(`c:pow:${pow},big:${big},small:${small}`);
                     }
                     else{
                         big=-1;
@@ -80,6 +84,10 @@ module.exports = {
                 reply=`5.7表記[${readTxt}]は，3,9表記で${big},${small}です`;
             }
         }else{
+            if(gearPowerBig>3||gearPowerSmall>9){
+                reply="大ギアの数値は3，小ギアの数値は9をそれぞれ超えないように入力してください．"
+                return interaction.editReply(reply);
+            }
             reply=`3.9表記[${readTxt}]は，5.7表記で${(gearPowerBig*10+gearPowerSmall*3)*0.1}です`;
         }
         return interaction.editReply(reply);
