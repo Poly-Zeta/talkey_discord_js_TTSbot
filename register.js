@@ -94,7 +94,7 @@ for (const file of commandFiles) {
 async function main() {
     console.log("REG");
     client.application = new ClientApplication(client, {});
-    await client.application.fetch();
+    const app=await client.application.fetch();
 
     //鯖IDをnullにしてregister->globalコマンドの登録
     await register(client, baseCommands, null);
