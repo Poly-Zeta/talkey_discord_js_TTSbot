@@ -93,6 +93,7 @@ for (const file of commandFiles) {
 
 async function main() {
     console.log("REG");
+    client.token = tokens.bot;
     client.application = new ClientApplication(client, {});
     const app=await client.application.fetch();
 
