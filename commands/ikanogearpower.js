@@ -52,7 +52,7 @@ module.exports = {
         console.log(`big:${gearPowerBig},small:${gearPowerSmall}`);
 
         if(option.value=="effect"){
-            let pow=gearPowerBig+gearPowerSmall*0.1;
+            let pow=gearPowerBig*10+gearPowerSmall;
             let big=0;
             let small=0;
             console.log(`pow:${pow},big:${big},small:${small}`);
@@ -80,7 +80,7 @@ module.exports = {
                 reply=`5.7表記[${readTxt}]は，3,9表記で${big},${small}です`;
             }
         }else{
-            reply=`3.9表記[${readTxt}]は，5.7表記で${gearPowerBig+gearPowerSmall*0.3}です`;
+            reply=`3.9表記[${readTxt}]は，5.7表記で${(gearPowerBig*10+gearPowerSmall*3)*0.1}です`;
         }
         return interaction.editReply(reply);
     }
