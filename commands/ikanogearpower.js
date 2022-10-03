@@ -88,7 +88,7 @@ module.exports = {
                 reply="大ギアの数値は3，小ギアの数値は9をそれぞれ超えないように入力してください．"
                 return interaction.editReply(reply);
             }
-            reply=`3.9表記[${readTxt}]は，5.7表記で${(gearPowerBig*10+gearPowerSmall*3)*0.1}です`;
+            reply=`3.9表記[${readTxt}]は，5.7表記で${((gearPowerBig*10+gearPowerSmall*3)*0.1).toPrecision(2)}です`;
         }
         return interaction.editReply(reply);
     }
