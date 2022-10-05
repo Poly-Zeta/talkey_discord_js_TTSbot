@@ -61,7 +61,11 @@ module.exports = {
             let small=0;
             // console.log(`pow:${pow},big:${big},small:${small}`);
             if(pow%10==0){
-                big=pow/10;
+                if(pow/10>3){
+                    big=-1;
+                }else{
+                    big=pow/10;
+                }
                 // console.log(`a:pow:${pow},big:${big},small:${small}`);
             }else{
                 let i=~~(pow/10);
