@@ -74,9 +74,13 @@ module.exports = {
                 for(i;i>=0;i--){
                     x=pow-i*10;
                     if(x%3==0){
-                        big=i;
-                        small=x/3;
-                        break;
+                        if(x/3>9){
+                            continue;
+                        }else{
+                            big=i;
+                            small=x/3;
+                            break;
+                        }
                     }else if(i==0){
                         big=-1;
                     }
