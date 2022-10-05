@@ -64,9 +64,10 @@ module.exports = {
                 big=pow/10;
                 // console.log(`a:pow:${pow},big:${big},small:${small}`);
             }else{
-                let i=0;
+                let i=~~(pow/10);
                 let x=0;
-                for(i=3;i>=0;i--){
+                if(i>3){i=3;}
+                for(i;i>=0;i--){
                     x=pow-i*10;
                     if(x%3==0){
                         big=i;
