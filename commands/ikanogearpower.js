@@ -64,20 +64,22 @@ module.exports = {
                 big=pow/10;
                 // console.log(`a:pow:${pow},big:${big},small:${small}`);
             }else{
-                if((pow%10)%3==0){
-                    big=~~(pow/10);
-                    small=(pow%10)/3;
-                    // console.log(`c:pow:${pow},big:${big},small:${small}`);
-                }else{
-                    if(pow%3==0){
-                        small=pow/3;
-                        // console.log(`b:pow:${pow},big:${big},small:${small}`);
-                    }
-                    else{
+                let i=0;
+                let x=0;
+                for(i=3;i>=0;i--){
+                    x=pow-i*10;
+                    if(x%3==0){
+                        big=i;
+                        small=x/3;
+                        break;
+                    }else if(i==0){
                         big=-1;
                     }
                 }
             }
+
+
+
             if(big<0){
                 reply=`5.7表記[${readTxt}]について，3,9表記の場合の解が見つかりませんでした．`;
             }else{
