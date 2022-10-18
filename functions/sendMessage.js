@@ -9,6 +9,10 @@ exports.sendMessage = async function (opt, interaction) {
     //メッセージ発信者の名前とアバターURL
     const nickname = interaction.member.displayName//nickname ?? interaction.user.username;
     const avatarURL = interaction.user.displayAvatarURL({ dynamic: true });
+    console.log(interaction.member);
+    console.log(interaction.member.displayName);
+    console.log(interaction.user);
+    console.log(interaction.user.displayAvatarURL({ dynamic: true }));
     //Webhookの取得（なければ作成する）
     const webhook = await getWebhookInChannel(interaction.channel).catch(e => console.error(e));
     //メッセージ送信。usernameとavatarURLをメッセージ発信者のものに指定するのがミソ
