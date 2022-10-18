@@ -16,10 +16,6 @@ module.exports = {
     },
     async execute(interaction) {
         //ユーザアカウントに偽装したwebhookを送る
-        console.log(interaction.member);
-        console.log(interaction.member.displayName);
-        console.log(interaction.user);
-        console.log(interaction.user.displayAvatarURL({ dynamic: true }));
         await sendMessage("🔇", interaction).catch(e => console.error(e));
 
         //ここまでで必要な動作は全て済んでいるが，interactionに返答しないとアプリ側にエラーが出てうざい
