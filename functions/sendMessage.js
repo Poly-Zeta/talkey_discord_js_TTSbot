@@ -25,7 +25,7 @@ exports.sendMessage = async function (opt, interaction) {
 async function getWebhookInChannel(channel) {
     //webhookのキャッシュを自前で保持し速度向上
     const webhook = cacheWebhooks.get(channel.id) ?? await getWebhook(channel);
-    console.log(webhook);
+    console.log(`webhook:${webhook}`);
     return webhook;
 }
 
