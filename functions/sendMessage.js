@@ -12,10 +12,12 @@ exports.sendMessage = async function (opt, interaction) {
     //Webhookの取得（なければ作成する）
     const webhook = await getWebhookInChannel(interaction.channel).catch(e => console.error(e));
     //メッセージ送信。usernameとavatarURLをメッセージ発信者のものに指定するのがミソ
+    webhook.avatarURL(avatarURL);
+    webhook.name=nickname;
     webhook.send({
         content: `${opt} : ${interaction.options.get("message").value}`,
-        username: nickname,
-        avatarURL: avatarURL,
+        // username: nickname,
+        // avatarURL: avatarURL,
     }).catch(e => console.error(e));
     return;
 }
