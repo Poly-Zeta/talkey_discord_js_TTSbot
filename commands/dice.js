@@ -15,7 +15,7 @@ module.exports = {
             {
                 type:5,//"BOOLIAN",
                 name:"secret",
-                description: "trueのとき，結果を他人には見せない(初期値false)",
+                description: "trueのとき，結果を他人には見せない",
                 required:false,
             }
             // {
@@ -101,7 +101,7 @@ module.exports = {
             //何のコマンドでも自動返信している待機メッセをeditReplyで編集することで返信しているので
             //返信隠しをするついでにダイスロールが実行されたことは表示する形にしてみる
             interaction.editReply(`${interaction.member.displayName}さんがダイスロールを実行しました．`);
-            return interaction.reply({content:replyText,ephemeral:true});
+            return interaction.followUp({content:replyText,ephemeral:true});
         }
 
         //オプション無し
