@@ -92,7 +92,7 @@ module.exports = {
         //リプライ隠し
         const shouldPublishingReply=interaction.options.get("secret",false);
         let shouldPublishingReplyFlg=false;
-        if(shouldPublishingReply===null){
+        if(shouldPublishingReply!==null){
             shouldPublishingReplyFlg=shouldPublishingReply.value;
         }
         if(shouldPublishingReplyFlg==false){
