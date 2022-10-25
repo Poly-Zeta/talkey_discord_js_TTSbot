@@ -101,7 +101,7 @@ module.exports = {
         }else{
             //何のコマンドでも自動返信している待機メッセをeditReplyで編集することで返信しているので
             //返信隠しをするついでにダイスロールが実行されたことは表示する形にしてみる
-            interaction.editReply(`${interaction.member.displayName}さんがダイスロールを実行しました．`);
+            interaction.editReply(`${interaction.member.displayName}さんが${ndn}を実行しました．`);
             return interaction.followUp({content:replyText,ephemeral:true});
         }
 
