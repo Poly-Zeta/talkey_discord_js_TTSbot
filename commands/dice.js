@@ -15,7 +15,7 @@ module.exports = {
             {
                 type:5,//"BOOLIAN",
                 name:"secret",
-                description: "trueのとき，結果を他人には見せない",
+                description: "trueのとき，結果を他人には見せない(無入力の際はfalseで実行)",
                 required:false,
             }
             // {
@@ -90,7 +90,7 @@ module.exports = {
         }
 
         //リプライ隠し
-        const shouldPublishingReply=interaction.options.get("secret",false);
+        const shouldPublishingReply=interaction.options.get("secret",false).value;
         //falseの場合(secretオプションに未記入の際はfalseとする)
         if(shouldPublishingReply===null||shouldPublishingReply==false){
             //普通に返信
