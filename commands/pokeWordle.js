@@ -32,7 +32,7 @@ async function getGuildGame(guildId) {
 //guildId指定のギルドをMapに追加し，新規にゲームを開始する
 async function addGuildToGameMap(guildId) {
     // console.log(pokewordleAnsList);
-    const answerRandomizer = Math.floor(Math.random() * pokewordleAnsList.length);
+    const answerRandomizer = Math.floor(Math.random() * (pokewordleAnsList.length-1))+1;
     // console.log(answerRandomizer);
     // console.log(pokewordleAnsList[answerRandomizer]);
     gameMap.set(guildId, {
