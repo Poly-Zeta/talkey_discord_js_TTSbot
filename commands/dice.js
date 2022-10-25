@@ -90,14 +90,15 @@ module.exports = {
         }
 
         //リプライ隠し
-        const shouldPublishingReply=interaction.options.get("secret",false).value;
-        //falseの場合(secretオプションに未記入の際はfalseとする)
-        if(shouldPublishingReply===null||shouldPublishingReply==false){
+        const shouldPublishingReply=interaction.options.get("secret",false);
+        let shouldPublishingReplyFlg=false;
+        if(shouldPublishingReply===null){
+            shouldPublishingReplyFlg=shouldPublishingReply.value;
+        }
+        if(shouldPublishingReplyFlg==false){
             //普通に返信
             return interaction.editReply(replyText);
-        }
-        //trueの場合
-        else{
+        }else{
             //何のコマンドでも自動返信している待機メッセをeditReplyで編集することで返信しているので
             //返信隠しをするついでにダイスロールが実行されたことは表示する形にしてみる
             interaction.editReply(`${interaction.member.displayName}さんがダイスロールを実行しました．`);
