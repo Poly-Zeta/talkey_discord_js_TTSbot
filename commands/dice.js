@@ -11,6 +11,12 @@ module.exports = {
                 name:"ndn",
                 description: "nDnダイスを実行(n<1000)",
                 required:false,
+            },
+            {
+                type:5,//"BOOLIAN",
+                name:"secret",
+                description: "trueのとき，結果を他人には見せない(初期値false)",
+                required:false,
             }
             // {
             //     type: "SUB_COMMAND",
@@ -70,14 +76,32 @@ module.exports = {
         }else{
             ndn="1D100";
         }
-        
+
+        let replyText=""
         if (nDnPattern.test(ndn)) {
             const arg = ndn.split(splitDPattern);
             // return interaction.reply(`${ndn}->${ndnDiceRoll(+arg[0], +arg[1])}`);
-            return interaction.editReply(`${ndn}->${ndnDiceRoll(+arg[0], +arg[1])}`);
+            // return interaction.editReply(`${ndn}->${ndnDiceRoll(+arg[0], +arg[1])}`);
+            replyText=`${ndn}->${ndnDiceRoll(+arg[0], +arg[1])}`;
         } else {
             // return interaction.reply(`引数が指定の形式に一致していないため，1D100を実行しました．\n1D100->${ndnDiceRoll(1, 100)}`);
-            return interaction.editReply(`引数が指定の形式に一致していないため，1D100を実行しました．\n1D100->${ndnDiceRoll(1, 100)}`);
+            // return interaction.editReply(`引数が指定の形式に一致していないため，1D100を実行しました．\n1D100->${ndnDiceRoll(1, 100)}`);
+            replyText=`引数が指定の形式に一致していないため，1D100を実行しました．\n1D100->${ndnDiceRoll(1, 100)}`;
+        }
+
+        //リプライ隠し
+        const shouldPublishingReply=interaction.options.get("secret",false);
+        //falseの場合(secretオプションに未記入の際はfalseとする)
+        if(shouldPublishingReply===null||shouldPublishingReply==false){
+            //普通に返信
+            return interaction.editReply(replyText);
+        }
+        //trueの場合
+        else{
+            //何のコマンドでも自動返信している待機メッセをeditReplyで編集することで返信しているので
+            //返信隠しをするついでにダイスロールが実行されたことは表示する形にしてみる
+            interaction.editReply(`${interaction.member.displayName}さんがダイスロールを実行しました．`);
+            return interaction.reply({content:replyText,ephemeral:true});
         }
 
         //オプション無し
