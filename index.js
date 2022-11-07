@@ -255,8 +255,11 @@ async function onVoiceStateUpdate(oldState, newState) {
                     //空になってないので退出通知
                     return addAudioToMapQueue(oldGuild.id, "システム", `${updateMember.user.username}さんが通話から退出しました`, "f1");
                 }
+
+                if (newGuildBotVcData.voiceChannelId === newVcId) {
                 //ユーザの移動先vcにbotが居る状態なので入室通知
-                return addAudioToMapQueue(newGuild.id, "システム", `${updateMember.user.username}さんが通話に参加しました`, "f1");
+                    return addAudioToMapQueue(newGuild.id, "システム", `${updateMember.user.username}さんが通話に参加しました`, "f1");
+                }
             }
             return;
         }
