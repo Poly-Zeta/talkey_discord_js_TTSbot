@@ -73,8 +73,10 @@ module.exports = {
         let ndn;
         if(cmdOption!==null){
             ndn=cmdOption.value;
+            console.log(`ndn:${ndn}`);
         }else{
             ndn="1D100";
+            console.log(`ndn(default):${ndn}`);
         }
 
         let replyText=""
@@ -94,6 +96,7 @@ module.exports = {
         let shouldPublishingReplyFlg=false;
         if(shouldPublishingReply!==null){
             shouldPublishingReplyFlg=shouldPublishingReply.value;
+            console.log(`secret:${shouldPublishingReplyFlg}`);
         }
         if(shouldPublishingReplyFlg==false){
             //普通に返信
