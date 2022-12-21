@@ -3,7 +3,7 @@ const { textOperator } = require('../functions/textOperator.js');
 const { getResponseofTalkAPI } = require('../functions/talkapi.js');
 const { getVoiceConnection } = require("@discordjs/voice");
 const { addTalkCommandCounter } = require('../functions/talkLog.js');
-const { talkFunc } = require('../functions/talkFunc.js');
+const { talkToBotFunc } = require('../functions/talkFunc.js');
 
 module.exports = {
     attr: "base",
