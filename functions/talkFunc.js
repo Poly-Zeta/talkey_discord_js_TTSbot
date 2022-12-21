@@ -5,11 +5,6 @@ const { getResponseofTalkAPI ,getResponseofChaplus,getResponseofMebo} = require(
 // async function talkFunc(message) {
 async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,uid) {
     const namePattern = /たーきーちゃん|ターキーちゃん|たーきーくん|ターキーくん/;
-    // const botConnection = getVoiceConnection(message.guildId);
-
-    // //引数のメッセージを取得
-    // let readTxt = message.content;
-    // console.log(`chk1: ${readTxt}`);
 
     //名前があるかどうかで挙動を変える
     if (namePattern.test(readTxt)) {
@@ -53,6 +48,42 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,u
     return;
 }
 
+async function talkToBotFunc(readTxt, guildId, textChannel, botConnection, nickname,uid) {
+    const namePattern = /たーきーちゃん|ターキーちゃん|たーきーくん|ターキーくん/;
+
+    textChannel.sendTyping();
+    //ボイチャに接続しているかを確認してf2ボイスにしてqueueに追加
+    if (botConnection != undefined) {
+        //色々除去
+        const readreq = textOperator(readTxt);
+        addAudioToMapQueue(guildId, nickname, readreq, "f2");
+    }
+
+    // console.log(`namechk: ${readTxt}`);
+    var apiResponseText="";
+    const apiRandomizer = Math.floor(Math.random() * 100);
+
+    if (apiRandomizer< 30) {
+        readTxt = readTxt.replace(namePattern, "talkeyちゃん");
+        apiResponseText = await getResponseofMebo(readTxt,nickname,uid);
+    }else{
+        console.log("a3rt");
+        readTxt = readTxt.replace(namePattern, "");
+        //a3rtに投げる
+        apiResponseText = await getResponseofTalkAPI(readTxt);
+    }
+
+    //ボイチャに接続している場合は応答をf1ボイスにしてqueueに投げる
+    if (botConnection != undefined) {
+        addAudioToMapQueue(guildId, "たーきーちゃん", apiResponseText, "f1");
+    }
+    //応答をreplyで返す
+    textChannel.send(apiResponseText);
+    
+    return;
+}
+
 module.exports = {
-    talkFunc
+    talkFunc,
+    talkToBotFunc
 }
