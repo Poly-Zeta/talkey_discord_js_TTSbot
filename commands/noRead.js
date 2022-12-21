@@ -15,8 +15,11 @@ module.exports = {
         ]
     },
     async execute(interaction) {
+        //引数のメッセージを取得
+        let readTxt = interaction.options.get("message").value;
+
         //ユーザアカウントに偽装したwebhookを送る
-        await sendMessage("🔇", interaction).catch(e => console.error(e));
+        await sendMessage("🔇", interaction,readTxt).catch(e => console.error(e));
 
         //ここまでで必要な動作は全て済んでいるが，interactionに返答しないとアプリ側にエラーが出てうざい
         //ので適当に返信してすぐ消す
