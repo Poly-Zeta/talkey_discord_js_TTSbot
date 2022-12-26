@@ -36,12 +36,12 @@ module.exports = {
         let reply = "";
 
         if(readTxt.length!=3){
-            reply="ギアパワーの入力は，[数値1桁 カンマまたはピリオド 数値1桁]の3文字で入力してください．"
+            reply="ギアパワーは，[数値1桁 カンマまたはピリオド 数値1桁]の3文字で入力してください．"
             return interaction.editReply(reply);
         }
         const msgMatch=readTxt.match(/^[0-9][,][0-9]$|^[0-9][.][0-9]$/);
         if(msgMatch===null){
-            reply="ギアパワーの入力は，[数値1桁 カンマまたはピリオド 数値1桁]の3文字で入力してください．"
+            reply="ギアパワーは，[数値1桁 カンマまたはピリオド 数値1桁]の3文字で入力してください．"
             return interaction.editReply(reply);
         }
 
