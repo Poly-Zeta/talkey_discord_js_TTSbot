@@ -61,17 +61,17 @@ async function talkToBotFunc(readTxt, guildId, textChannel, botConnection, nickn
 
     // console.log(`namechk: ${readTxt}`);
     var apiResponseText="";
-    const apiRandomizer = Math.floor(Math.random() * 100);
+    // const apiRandomizer = Math.floor(Math.random() * 100);
 
-    if (apiRandomizer< 30) {
+    // if (apiRandomizer< 30) {
         readTxt = readTxt.replace(namePattern, "talkeyちゃん");
         apiResponseText = await getResponseofMebo(readTxt,nickname,uid);
-    }else{
-        console.log("a3rt");
-        readTxt = readTxt.replace(namePattern, "");
-        //a3rtに投げる
-        apiResponseText = await getResponseofTalkAPI(readTxt);
-    }
+    // }else{
+    //     console.log("a3rt");
+    //     readTxt = readTxt.replace(namePattern, "");
+    //     //a3rtに投げる
+    //     apiResponseText = await getResponseofTalkAPI(readTxt);
+    // }
 
     //ボイチャに接続している場合は応答をf1ボイスにしてqueueに投げる
     if (botConnection != undefined) {
