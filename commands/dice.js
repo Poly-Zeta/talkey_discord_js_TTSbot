@@ -1,4 +1,5 @@
 const { ndnDiceRoll } = require('../functions/diceroll.js');
+const { getVoiceConnection } = require("@discordjs/voice");
 const { talkFunc } = require('../functions/talkFunc.js');
 
 module.exports = {
