@@ -1,4 +1,5 @@
 const { ndnDiceRoll } = require('../functions/diceroll.js');
+const { talkFunc } = require('../functions/talkFunc.js');
 
 module.exports = {
     attr: "additional",
@@ -69,6 +70,9 @@ module.exports = {
         // const subCommand = interaction.options.getSubcommand(false);
         // console.log(subCommand);
 
+        const guildId = interaction.guild.id;
+        const botConnection = getVoiceConnection(guildId);
+
         const cmdOption=interaction.options.get("ndn",false);
         let ndn;
         if(cmdOption!==null){
@@ -100,6 +104,7 @@ module.exports = {
         }
         if(shouldPublishingReplyFlg==false){
             //普通に返信
+            await talkFunc(replyText, guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id);
             return interaction.editReply(replyText);
         }else{
             //何のコマンドでも自動返信している待機メッセをeditReplyで編集することで返信しているので
