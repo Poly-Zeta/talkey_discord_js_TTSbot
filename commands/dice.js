@@ -105,7 +105,7 @@ module.exports = {
         }
         if(shouldPublishingReplyFlg==false){
             //普通に返信
-            await talkFunc(replyText, guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id);
+            await talkFunc(replyText.replace(/d/g,'D'), guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id);
             return interaction.editReply(replyText);
         }else{
             //何のコマンドでも自動返信している待機メッセをeditReplyで編集することで返信しているので
