@@ -1,7 +1,6 @@
 const { textOperator } = require('../functions/textOperator.js');
 const { addAudioToMapQueue } = require('../functions/audioMap.js');
 const { getVoiceConnection } = require("@discordjs/voice");
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 var fs = require('fs');
 var path = require('path');
 
@@ -17,7 +16,7 @@ var tokens = JSON.parse(
     )
 );
 
-const formsURLBase=tokens.formsURLBase;
+const formsURL=tokens.formsURLBase;
 
 module.exports = {
     attr: "additional",
@@ -49,7 +48,7 @@ module.exports = {
         let reply = "";
 
         if(option.value==="add"){
-            reply=`次のGoogleFormリンクから，通知してほしいギアの登録を行ってください．\n${formsURLBase}${interaction.member.id}`;
+            reply=`次のGoogleFormリンクから，通知してほしいギアの登録を行ってください．\n${formsURL}${interaction.member.id}`;
             interaction.editReply(`${interaction.member.displayName}さんがaddを実行しました．`);
             return interaction.followUp({content:reply,ephemeral:true});
         }else{
