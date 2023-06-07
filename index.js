@@ -487,17 +487,19 @@ async function vcAutoDisconnect(elem){
 
 async function onMessage(message) {
     console.log(message.content);
+
     //token削除
     //参考
     //https://qiita.com/minecraftomato1/items/50fac64d500ea98941f4
-    const startsWithHTTP=message.content.startsWith("http");
-    const findTOKEN=message.content.match(/[a-zA-Z0-9]{23}.[a-zA-Z0-9]{6}/);
-    if (findTOKEN && !startsWithHTTP) {
-        message.delete()
-            .then(() => message.channel.send("tokenを検出したため削除"))
-            .catch(e => message.channel.send(`エラー${e.message}`));
-        return;
-    }
+    // const startsWithHTTP=message.content.startsWith("http");
+    // const findTOKEN=message.content.match(/[a-zA-Z0-9]{23}.[a-zA-Z0-9]{6}/);
+    // if (findTOKEN && !startsWithHTTP) {
+    //     message.delete()
+    //         .then(() => message.channel.send("tokenを検出したため削除"))
+    //         .catch(e => message.channel.send(`エラー${e.message}`));
+    //     return;
+    // }
+
     //  /ttsList join 等で，読み上げ対象鯖のリストにユーザidを登録する
     //そのうえでmessageが送られた時，
     //1.message.guildIdが読み上げ対象鯖のリストに存在する
