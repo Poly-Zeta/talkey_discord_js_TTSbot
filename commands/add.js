@@ -66,7 +66,7 @@ for (const file of commandFiles) {
 
 //最大値を低めに取っておく
 //25らしいけど
-const maxNumOfAdditionalCommand = 15;
+const maxNumOfAdditionalCommand = 20;
 let lengthOfAdditionalCommandList;
 if (maxNumOfAdditionalCommand > additionalCommands.length) {
     lengthOfAdditionalCommandList = additionalCommands.length;
