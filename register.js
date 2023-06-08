@@ -47,11 +47,11 @@ client.token = tokens.bot;
 //鯖IDがnullだとdiscord側でglobalコマンドとして登録される
 async function register(client, commands, guildID) {
     // console.log(commands);
-    if (guildID == null) {
+    if (guildID === null) {
         return client.application.commands.set(commands);
     }
     const guild = await client.guilds.fetch(guildID);
-    // console.log(commands);
+    console.log(commands);
     return guild.commands.set(commands);
 }
 //******************************************************************************************** */
@@ -89,7 +89,7 @@ async function main() {
 
     //(commands.jsonに登録されている)サーバの数だけforループ
     for (let id of Object.keys(registerSet)) {
-
+        console.log(id);
         //optional系はbaseの拡張であるため全サーバに実装する．additional系と連結して一応重複排除しておく
         // console.log(additionalCommands);
         const commandList = Array.from(
