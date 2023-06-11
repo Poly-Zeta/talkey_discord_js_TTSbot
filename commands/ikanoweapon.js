@@ -66,7 +66,7 @@ module.exports = {
                             },
                             {
                                 name: "スピナー",
-                                value: "splatling",
+                                value: "spinner",
                             },
                             {
                                 name: "スロッシャー",
