@@ -26,7 +26,7 @@ module.exports = {
     },
     async execute(interaction) {
         let reply = "";
-        reply=`次のリンクから，通知してほしいギアの登録を行ってください．\n${formsURL}${interaction.member.id}`;
+        reply=`次のリンクから，通知してほしいギアの登録を行ってください．\n${formsURL}${btoa(interaction.member.id)}`;
         interaction.editReply(`${interaction.member.displayName}さんがikanogearnoticeを実行しました．`);
         return interaction.followUp({content:reply,ephemeral:true});
     }
