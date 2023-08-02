@@ -39,7 +39,7 @@ module.exports = {
             }
         );
         let reply = "";
-        reply=`[ギア登録はこちら](${formsURL}${btoa(userId)})`;
+        reply=`ギア登録は[こちらのリンク](${formsURL}${btoa(userId)})から`;
         interaction.editReply(`${interaction.member.displayName}さんがikanogearnoticeを実行しました．`);
         return interaction.followUp({content:reply,ephemeral:true});
     }
