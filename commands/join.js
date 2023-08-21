@@ -46,7 +46,7 @@ module.exports = {
             return interaction.editReply(replyMessage);
         }
         //vcが満員でbotが参加できない場合
-        else if (!memberVC.full) {
+        else if (memberVC.full) {
             const replyMessage = "ボイスチャットが満員となっているため，botがボイスチャットに接続できませんでした．";
             // return interaction.reply(replyMessage);
             return interaction.editReply(replyMessage);
