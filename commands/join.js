@@ -45,7 +45,13 @@ module.exports = {
             // return interaction.reply(replyMessage);
             return interaction.editReply(replyMessage);
         }
-        //botが参加できない場合
+        //vcが満員でbotが参加できない場合
+        else if (!memberVC.full) {
+            const replyMessage = "ボイスチャットが満員となっているため，botがボイスチャットに接続できませんでした．";
+            // return interaction.reply(replyMessage);
+            return interaction.editReply(replyMessage);
+        }
+        //何らかの事情でbotが参加できない場合
         else if (!memberVC.joinable) {
             const replyMessage = "botがボイスチャットに接続できませんでした．";
             // return interaction.reply(replyMessage);
