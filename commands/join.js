@@ -31,7 +31,7 @@ module.exports = {
         // const member = await guild.members.fetch(interaction.member.id);
         // const memberVC = member.voice.channel;
 
-        const botConnection = getVoiceConnection(interaction.guild.id);
+        const botConnection = getVoiceConnection(guild.id);
 
         //そもそも参加していない場合
         if (!memberVC) {
@@ -95,6 +95,9 @@ module.exports = {
             const attachment = new AttachmentBuilder('../how_to_use.png','how_to_use.png');
             embed.setImage('attachment://how_to_use.png');
             await interaction.editReply("finish!");
+
+            addMember(guild.id, interaction.user.id, interaction.user.username);
+
             return await interaction.editReply({ files: [attachment], embeds: [embed] });
             // return interaction.reply(replyMessage);
         }
