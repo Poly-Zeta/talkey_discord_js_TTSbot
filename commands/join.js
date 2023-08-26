@@ -1,5 +1,5 @@
 const { NoSubscriberBehavior, joinVoiceChannel, getVoiceConnection, createAudioPlayer } = require("@discordjs/voice");
-const { addGuildToMap } = require('../functions/audioMap.js');
+const { addGuildToMap,addMember } = require('../functions/audioMap.js');
 const { EmbedBuilder,AttachmentBuilder } = require('discord.js');
 
 var fs = require('fs');
@@ -91,13 +91,11 @@ module.exports = {
             const player = createAudioPlayer({ behaviors: { noSubscriber: NoSubscriberBehavior.Pause, } });
             connection.subscribe(player);
             addGuildToMap(guild.me, guild.id,textChannelId, memberVC.id, connection, player);
+            addMember(guild.id, interaction.user.id, interaction.user.username);
 
             const attachment = new AttachmentBuilder('../how_to_use.png','how_to_use.png');
             embed.setImage('attachment://how_to_use.png');
             await interaction.editReply("finish!");
-
-            addMember(guild.id, interaction.user.id, interaction.user.username);
-
             return await interaction.editReply({ files: [attachment], embeds: [embed] });
             // return interaction.reply(replyMessage);
         }
