@@ -11,13 +11,12 @@ async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConn
     queue.push({guildId, nickname, readTxt, uid,textChannel,botConnection});
     if (queue.length != 0) {
         console.log(`llmqueue@addllamaqueue:${llmQueue}`);
-        processLlamaQueue();
+        processLlamaQueue(queue);
     }
     return;
 };
 
-async function processLlamaQueue() {
-    const queue = llmQueue;
+async function processLlamaQueue(queue) {
     console.log(`llmqueue@processllamaqueue:${llmQueue}`);
     console.log(`queue@processllamaqueue:${queue}`);
     console.log(`queue.length@processllamaqueue:${queue.length}`);
@@ -40,7 +39,7 @@ async function processLlamaQueue() {
     queue[0].textChannel.send(queue[0].readTxt);
 
     queue.shift();
-    processLlamaQueue();
+    processLlamaQueue(queue);
 };
 
 module.exports = {
