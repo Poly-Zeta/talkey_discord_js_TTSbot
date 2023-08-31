@@ -21,6 +21,46 @@ const proofreadingAPIKey = tokens.a3rtProofreading;
 const chaplusKey=tokens.chaplus;
 const meboAPIKey=tokens.meboKey;
 const meboAgentId=tokens.meboId;
+const translateURL=tokens.translateURLBase;
+const llamaServerAddress=tokens.llamaServerAddress;
+const prompt="";
+
+async function getResponseofLlamaAPI(username,txt) {
+    const talkRes = await fetch(
+        llamaServerAddress,
+        {
+            method: 'POST',
+            body: JSON.stringify({
+                prompt:`${prompt}[${username}]${txt}`,
+                n_predict: 512,
+            })
+        }
+    );
+    const talkData = await talkRes.json();
+    if (talkData.message == "ok") {
+        let reply = talkData.results[0].reply;
+        return reply;
+    } else {
+        return `リプライの生成時にエラーが発生しました．`;
+    }
+}
+
+async function getResponseofTranslateAPI(txt,source,target) {
+    const talkRes = await fetch(
+        `${translateURL}?text=${txt}&source=${source}&target=${target}`,
+        {
+            method: 'GET',
+            body: talkParam
+        }
+    );
+    const talkData = await talkRes.json();
+    if (talkData.message == "ok") {
+        let reply = talkData.results[0].reply;
+        return reply;
+    } else {
+        return `リプライの生成時にエラーが発生しました．`;
+    }
+}
 
 async function getResponseofTalkAPI(txt) {
     // const inputTextRandomThrethold = Math.floor(Math.random() * 100);
@@ -108,5 +148,7 @@ async function getResponseofMebo(txt,userName,userId){
 module.exports={
     getResponseofTalkAPI,
     getResponseofChaplus,
-    getResponseofMebo
+    getResponseofMebo,
+    getResponseofTranslateAPI,
+    getResponseofLlamaAPI
 }
