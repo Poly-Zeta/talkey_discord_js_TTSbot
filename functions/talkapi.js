@@ -58,10 +58,10 @@ async function getResponseofTranslateAPI(txt,source,target) {
             body:talkParams
         }
     );
-    console.log(talkRes);
-    // const talkData = await talkRes.json();
     // console.log(talkRes);
-    // console.log(talkData);
+    const talkData = await talkRes.json();
+    console.log(talkRes);
+    console.log(talkData);
     // console.log(talkData.message);
     // if (talkData.message == "ok") {
     //     let reply = talkData.results[0].reply;
