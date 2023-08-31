@@ -3,7 +3,7 @@ const { textOperator } = require('../functions/textOperator.js');
 const { getResponseofTalkAPI } = require('../functions/talkapi.js');
 const { getVoiceConnection } = require("@discordjs/voice");
 const { addTalkCommandCounter } = require('../functions/talkLog.js');
-const { talkToBotFunc } = require('../functions/talkFunc.js');
+const { talkToBotFunc,talkToLlamaFunc } = require('../functions/talkFunc.js');
 
 module.exports = {
     attr: "base",
@@ -38,7 +38,8 @@ module.exports = {
             addTalkCommandCounter();
         }
 
-        await talkToBotFunc(readTxt, guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id);
+        // await talkToBotFunc(readTxt, guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id);
+        await talkToLlamaFunc(readTxt, guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id);
 
         return;
     }
