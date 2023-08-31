@@ -10,7 +10,7 @@ async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConn
     const queue = llmQueue;
     queue.push({guildId, nickname, readTxt, uid,textChannel,botConnection});
     if (queue.length != 0) {
-        console.log(llmQueue);
+        console.log(`llmqueue@addllamaqueue:${llmQueue}`);
         processLlamaQueue();
     }
     return;
@@ -18,6 +18,10 @@ async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConn
 
 async function processLlamaQueue() {
     const queue = llmQueue;
+    console.log(`llmqueue@processllamaqueue:${llmQueue}`);
+    console.log(`queue@processllamaqueue:${queue}`);
+    console.log(`queue.length@processllamaqueue:${queue.length}`);
+    console.log(`queue[0]@processllamaqueue:${queue[0]}`);
     if (queue.length==0) {
         return;
     }
