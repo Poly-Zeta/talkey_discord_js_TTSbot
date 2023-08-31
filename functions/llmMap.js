@@ -7,11 +7,10 @@ const {getResponseofTranslateAPI,getResponseofLlamaAPI} = require('../functions/
 const llmQueue = [];
 
 async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection) {
-    const queue = llmQueue;
-    queue.push({guildId, nickname, readTxt, uid,textChannel,botConnection});
-    if (queue.length != 0) {
+    llmQueue.push({guildId, nickname, readTxt, uid,textChannel,botConnection});
+    if (llmQueue.length != 0) {
         console.log(`llmqueue@addllamaqueue:${llmQueue}`);
-        processLlamaQueue(queue);
+        processLlamaQueue(llmQueue);
     }
     return;
 };
