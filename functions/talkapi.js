@@ -53,10 +53,11 @@ async function getResponseofTranslateAPI(txt,source,target) {
             method: 'GET'
         }
     );
-    const talkData = await talkRes.json();
     console.log(talkRes);
-    console.log(talkData);
-    console.log(talkData.message);
+    // const talkData = await talkRes.json();
+    // console.log(talkRes);
+    // console.log(talkData);
+    // console.log(talkData.message);
     // if (talkData.message == "ok") {
     //     let reply = talkData.results[0].reply;
     //     return reply;
