@@ -1,4 +1,5 @@
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+const { Console } = require('console');
 var fs = require('fs');
 var path = require('path');
 
@@ -23,7 +24,7 @@ const meboAPIKey=tokens.meboKey;
 const meboAgentId=tokens.meboId;
 const translateURL=tokens.translateURLBase;
 const llamaServerAddress=tokens.llamaServerAddress;
-const prompt="";
+const prompt=tokens.prompt;
 
 async function getResponseofLlamaAPI(username,txt) {
     const talkRes = await fetch(
@@ -49,17 +50,19 @@ async function getResponseofTranslateAPI(txt,source,target) {
     const talkRes = await fetch(
         `${translateURL}?text=${txt}&source=${source}&target=${target}`,
         {
-            method: 'GET',
-            body: talkParam
+            method: 'GET'
         }
     );
     const talkData = await talkRes.json();
-    if (talkData.message == "ok") {
-        let reply = talkData.results[0].reply;
-        return reply;
-    } else {
-        return `リプライの生成時にエラーが発生しました．`;
-    }
+    console.log(talkRes);
+    console.log(talkData);
+    console.log(talkData.message);
+    // if (talkData.message == "ok") {
+    //     let reply = talkData.results[0].reply;
+    //     return reply;
+    // } else {
+    //     return `リプライの生成時にエラーが発生しました．`;
+    // }
 }
 
 async function getResponseofTalkAPI(txt) {
