@@ -17,22 +17,24 @@ async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConn
 
 async function processLlamaQueue(queue) {
     console.log("loop");
-    console.log(`llmqueue@processllamaqueue:${llmQueue}`);
-    console.log(`queue@processllamaqueue:${queue}`);
-    console.log(`queue.length@processllamaqueue:${queue.length}`);
-    console.log(`queue[0]@processllamaqueue:${queue[0]}`);
-    console.log(`queue[0].readTxt@processllamaqueue:${queue[0].readTxt}`);
+    // console.log(`llmqueue@processllamaqueue:${llmQueue}`);
+    // console.log(`queue@processllamaqueue:${queue}`);
+    // console.log(`queue.length@processllamaqueue:${queue.length}`);
+    // console.log(`queue[0]@processllamaqueue:${queue[0]}`);
+    console.log(`queue[0].readTxt@1:${queue[0].readTxt}`);
     if (queue.length==0) {
         return;
     };
     
     //英訳
     queue[0].readTxt=await getResponseofTranslateAPI(queue[0].readTxt,"ja","en");
+    console.log(`queue[0].readTxt@1:${queue[0].readTxt}`);
 
     //llama
 
     //和訳
     queue[0].readTxt=await getResponseofTranslateAPI(queue[0].readTxt,"en","ja");
+    console.log(`queue[0].readTxt@1:${queue[0].readTxt}`);
 
     //音声再生にスタック<-botConnectionに応じた動作が必要かも
 
