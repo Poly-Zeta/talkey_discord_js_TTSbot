@@ -43,7 +43,6 @@ async function getResponseofLlamaAPI(username,txt) {
     // console.log(talkRes.status);
     const talkData = await talkRes.json();
     // console.log(talkData);
-    // console.log(talkData.content);
     if(talkRes.status!=200){
         return `リプライの生成時にエラーが発生しました．`;
     }    
