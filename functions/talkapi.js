@@ -47,20 +47,15 @@ async function getResponseofLlamaAPI(username,txt) {
 }
 
 async function getResponseofTranslateAPI(txt,source,target) {
-    const talkParams = new URLSearchParams();
-    talkParams.append('text', txt);
-    talkParams.append('source',source);
-    talkParams.append('target',target);
+    txt=txt.replace(/ /g,"+");
     const talkRes = await fetch(
-        translateURL,
+        `${translateURL}?text=${txt}&source=${source}&target=${target}`,
         {
-            method: 'POST',
-            body:talkParams
+            method: 'GET'
         }
     );
-    // console.log(talkRes);
-    const talkData = await talkRes.json();
     console.log(talkRes);
+    const talkData = await talkRes.json();
     console.log(talkData);
     // console.log(talkData.message);
     // if (talkData.message == "ok") {
