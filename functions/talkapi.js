@@ -36,8 +36,11 @@ async function getResponseofLlamaAPI(username,txt) {
                 n_predict: 512,
             })
         }
-    );
+    ); 
+    console.log(talkRes);
     const talkData = await talkRes.json();
+    console.log(talkData);
+    console.log(talkData.message);
     if (talkData.message == "ok") {
         let reply = talkData.results[0].reply;
         return reply;
