@@ -8,8 +8,8 @@ const { addAudioToMapQueue } = require('../functions/audioMap.js');
 const llmQueue = [];
 
 async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection) {
-    llmQueue.push({guildId, nickname, readTxt, uid,textChannel,botConnection});
     const startlength=llmQueue.length;
+    llmQueue.push({guildId, nickname, readTxt, uid,textChannel,botConnection});
     if (startlength == 0) {
         console.log(`llmqueue@addllamaqueue:${llmQueue}`);
         processLlamaQueue(llmQueue);
