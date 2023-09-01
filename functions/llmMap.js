@@ -24,7 +24,9 @@ async function processLlamaQueue(queue) {
     console.log(`queue[0].readTxt@1:${queue[0].readTxt}`);
     if (queue.length==0) {
         return;
-    };
+    }else{
+        console.log(queue.length);
+    }
     
     //英訳
     queue[0].readTxt=await getResponseofTranslateAPI(queue[0].readTxt,"ja","en");
