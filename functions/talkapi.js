@@ -1,4 +1,5 @@
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+const { Console } = require('console');
 var fs = require('fs');
 var path = require('path');
 
@@ -21,6 +22,60 @@ const proofreadingAPIKey = tokens.a3rtProofreading;
 const chaplusKey=tokens.chaplus;
 const meboAPIKey=tokens.meboKey;
 const meboAgentId=tokens.meboId;
+const translateURL=tokens.translateURLBase;
+const llamaServerAddress=tokens.llamaServerAddress;
+const prompt=tokens.prompt;
+
+async function getResponseofLlamaAPI(username,txt) {
+    var targetStr = `>${username}:` ;
+
+    const talkRes = await fetch(
+        llamaServerAddress,
+        {
+            method: 'POST',
+            body: JSON.stringify({
+                prompt:`${prompt}[${username}]${txt}`,
+                n_predict: 512,
+            })
+        }
+    ); 
+    // console.log(talkRes);
+    // console.log(talkRes.status);
+    const talkData = await talkRes.json();
+    // console.log(talkData);
+    // console.log(talkData.content);
+    if(talkRes.status!=200){
+        return `リプライの生成時にエラーが発生しました．`;
+    }    
+    
+    const count = (talkData.content.match( new RegExp( targetStr, "g" ) ) || [] ).length;
+    if(count!=1){
+        return `リプライの生成時にエラーが発生しました．`;
+    }
+    const reply = talkData.content.split(targetStr);
+    return reply[1];
+    
+}
+
+async function getResponseofTranslateAPI(txt,source,target) {
+    txt=txt.replace(/ /g,"+");
+    const talkRes = await fetch(
+        `${translateURL}?text=${txt}&source=${source}&target=${target}`,
+        {
+            method: 'GET'
+        }
+    );
+    // console.log(talkRes);
+    const talkData = await talkRes.json();
+    // console.log(talkData);
+    // console.log(talkData.message);
+    if (talkData.code == 200) {
+        let reply = talkData.text;
+        return reply;
+    } else {
+        return `リプライの生成時にエラーが発生しました．`;
+    }
+}
 
 async function getResponseofTalkAPI(txt) {
     // const inputTextRandomThrethold = Math.floor(Math.random() * 100);
@@ -108,5 +163,7 @@ async function getResponseofMebo(txt,userName,userId){
 module.exports={
     getResponseofTalkAPI,
     getResponseofChaplus,
-    getResponseofMebo
+    getResponseofMebo,
+    getResponseofTranslateAPI,
+    getResponseofLlamaAPI
 }
