@@ -54,16 +54,16 @@ async function getResponseofTranslateAPI(txt,source,target) {
             method: 'GET'
         }
     );
-    console.log(talkRes);
+    // console.log(talkRes);
     const talkData = await talkRes.json();
-    console.log(talkData);
+    // console.log(talkData);
     // console.log(talkData.message);
-    // if (talkData.message == "ok") {
-    //     let reply = talkData.results[0].reply;
-    //     return reply;
-    // } else {
-    //     return `リプライの生成時にエラーが発生しました．`;
-    // }
+    if (talkData.code == 200) {
+        let reply = talkData.text;
+        return reply;
+    } else {
+        return `リプライの生成時にエラーが発生しました．`;
+    }
 }
 
 async function getResponseofTalkAPI(txt) {
