@@ -40,7 +40,7 @@ async function getResponseofLlamaAPI(username,txt) {
         }
     ); 
     // console.log(talkRes);
-    // console.log(talkRes.status);
+    console.log(talkRes.status);
     const talkData = await talkRes.json();
     // console.log(talkData);
     if(talkRes.status!=200){
@@ -48,6 +48,7 @@ async function getResponseofLlamaAPI(username,txt) {
     }    
     
     const count = (talkData.content.match( new RegExp( targetStr, "g" ) ) || [] ).length;
+    console.log(talkData.content);
     if(count!=1){
         return `リプライの生成時にエラーが発生しました．`;
     }
@@ -66,7 +67,7 @@ async function getResponseofTranslateAPI(txt,source,target) {
     );
     // console.log(talkRes);
     const talkData = await talkRes.json();
-    // console.log(talkData);
+    console.log(talkData.code);
     // console.log(talkData.message);
     if (talkData.code == 200) {
         let reply = talkData.text;
