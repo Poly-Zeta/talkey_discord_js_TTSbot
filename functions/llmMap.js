@@ -19,7 +19,7 @@ async function processLlamaQueue(queue) {
     console.log("loop");
     // console.log(`llmqueue@processllamaqueue:${llmQueue}`);
     // console.log(`queue@processllamaqueue:${queue}`);
-    // console.log(`queue.length@processllamaqueue:${queue.length}`);
+    console.log(`queue.length@processllamaqueue:${queue.length}`);
     // console.log(`queue[0]@processllamaqueue:${queue[0]}`);
     console.log(`queue[0].readTxt@1:${queue[0].readTxt}`);
     if (queue.length==0) {
