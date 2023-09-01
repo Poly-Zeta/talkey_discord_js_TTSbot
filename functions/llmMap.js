@@ -32,13 +32,17 @@ async function processLlamaQueue(queue) {
     // console.log(`queue[0].readTxt@1:${queue[0].readTxt}`);
 
     //llama
+    queue[0].textChannel.sendTyping();
     queue[0].readTxt=await getResponseofLlamaAPI(queue[0].nickname,queue[0].readTxt);
 
     //和訳
     queue[0].readTxt=await getResponseofTranslateAPI(queue[0].readTxt,"en","ja");
     // console.log(`queue[0].readTxt@1:${queue[0].readTxt}`);
 
-    //音声再生にスタック<-botConnectionに応じた動作が必要かも
+    //音声再生にスタック
+    if (queue[0].botConnection != undefined) {
+        addAudioToMapQueue(queue[0].guildId, "たーきーちゃん", queue[0].readTxt, "f1");
+    }
 
     //該当テキストチャットにメッセージ送信
     queue[0].textChannel.send(queue[0].readTxt);
