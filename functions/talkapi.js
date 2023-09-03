@@ -45,15 +45,17 @@ async function getResponseofLlamaAPI(username,txt) {
     // console.log(talkData);
     if(talkRes.status!=200){
         return `リプライの生成時にエラーが発生しました．`;
-    }    
-    
-    const count = (talkData.content.match( new RegExp( targetStr, "g" ) ) || [] ).length;
-    console.log(talkData.content);
-    if(count!=1){
-        return `リプライの生成時にエラーが発生しました．`;
     }
-    const reply = talkData.content.split(targetStr);
-    return reply[1];
+
+    return talkData.content;
+    
+    // const count = (talkData.content.match( new RegExp( targetStr, "g" ) ) || [] ).length;
+    // console.log(talkData.content);
+    // if(count!=1){
+    //     return `リプライの生成時にエラーが発生しました．`;
+    // }
+    // const reply = talkData.content.split(targetStr);
+    // return reply[1];
     
 }
 
