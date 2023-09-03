@@ -41,6 +41,8 @@ async function processLlamaQueue(queue) {
     queue[0].readTxt=await getResponseofTranslateAPI(queue[0].readTxt,"en","ja");
     // console.log(`queue[0].readTxt@1:${queue[0].readTxt}`);
 
+    queue[0].readTxt=queue[0].readTxt.replace(/トーキーちゃん/g, `talkey`);
+
     //音声再生にスタック
     if (queue[0].botConnection != undefined) {
         addAudioToMapQueue(queue[0].guildId, "たーきーちゃん", queue[0].readTxt, "f1");
