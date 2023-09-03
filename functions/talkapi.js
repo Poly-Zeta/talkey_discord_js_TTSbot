@@ -34,7 +34,7 @@ async function getResponseofLlamaAPI(username,txt) {
         {
             method: 'POST',
             body: JSON.stringify({
-                prompt:`${prompt}[${username}]${txt}`,
+                prompt:`${prompt}User input:[${username}]${txt}`,
                 n_predict: 512,
             })
         }
