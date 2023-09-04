@@ -11,7 +11,7 @@ async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConn
     const startlength=llmQueue.length;
     llmQueue.push({guildId, nickname, readTxt, uid,textChannel,botConnection});
     if (startlength == 0) {
-        console.log(`llmqueue@addllamaqueue:${llmQueue}`);
+        // console.log(`llmqueue@addllamaqueue:${llmQueue}`);
         processLlamaQueue(llmQueue);
     }
     return;
@@ -21,7 +21,7 @@ async function processLlamaQueue(queue) {
     console.log("loop");
     // console.log(`llmqueue@processllamaqueue:${llmQueue}`);
     // console.log(`queue@processllamaqueue:${queue}`);
-    console.log(`queue.length@processllamaqueue:${queue.length}`);
+    // console.log(`queue.length@processllamaqueue:${queue.length}`);
     // console.log(`queue[0]@processllamaqueue:${queue[0]}`);
     if (!queue[0]?.readTxt || queue.length==0) {
         return;
@@ -45,7 +45,7 @@ async function processLlamaQueue(queue) {
 
     //音声再生にスタック
     if (queue[0].botConnection != undefined) {
-        addAudioToMapQueue(queue[0].guildId, "たーきーちゃん", queue[0].readTxt, "f1");
+        addAudioToMapQueue(queue[0].guildId, "たーきーちゃん", queue[0].readTxt.replace(/talkey/g, `たーきー`), "f1");
     }
 
     //該当テキストチャットにメッセージ送信
