@@ -27,8 +27,6 @@ const llamaServerAddress=tokens.llamaServerAddress;
 const prompt=tokens.prompt;
 
 async function getResponseofLlamaAPI(username,txt) {
-    var targetStr = `>${username}:` ;
-
     const talkRes = await fetch(
         llamaServerAddress,
         {
@@ -43,13 +41,13 @@ async function getResponseofLlamaAPI(username,txt) {
         }
     ); 
     // console.log(talkRes);
-    console.log(talkRes.status);
+    // console.log(talkRes.status);
     const talkData = await talkRes.json();
     // console.log(talkData);
     if(talkRes.status!=200){
         return `リプライの生成時にエラーが発生しました．`;
     }
-    console.log(talkData.content);
+    // console.log(talkData.content);
     // return talkData.content;
     
     const replacedRes = talkData.content.replace(/{username}/g, `${username}`);
@@ -66,7 +64,7 @@ async function getResponseofTranslateAPI(txt,source,target) {
     );
     // console.log(talkRes);
     const talkData = await talkRes.json();
-    console.log(talkData.code);
+    // console.log(talkData.code);
     // console.log(talkData.message);
     if (talkData.code == 200) {
         let reply = talkData.text;
