@@ -29,17 +29,19 @@ async function processLlamaQueue(queue) {
         console.log(queue.length);
     }
     
+    console.log(`入力:${queue[0].readTxt}`);
     //英訳
     queue[0].readTxt=await getResponseofTranslateAPI(queue[0].readTxt,"ja","en");
-    // console.log(`queue[0].readTxt@1:${queue[0].readTxt}`);
+    console.log(`入力->英訳:${queue[0].readTxt}`);
 
     //llama
     queue[0].textChannel.sendTyping();
     queue[0].readTxt=await getResponseofLlamaAPI(queue[0].nickname,queue[0].readTxt);
+    console.log(`英訳->llm:${queue[0].readTxt}`);
 
     //和訳
     queue[0].readTxt=await getResponseofTranslateAPI(queue[0].readTxt,"en","ja");
-    // console.log(`queue[0].readTxt@1:${queue[0].readTxt}`);
+    console.log(`llm->和訳:${queue[0].readTxt}`);
 
     queue[0].readTxt=queue[0].readTxt.replace(/トーキーちゃん/g, `talkey`);
 
