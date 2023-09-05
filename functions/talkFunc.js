@@ -7,15 +7,6 @@ async function talkToLlamaFunc(readTxt, guildId, textChannel, botConnection, nic
     //talkToBotFuncでは応答までこの関数内で片づけるが，スタックの都合この関数ではQueue実行までとする
     //入力->ユーザ書き込みの読み上げ->llama用に名前の下処理->llamaのスタック登録->終了とし
     //応答や応答読み上げはスタック処理に任せる
-    const namePattern = /たーきーちゃん|ターキーちゃん|たーきーくん|ターキーくん/;
-
-    if (botConnection != undefined) {
-        //色々除去
-        const readreq = textOperator(readTxt);
-        addAudioToMapQueue(guildId, nickname, readreq, "f2");
-    }
-
-    readTxt = readTxt.replace(namePattern, "{talkey-chan}");
     await addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection);
     
     return;
@@ -24,7 +15,6 @@ async function talkToLlamaFunc(readTxt, guildId, textChannel, botConnection, nic
 
 // async function talkFunc(message) {
 async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,uid) {
-    const namePattern = /たーきーちゃん|ターキーちゃん|たーきーくん|ターキーくん/;
 
     //名前があるかどうかで挙動を変える
     if (namePattern.test(readTxt)) {
@@ -36,7 +26,6 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,u
             addAudioToMapQueue(guildId, nickname, readreq, "f2");
         }
         
-        readTxt = readTxt.replace(namePattern, "talkey-chan");
         await addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection);
         // console.log(`namechk: ${readTxt}`);
         // var apiResponseText="";
