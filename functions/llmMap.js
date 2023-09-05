@@ -39,6 +39,9 @@ async function processLlamaQueue(queue) {
     queue[0].readTxt=await getResponseofLlamaAPI(queue[0].nickname,queue[0].readTxt);
     console.log(`英訳->llm:${queue[0].readTxt}`);
 
+    queue[0].readTxt.replace(/\*\S[a-z\s]*\S\*/gi,' ').replace(/\s{2,}/g,' ');
+    console.log(`llm->下処理:${queue[0].readTxt}`);
+
     //和訳
     queue[0].readTxt=await getResponseofTranslateAPI(queue[0].readTxt,"en","ja");
     console.log(`llm->和訳:${queue[0].readTxt}`);
