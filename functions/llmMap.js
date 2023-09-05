@@ -30,14 +30,14 @@ async function processLlamaQueue(queue) {
     }
 
     const namePattern = /たーきーちゃん|ターキーちゃん|たーきーくん|ターキーくん/;
-    queue[0].readTxt = queue[0].readTxt.replace(namePattern, "{XXXXxxxxXXXXxxxxXXXXxxxx}");
+    queue[0].readTxt = queue[0].readTxt.replace(namePattern, "talkey-chan");
     
     console.log(`入力:${queue[0].readTxt}`);
     //英訳
     queue[0].readTxt=await getResponseofTranslateAPI(queue[0].readTxt,"ja","en");
     console.log(`入力->英訳:${queue[0].readTxt}`);
 
-    queue[0].readTxt=queue[0].readTxt.replace(/{XXXXxxxxXXXXxxxxXXXXxxxx}/g,'talkey-chan');
+    queue[0].readTxt=queue[0].readTxt.replace(/Turkey-chan|talky-chan/gi,'talkey-chan').replace(/Turkey|talky/gi,'talkey-chan');
     console.log(`英訳->名前処理:${queue[0].readTxt}`);
 
     //llama
