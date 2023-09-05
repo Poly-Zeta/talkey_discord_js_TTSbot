@@ -15,7 +15,7 @@ async function talkToLlamaFunc(readTxt, guildId, textChannel, botConnection, nic
 
 // async function talkFunc(message) {
 async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,uid) {
-
+    const namePattern = /たーきーちゃん|ターキーちゃん|たーきーくん|ターキーくん/;
     //名前があるかどうかで挙動を変える
     if (namePattern.test(readTxt)) {
         textChannel.sendTyping();
@@ -25,7 +25,7 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,u
             const readreq = textOperator(readTxt);
             addAudioToMapQueue(guildId, nickname, readreq, "f2");
         }
-        
+
         await addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection);
         // console.log(`namechk: ${readTxt}`);
         // var apiResponseText="";
