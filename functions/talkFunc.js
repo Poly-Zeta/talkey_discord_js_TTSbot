@@ -15,7 +15,7 @@ async function talkToLlamaFunc(readTxt, guildId, textChannel, botConnection, nic
         addAudioToMapQueue(guildId, nickname, readreq, "f2");
     }
 
-    readTxt = readTxt.replace(namePattern, "talkey-chan");
+    readTxt = readTxt.replace(namePattern, "{talkey-chan}");
     await addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection);
     
     return;
