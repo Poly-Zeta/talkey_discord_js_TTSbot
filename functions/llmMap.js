@@ -12,8 +12,8 @@ async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConn
     llmQueue.push({guildId, nickname, readTxt, uid,textChannel,botConnection});
     if (startlength == 0) {
         // console.log(`llmqueue@addllamaqueue:${llmQueue}`);
-        processLlamaQueue(llmQueue);
-        // processELYZAQueue(llmQueue);
+        // processLlamaQueue(llmQueue);
+        processELYZAQueue(llmQueue);
     }
     return;
 };
