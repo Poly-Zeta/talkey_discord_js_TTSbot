@@ -27,15 +27,15 @@ const llamaServerAddress=tokens.llamaServerAddress;
 const prompt=tokens.prompt;
 
 async function getResponseofLlamaAPI(username,txt) {
+    const date=new Date;
+    const dateAndTime=`${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()},${date.getHours()}:${date.getMinutes()}`;
     const talkRes = await fetch(
         llamaServerAddress,
         {
             method: 'POST',
             body: JSON.stringify({
                 // prompt:`${prompt}User input:[${username}]${txt}`,
-                prompt:`${prompt}
-                User input:${txt}
-                Your output:`,
+                prompt:`${prompt}${username},${dateAndTime},${txt}[/INST]"""`,
                 n_predict: 512,
             })
         }
@@ -50,8 +50,10 @@ async function getResponseofLlamaAPI(username,txt) {
     // console.log(talkData.content);
     // return talkData.content;
     
-    const replacedRes = talkData.content.replace(/{username}/g, `${username}`);
-    return replacedRes;
+    // const replacedRes = talkData.content.replace(/{username}/g, `${username}`);
+    // return replacedRes;
+    const res = talkData.content;
+    return res;
 }
 
 async function getResponseofTranslateAPI(txt,source,target) {
