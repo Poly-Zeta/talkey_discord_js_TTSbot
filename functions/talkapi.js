@@ -51,9 +51,10 @@ async function getResponseofLlamaAPI(username,txt) {
     // return talkData.content;
     
     // const replacedRes = talkData.content.replace(/{username}/g, `${username}`);
-    // return replacedRes;
-    const res = talkData.content;
-    return res;
+    const replacedRes=talkData.content.split(';')
+    return replacedRes[0];
+    // const res = talkData.content;
+    // return res;
 }
 
 async function getResponseofTranslateAPI(txt,source,target) {
