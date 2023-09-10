@@ -51,7 +51,8 @@ async function getResponseofLlamaAPI(username,txt) {
     // return talkData.content;
     
     // const replacedRes = talkData.content.replace(/{username}/g, `${username}`);
-    const replacedRes=talkData.content.split(';')
+    const tmp=talkData.content.split(/\r\n|\n|\r/);
+    const replacedRes=tmp[0].split(';');
     return replacedRes[0];
     // const res = talkData.content;
     // return res;
