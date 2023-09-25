@@ -53,7 +53,8 @@ async function getResponseofLlamaAPI(username,txt) {
     // const replacedRes = talkData.content.replace(/{username}/g, `${username}`);
     const tmp=talkData.content.split(';');
     const replacedRes=tmp[0].split(/\r\n|\n|\r/);
-    return replacedRes[0];
+    console.log(replacedRes);
+    return replacedRes[0] ?? `リプライの生成時にエラーが発生しました．`;
     // const res = talkData.content;
     // return res;
 }
