@@ -52,12 +52,12 @@ async function getResponseofLlamaAPI(username,txt) {
     // return talkData.content;
     
     // const replacedRes = talkData.content.replace(/{username}/g, `${username}`);
-    const tmp=talkData.content.split(';');
-    const replacedRes=tmp[0].split(/\r\n|\n|\r/);
-    console.log(replacedRes);
-    return replacedRes[0] ?? `リプライの生成時にエラーが発生しました．`;
-    // const res = talkData.content;
-    // return res;
+    // const tmp=talkData.content.split(';');
+    // const replacedRes=tmp[0].split(/\r\n|\n|\r/);
+    // console.log(replacedRes);
+    // return replacedRes[0] ?? `リプライの生成時にエラーが発生しました．`;
+    const res = talkData.content;
+    return res;
 }
 
 async function getResponseofTranslateAPI(txt,source,target) {

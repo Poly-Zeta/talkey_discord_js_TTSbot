@@ -8,9 +8,9 @@ const { addAudioToMapQueue } = require('../functions/audioMap.js');
 const llmQueue = [];
 const talkMemoryLength=3;
 
-async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection) {
+async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg) {
     const startlength=llmQueue.length;
-    llmQueue.push({guildId, nickname, readTxt, uid,textChannel,botConnection});
+    llmQueue.push({guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg});
     if (startlength == 0) {
         // console.log(`llmqueue@addllamaqueue:${llmQueue}`);
         // processLlamaQueue(llmQueue);
@@ -88,6 +88,10 @@ async function processELYZAQueue(queue) {
     //llama
     queue[0].textChannel.sendTyping();
     queue[0].readTxt=await getResponseofLlamaAPI(queue[0].nickname,queue[0].readTxt);
+    if(queue[0].doMoldProcessFlg){
+        const tmp=queue[0].readTxt.split(';');
+        queue[0].readTxt=tmp[0].split(/\r\n|\n|\r/);
+    }
     console.log(`入力->llm:${queue[0].readTxt}`);
     queue[0].readTxt=queue[0].readTxt??"リプライの生成に失敗しました．"
     if(queue[0].readTxt===""){queue[0].readTxt="リプライの生成に失敗しました．"}

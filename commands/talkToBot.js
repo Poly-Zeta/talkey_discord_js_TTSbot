@@ -16,6 +16,12 @@ module.exports = {
                 name: "saying",
                 description: "botに話しかける内容",
                 required: true
+            },
+            {
+                type:5,//"BOOLIAN",
+                name:"opt",
+                description: "falseのとき，成形処理をスキップして出力(無入力の際はtrueで実行)",
+                required:false,
             }
         ]
     },
@@ -38,8 +44,15 @@ module.exports = {
             addTalkCommandCounter();
         }
 
+        const doMoldProcess=interaction.options.get("opt",false);
+        let doMoldProcessFlg=true;
+        if(doMoldProcess!==null){
+            doMoldProcessFlg=doMoldProcess.value;
+            console.log(`opt:${doMoldProcessFlg}`);
+        }
+
         // await talkToBotFunc(readTxt, guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id);
-        await talkToLlamaFunc(readTxt, guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id);
+        await talkToLlamaFunc(readTxt, guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id,doMoldProcessFlg);
 
         return;
     }

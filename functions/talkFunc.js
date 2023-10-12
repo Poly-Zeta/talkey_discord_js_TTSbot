@@ -3,11 +3,11 @@ const { addLlamaQueue } = require('../functions/llmMap.js');
 const { textOperator } = require('../functions/textOperator.js');
 const { getResponseofTalkAPI ,getResponseofChaplus,getResponseofMebo} = require('../functions/talkapi.js');
 
-async function talkToLlamaFunc(readTxt, guildId, textChannel, botConnection, nickname,uid) {
+async function talkToLlamaFunc(readTxt, guildId, textChannel, botConnection, nickname,uid,doMoldProcessFlg) {
     //talkToBotFuncでは応答までこの関数内で片づけるが，スタックの都合この関数ではQueue実行までとする
     //入力->ユーザ書き込みの読み上げ->llama用に名前の下処理->llamaのスタック登録->終了とし
     //応答や応答読み上げはスタック処理に任せる
-    await addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection);
+    await addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg);
     
     return;
 }
