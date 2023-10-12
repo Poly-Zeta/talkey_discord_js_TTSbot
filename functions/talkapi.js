@@ -37,6 +37,7 @@ async function getResponseofLlamaAPI(username,txt) {
                 // prompt:`${prompt}User input:[${username}]${txt}`,
                 prompt:`${prompt}${username},${dateAndTime},${txt}\nあなたの回答:`,
                 n_predict: 512,
+                temperature:0.65
             })
         }
     ); 
