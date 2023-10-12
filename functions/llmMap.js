@@ -90,6 +90,7 @@ async function processELYZAQueue(queue) {
     queue[0].readTxt=await getResponseofLlamaAPI(queue[0].nickname,queue[0].readTxt);
     console.log(`入力->llm:${queue[0].readTxt}`);
     queue[0].readTxt=queue[0].readTxt??"リプライの生成に失敗しました．"
+    if(queue[0].readTxt===""){queue[0].readTxt="リプライの生成に失敗しました．"}
 
     //音声再生にスタック
     if (queue[0].botConnection != undefined) {
