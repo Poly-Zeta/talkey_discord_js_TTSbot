@@ -122,6 +122,7 @@ async function processELYZAQueue(queue) {
     queue[0].readTxt=`userinput:${queue[0].nickname},${dateAndTime},${queue[0].readTxt} \n `;
     //最新のユーザ入力をログに登録
     const guildLog=talkMemoryMap.get(queue[0].guildId);
+    console.log(guildLog);
     guildLog.push(queue[0].readTxt);
     //ログの長さは一定で切る
     if(guildLog.length>talkMemoryMaxLength){guildLog.shift();}
