@@ -14,7 +14,7 @@ const { sendMessage } = require('../functions/sendMessage.js');
 //デフォルトの対話は各マップの項目作成時に挿入しておく
 
 const llmQueue = [];
-const talkMemoryLength=6;
+const talkMemoryLength=8;
 const talkMemoryMaxLength=30;
 const talkMemoryMap=new Map();
 
@@ -151,7 +151,7 @@ async function processELYZAQueue(queue) {
     await queue[0].textChannel.send(`${queue[0].readTxt}`);
 
     //llmの生成した応答をログに保存
-    guildLog.push(`${queue[0].readTxt}`);
+    guildLog.push(`${queue[0].readTxt} \n`);
     if(guildLog.length>talkMemoryMaxLength){guildLog.shift();}
     // console.log(guildLog.slice(0,3));
 
