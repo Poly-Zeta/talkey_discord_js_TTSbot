@@ -52,7 +52,7 @@ module.exports = {
         }
 
         // await talkToBotFunc(readTxt, guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id);
-        await talkToLlamaFunc(interaction,readTxt, guildId,interaction.channel, botConnection, interaction.member.displayName,interaction.user.id,doMoldProcessFlg);
+        await talkToLlamaFunc(readTxt, guildId,interaction.channel, botConnection, interaction.member.displayName,interaction.user.id,doMoldProcessFlg);
 
         return;
     }

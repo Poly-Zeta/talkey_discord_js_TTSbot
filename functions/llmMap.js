@@ -18,9 +18,9 @@ const talkMemoryLength=6;
 const talkMemoryMaxLength=30;
 const talkMemoryMap=new Map();
 
-async function addLlamaQueue(interaction,guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg) {
+async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg) {
     const startlength=llmQueue.length;
-    llmQueue.push({guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg,interaction});
+    llmQueue.push({guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg});
 
     //当該ギルドに会話履歴が無ければ作成
     //デモ応答を登録する
@@ -123,13 +123,13 @@ async function processELYZAQueue(queue) {
     queue[0].readTxt=`userinput:${queue[0].nickname},${dateAndTime},${queue[0].readTxt} \n `;
     //最新のユーザ入力をログに登録
     const guildLog=talkMemoryMap.get(queue[0].guildId);
-    console.log(`processELYZAQueue guildlog:${guildLog}`);
+    // console.log(`processELYZAQueue guildlog:${guildLog}`);
     guildLog.push(queue[0].readTxt);
     //ログの長さは一定で切る
     if(guildLog.length>talkMemoryMaxLength){guildLog.shift();}
     //ログからn/2回の会話往復と最新のユーザ入力を引き出して成形
     queue[0].readTxt=guildLog.slice(0,talkMemoryLength+1).join("");
-    console.log(`processELYZAQueue joinedtxt:${queue[0].readTxt}`);
+    // console.log(`processELYZAQueue joinedtxt:${queue[0].readTxt}`);
 
     // queue[0].readTxt=await getResponseofLlamaAPI(queue[0].nickname,queue[0].readTxt);
     queue[0].readTxt=await getResponseofLlamaAPI(queue[0].readTxt);
@@ -138,15 +138,9 @@ async function processELYZAQueue(queue) {
         queue[0].readTxt=tmp[0].split(/\r\n|\n|\r/);
     }
     console.log(`入力->llm:${queue[0].readTxt}`);
-    console.log("chk!!");
-    console.log(`1:${queue[0].readTxt}`);
-    console.log(`1:${queue[0].readTxt[0]}`);
+    // console.log("chk!!");
     queue[0].readTxt=queue[0].readTxt??"リプライの生成に失敗しました．"
-    console.log(`2:${queue[0].readTxt}`);
-    console.log(`2:${queue[0].readTxt[0]}`);
     if(queue[0].readTxt===""){queue[0].readTxt="リプライの生成に失敗しました．"}
-    console.log(`3:${queue[0].readTxt}`);
-    console.log(`3:${queue[0].readTxt[0]}`);
 
     //音声再生にスタック
     if (queue[0].botConnection != undefined) {
@@ -154,14 +148,12 @@ async function processELYZAQueue(queue) {
     }
 
     //該当テキストチャットにメッセージ送信
-    console.log(`4:${queue[0].readTxt}`);
-    console.log(`4:${queue[0].readTxt[0]}`);
-    await queue[0].textChannel.send(queue[0].readTxt[0]);
+    await queue[0].textChannel.send(`${queue[0].readTxt}`);
 
     //llmの生成した応答をログに保存
     guildLog.push(queue[0].readTxt);
     if(guildLog.length>talkMemoryMaxLength){guildLog.shift();}
-    console.log(guildLog.slice(0,3));
+    // console.log(guildLog.slice(0,3));
 
     queue.shift();
     processELYZAQueue(queue);
