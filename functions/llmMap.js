@@ -151,7 +151,7 @@ async function processELYZAQueue(queue) {
     await queue[0].textChannel.send(`${queue[0].readTxt}`);
 
     //llmの生成した応答をログに保存
-    guildLog.push(`${queue[0].readTxt} \n`);
+    guildLog.push(`あなたの回答:${queue[0].readTxt} \n`);
     if(guildLog.length>talkMemoryMaxLength){guildLog.shift();}
     // console.log(guildLog.slice(0,3));
 
