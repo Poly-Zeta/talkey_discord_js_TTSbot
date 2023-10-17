@@ -52,7 +52,8 @@ module.exports = {
         }
 
         // await talkToBotFunc(readTxt, guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id);
-        await talkToLlamaFunc(readTxt, guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id,doMoldProcessFlg);
+        const txtChannel = interaction.client.channels.cache.get(interaction.channelId);
+        await talkToLlamaFunc(readTxt, guildId, txtChannel, botConnection, interaction.member.displayName,interaction.user.id,doMoldProcessFlg);
 
         return;
     }
