@@ -122,12 +122,13 @@ async function processELYZAQueue(queue) {
     queue[0].readTxt=`userinput:${queue[0].nickname},${dateAndTime},${queue[0].readTxt} \n `;
     //最新のユーザ入力をログに登録
     const guildLog=talkMemoryMap.get(queue[0].guildId);
-    console.log(guildLog);
+    console.log(`processELYZAQueue guildlog:${guildLog}`);
     guildLog.push(queue[0].readTxt);
     //ログの長さは一定で切る
     if(guildLog.length>talkMemoryMaxLength){guildLog.shift();}
     //ログからn/2回の会話往復と最新のユーザ入力を引き出して成形
     queue[0].readTxt=guildLog.slice(0,talkMemoryLength+1).join("");
+    console.log(`processELYZAQueue joinedtxt:${queue[0].readTxt}`);
 
     queue[0].readTxt=await getResponseofLlamaAPI(queue[0].nickname,queue[0].readTxt);
     if(queue[0].doMoldProcessFlg){
