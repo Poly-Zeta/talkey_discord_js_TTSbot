@@ -1,5 +1,6 @@
 const {getResponseofTranslateAPI,getResponseofLlamaAPI} = require('../functions/talkapi.js');
 const { addAudioToMapQueue } = require('../functions/audioMap.js');
+const { sendMessage } = require('../functions/sendMessage.js');
 //queue処理のお試し
 //以下の改造
 //https://zenn.dev/s7/articles/86511eb5089fb6c05599
@@ -17,9 +18,9 @@ const talkMemoryLength=6;
 const talkMemoryMaxLength=30;
 const talkMemoryMap=new Map();
 
-async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg) {
+async function addLlamaQueue(interaction,guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg) {
     const startlength=llmQueue.length;
-    llmQueue.push({guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg});
+    llmQueue.push({guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg,interaction});
 
     //当該ギルドに会話履歴が無ければ作成
     //デモ応答を登録する
@@ -148,7 +149,7 @@ async function processELYZAQueue(queue) {
 
     //該当テキストチャットにメッセージ送信
     console.log(queue[0].readTxt);
-    queue[0].textChannel.send(queue[0].readTxt);
+    await queue[0].textChannel.send(queue[0].readTxt);
 
     //llmの生成した応答をログに保存
     guildLog.push(queue[0].readTxt);
