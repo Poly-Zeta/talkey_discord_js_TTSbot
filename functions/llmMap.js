@@ -137,6 +137,7 @@ async function processELYZAQueue(queue) {
         queue[0].readTxt=tmp[0].split(/\r\n|\n|\r/);
     }
     console.log(`入力->llm:${queue[0].readTxt}`);
+    console.log("chk!!");
     queue[0].readTxt=queue[0].readTxt??"リプライの生成に失敗しました．"
     if(queue[0].readTxt===""){queue[0].readTxt="リプライの生成に失敗しました．"}
 
