@@ -128,7 +128,7 @@ async function processELYZAQueue(queue) {
     //ログの長さは一定で切る
     if(guildLog.length>talkMemoryMaxLength){guildLog.shift();}
     //ログからn/2回の会話往復と最新のユーザ入力を引き出して成形
-    queue[0].readTxt=guildLog.slice(0,talkMemoryLength+1).join("");
+    queue[0].readTxt=guildLog.slice(-1*(talkMemoryLength+1)).join("");
     // console.log(`processELYZAQueue joinedtxt:${queue[0].readTxt}`);
 
     // queue[0].readTxt=await getResponseofLlamaAPI(queue[0].nickname,queue[0].readTxt);
@@ -151,7 +151,7 @@ async function processELYZAQueue(queue) {
     await queue[0].textChannel.send(`${queue[0].readTxt}`);
 
     //llmの生成した応答をログに保存
-    guildLog.push(queue[0].readTxt);
+    guildLog.push(`${queue[0].readTxt}`);
     if(guildLog.length>talkMemoryMaxLength){guildLog.shift();}
     // console.log(guildLog.slice(0,3));
 
