@@ -23,7 +23,7 @@ async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConn
 
     //当該ギルドに会話履歴が無ければ作成
     //デモ応答を登録する
-    if(!talkMemoryMap.has(guildID)){
+    if(!talkMemoryMap.has(guildId)){
         talkMemoryMap.set(guildId,
             //このデモ応答登録は後々ファイル読み出しにした方が良い
             //そうなっていれば，ファイルIOにして記憶を引き継げる
