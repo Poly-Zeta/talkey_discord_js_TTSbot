@@ -130,7 +130,8 @@ async function processELYZAQueue(queue) {
     queue[0].readTxt=guildLog.slice(0,talkMemoryLength+1).join("");
     console.log(`processELYZAQueue joinedtxt:${queue[0].readTxt}`);
 
-    queue[0].readTxt=await getResponseofLlamaAPI(queue[0].nickname,queue[0].readTxt);
+    // queue[0].readTxt=await getResponseofLlamaAPI(queue[0].nickname,queue[0].readTxt);
+    queue[0].readTxt=await getResponseofLlamaAPI(queue[0].readTxt);
     if(queue[0].doMoldProcessFlg){
         const tmp=queue[0].readTxt.split(';');
         queue[0].readTxt=tmp[0].split(/\r\n|\n|\r/);
