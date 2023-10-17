@@ -147,6 +147,7 @@ async function processELYZAQueue(queue) {
     }
 
     //該当テキストチャットにメッセージ送信
+    console.log(queue[0].readTxt);
     queue[0].textChannel.send(queue[0].readTxt);
 
     //llmの生成した応答をログに保存
