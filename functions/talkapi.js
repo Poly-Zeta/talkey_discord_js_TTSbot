@@ -26,16 +26,19 @@ const translateURL=tokens.translateURLBase;
 const llamaServerAddress=tokens.llamaServerAddress;
 const prompt=tokens.prompt;
 
-async function getResponseofLlamaAPI(username,txt) {
-    const date=new Date;
-    const dateAndTime=`${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()},${date.getHours()}:${date.getMinutes()}`;
+// async function getResponseofLlamaAPI(username,txt) {
+async function getResponseofLlamaAPI(txt) {
+    console.log(`getResponseofLlamaAPI input : ${prompt}${txt}あなたの回答:`);
+    // const date=new Date;
+    // const dateAndTime=`${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()},${date.getHours()}:${date.getMinutes()}`;
     const talkRes = await fetch(
         llamaServerAddress,
         {
             method: 'POST',
             body: JSON.stringify({
                 // prompt:`${prompt}User input:[${username}]${txt}`,
-                prompt:`${prompt}${username},${dateAndTime},${txt}\nあなたの回答:`,
+                // prompt:`${prompt}${username},${dateAndTime},${txt}\nあなたの回答:`,
+                prompt:`${prompt}${txt}あなたの回答:`,
                 n_predict: 512,
                 temperature:0.65
             })
