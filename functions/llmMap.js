@@ -139,8 +139,14 @@ async function processELYZAQueue(queue) {
     }
     console.log(`入力->llm:${queue[0].readTxt}`);
     console.log("chk!!");
+    console.log(`1:${queue[0].readTxt}`);
+    console.log(`1:${queue[0].readTxt[0]}`);
     queue[0].readTxt=queue[0].readTxt??"リプライの生成に失敗しました．"
+    console.log(`2:${queue[0].readTxt}`);
+    console.log(`2:${queue[0].readTxt[0]}`);
     if(queue[0].readTxt===""){queue[0].readTxt="リプライの生成に失敗しました．"}
+    console.log(`3:${queue[0].readTxt}`);
+    console.log(`3:${queue[0].readTxt[0]}`);
 
     //音声再生にスタック
     if (queue[0].botConnection != undefined) {
@@ -148,9 +154,9 @@ async function processELYZAQueue(queue) {
     }
 
     //該当テキストチャットにメッセージ送信
-    console.log(queue[0].readTxt);
-    console.log(queue[0].readTxt[0]);
-    await queue[0].textChannel.send(queue[0].readTxt);
+    console.log(`4:${queue[0].readTxt}`);
+    console.log(`4:${queue[0].readTxt[0]}`);
+    await queue[0].textChannel.send(queue[0].readTxt[0]);
 
     //llmの生成した応答をログに保存
     guildLog.push(queue[0].readTxt);
