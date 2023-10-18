@@ -14,7 +14,7 @@ const { sendMessage } = require('../functions/sendMessage.js');
 //デフォルトの対話は各マップの項目作成時に挿入しておく
 
 const llmQueue = [];
-const talkMemoryLength=8;
+const talkMemoryLength=6;
 const talkMemoryMaxLength=30;
 const talkMemoryMap=new Map();
 
