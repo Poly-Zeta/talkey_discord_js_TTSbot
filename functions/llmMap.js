@@ -129,7 +129,7 @@ async function processELYZAQueue(queue) {
     //最新のユーザ入力の成形
     const date=new Date;
     const dateAndTime=`${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()},${date.getHours()}:${date.getMinutes()}`;
-    queue[0].readTxt=`userinput:${queue[0].nickname},${dateAndTime},${queue[0].readTxt} \n `;
+    queue[0].readTxt=`userinput:${queue[0].nickname},${dateAndTime},'${queue[0].readTxt}' \n `;
     //最新のユーザ入力をログに登録
     const guildLog=talkMemoryMap.get(queue[0].guildId);
     // console.log(`processELYZAQueue guildlog:${guildLog}`);
@@ -160,7 +160,11 @@ async function processELYZAQueue(queue) {
     await queue[0].textChannel.send(`${queue[0].readTxt}`);
 
     //llmの生成した応答をログに保存
-    guildLog.push(`あなたの回答:${queue[0].readTxt} \n`);
+    if(!queue[0].doMoldProcessFlg){
+        const tmp=queue[0].readTxt.split(';');
+        queue[0].readTxt=tmp[0].split(/\r\n|\n|\r/);
+    }
+    guildLog.push(`あなたの回答:'${queue[0].readTxt};' \n`);
     if(guildLog.length>talkMemoryMaxLength){guildLog.shift();}
     // console.log(guildLog.slice(0,3));
 
