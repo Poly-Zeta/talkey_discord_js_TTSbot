@@ -22,12 +22,12 @@ const talkMemoryLength=6;
 const talkMemoryMaxLength=30;
 const talkMemoryMap=new Map();
 const defaultLog=[
-    "userinput:875oasfj,2023/2/17,19:57,お元気ですか？ \n ",
-    "あなたの回答:こんばんは！私は元気です！875oasfjさんはお元気ですか？; \n ",
-    "userinput:falken936,2022/12/28,21:40,今日は仕事に行きたくない \n ",
-    "あなたの回答:falken936さん、大丈夫ですか？休憩は取れていますか？; \n ",
-    "userinput:user556,2021/1/3,1:26,お喋りしてくれてありがとうターキーちゃん。私は今から皿を洗います。応援しててね！ \n ",
-    "あなたの回答:user556さん、こちらこそありがとうございました。頑張ってくださいね！; \n ",
+    "userinput:875oasfj,2023/2/17,19:57,'お元気ですか？' \n ",
+    "あなたの回答:'こんばんは！私は元気です！875oasfjさんはお元気ですか？;' \n ",
+    "userinput:falken936,2022/12/28,21:40,'今日は仕事に行きたくない' \n ",
+    "あなたの回答:'falken936さん、大丈夫ですか？休憩は取れていますか？;' \n ",
+    "userinput:user556,2021/1/3,1:26,'お喋りしてくれてありがとうターキーちゃん。私は今から皿を洗います。応援しててね！' \n ",
+    "あなたの回答:'user556さん、こちらこそありがとうございました。頑張ってくださいね！;' \n ",
 ];
 
 async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg,doTalkLogResetFlg) {

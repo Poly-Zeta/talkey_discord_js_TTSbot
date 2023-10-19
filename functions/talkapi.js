@@ -38,7 +38,7 @@ async function getResponseofLlamaAPI(txt) {
             body: JSON.stringify({
                 // prompt:`${prompt}User input:[${username}]${txt}`,
                 // prompt:`${prompt}${username},${dateAndTime},${txt}\nあなたの回答:`,
-                prompt:`${prompt}${txt}あなたの回答:`,
+                prompt:`${prompt}${txt}あなたの回答:'`,
                 n_predict: 512,
                 temperature:0.65
             })
