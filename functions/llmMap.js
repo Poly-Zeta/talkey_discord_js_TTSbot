@@ -113,7 +113,7 @@ async function processELYZAQueue(queue) {
     }
 
     if(queue[0].doTalkLogResetFlg){
-        talkMemoryMap.set(guildId,defaultLog);
+        talkMemoryMap.set(queue[0].guildId,defaultLog);
     }
 
     const namePattern = /たーきーちゃん|ターキーちゃん|たーきーくん|ターキーくん/;
