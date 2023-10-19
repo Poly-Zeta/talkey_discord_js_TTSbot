@@ -13,14 +13,26 @@ const { sendMessage } = require('../functions/sendMessage.js');
 //prompt末尾の会話履歴部分に挿入する
 //デフォルトの対話は各マップの項目作成時に挿入しておく
 
+//会話履歴のファイルIO
+//起動時，生成されるMapに会話履歴を読み出す
+//シャットダウン時，リブート時，定期タスクのそれぞれでファイルに履歴を書き込む
+
 const llmQueue = [];
 const talkMemoryLength=6;
 const talkMemoryMaxLength=30;
 const talkMemoryMap=new Map();
+const defaultLog=[
+    "userinput:875oasfj,2023/2/17,19:57,お元気ですか？ \n ",
+    "あなたの回答:こんばんは！私は元気です！875oasfjさんはお元気ですか？; \n ",
+    "userinput:falken936,2022/12/28,21:40,今日は仕事に行きたくない \n ",
+    "あなたの回答:falken936さん、大丈夫ですか？休憩は取れていますか？; \n ",
+    "userinput:user556,2021/1/3,1:26,お喋りしてくれてありがとうターキーちゃん。私は今から皿を洗います。応援しててね！ \n ",
+    "あなたの回答:user556さん、こちらこそありがとうございました。頑張ってくださいね！; \n ",
+];
 
-async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg) {
+async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg,doTalkLogResetFlg) {
     const startlength=llmQueue.length;
-    llmQueue.push({guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg});
+    llmQueue.push({guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg,doTalkLogResetFlg});
 
     //当該ギルドに会話履歴が無ければ作成
     //デモ応答を登録する
@@ -28,14 +40,7 @@ async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConn
         talkMemoryMap.set(guildId,
             //このデモ応答登録は後々ファイル読み出しにした方が良い
             //そうなっていれば，ファイルIOにして記憶を引き継げる
-            [
-                "userinput:875oasfj,2023/2/17,19:57,お元気ですか？ \n ",
-                "あなたの回答:こんばんは！私は元気です！875oasfjさんはお元気ですか？; \n ",
-                "userinput:falken936,2022/12/28,21:40,今日は仕事に行きたくない \n ",
-                "あなたの回答:falken936さん、大丈夫ですか？休憩は取れていますか？; \n ",
-                "userinput:user556,2021/1/3,1:26,お喋りしてくれてありがとうターキーちゃん。私は今から皿を洗います。応援しててね！ \n ",
-                "あなたの回答:user556さん、こちらこそありがとうございました。頑張ってくださいね！; \n ",
-            ]
+            defaultLog
         );
     }
     if (startlength == 0) {
@@ -105,6 +110,10 @@ async function processELYZAQueue(queue) {
         return;
     }else{
         console.log(queue.length);
+    }
+
+    if(queue[0].doTalkLogResetFlg){
+        talkMemoryMap.set(guildId,defaultLog);
     }
 
     const namePattern = /たーきーちゃん|ターキーちゃん|たーきーくん|ターキーくん/;

@@ -22,6 +22,12 @@ module.exports = {
                 name:"opt",
                 description: "falseのとき，成形処理をスキップして出力(無入力の際はtrueで実行)",
                 required:false,
+            },
+            {
+                type:5,//"BOOLIAN",
+                name:"logreset",
+                description: "trueのとき，コマンド実行ギルドの会話履歴をクリア(無入力の際はfalseで実行)",
+                required:false,
             }
         ]
     },
@@ -51,8 +57,14 @@ module.exports = {
             console.log(`opt:${doMoldProcessFlg}`);
         }
 
+        const doTalkLogReset=interaction.options.get("logreset",false);
+        let doTalkLogResetFlg=false;
+        if(doTalkLogReset!==null){
+            doTalkLogResetFlg=doTalkLogReset.value;
+        }
+
         // await talkToBotFunc(readTxt, guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id);
-        await talkToLlamaFunc(readTxt, guildId,interaction.channel, botConnection, interaction.member.displayName,interaction.user.id,doMoldProcessFlg);
+        await talkToLlamaFunc(readTxt, guildId,interaction.channel, botConnection, interaction.member.displayName,interaction.user.id,doMoldProcessFlg,doTalkLogResetFlg);
 
         return;
     }
