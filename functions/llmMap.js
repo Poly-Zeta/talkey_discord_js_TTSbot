@@ -1,6 +1,5 @@
 const {getResponseofTranslateAPI,getResponseofLlamaAPI} = require('../functions/talkapi.js');
 const { addAudioToMapQueue } = require('../functions/audioMap.js');
-const { sendMessage } = require('../functions/sendMessage.js');
 //queue処理のお試し
 //以下の改造
 //https://zenn.dev/s7/articles/86511eb5089fb6c05599
@@ -102,10 +101,7 @@ async function processLlamaQueue(queue) {
 
 async function processELYZAQueue(queue) {
     console.log("loop");
-    // console.log(`llmqueue@processllamaqueue:${llmQueue}`);
-    // console.log(`queue@processllamaqueue:${queue}`);
-    // console.log(`queue.length@processllamaqueue:${queue.length}`);
-    // console.log(`queue[0]@processllamaqueue:${queue[0]}`);
+    
     if (!queue[0]?.readTxt || queue.length==0) {
         return;
     }else{
