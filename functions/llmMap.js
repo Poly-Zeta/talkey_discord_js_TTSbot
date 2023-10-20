@@ -168,7 +168,12 @@ async function processELYZAQueue(queue) {
     processELYZAQueue(queue);
 };
 
+function getLLMQueueLength(){
+    return llmQueue.length;
+}
+
 module.exports = {
-    addLlamaQueue
+    addLlamaQueue,
+    getLLMQueueLength
 }
 

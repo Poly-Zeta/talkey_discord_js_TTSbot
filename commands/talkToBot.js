@@ -4,6 +4,7 @@ const { getResponseofTalkAPI } = require('../functions/talkapi.js');
 const { getVoiceConnection } = require("@discordjs/voice");
 const { addTalkCommandCounter } = require('../functions/talkLog.js');
 const { talkToBotFunc,talkToLlamaFunc } = require('../functions/talkFunc.js');
+const { getLLMQueueLength } = require('../functions/llmMap.js');
 
 module.exports = {
     attr: "base",
@@ -45,7 +46,9 @@ module.exports = {
 
 
         //ユーザアカウントに偽装したwebhookを送る
-        await sendMessage("🗣️", interaction,readTxt).catch(e => console.error(e));
+        const waitlistLength=getLLMQueueLength();
+        const msgopt=`(待機件数:${waitlistLength}，予想処理時間${waitlistLength*5}分)`
+        await sendMessage("🗣️", interaction,`${readTxt}${msgopt}`).catch(e => console.error(e));
         if (botConnection != undefined) {
             addTalkCommandCounter();
         }
