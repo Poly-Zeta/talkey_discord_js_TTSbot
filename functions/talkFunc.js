@@ -6,7 +6,12 @@ const { getResponseofTalkAPI ,getResponseofChaplus,getResponseofMebo} = require(
 async function talkToLlamaFunc(readTxt, guildId, textChannel, botConnection, nickname,uid,doMoldProcessFlg,doTalkLogResetFlg) {
     //talkToBotFuncでは応答までこの関数内で片づけるが，スタックの都合この関数ではQueue実行までとする
     //入力->ユーザ書き込みの読み上げ->llama用に名前の下処理->llamaのスタック登録->終了とし
-    //応答や応答読み上げはスタック処理に任せる
+    //bot側の応答や応答読み上げはスタック処理に任せる
+    if (botConnection != undefined) {
+        //色々除去
+        const readreq = textOperator(readTxt);
+        addAudioToMapQueue(guildId, nickname, readreq, "f2");
+    }
     await addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg,doTalkLogResetFlg);
     
     return;

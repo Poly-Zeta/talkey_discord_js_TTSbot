@@ -147,11 +147,6 @@ async function processELYZAQueue(queue) {
     queue[0].readTxt=queue[0].readTxt??"リプライの生成に失敗しました．"
     if(queue[0].readTxt===""){queue[0].readTxt="リプライの生成に失敗しました．"}
 
-    //音声再生にスタック
-    if (queue[0].botConnection != undefined) {
-        addAudioToMapQueue(queue[0].guildId, "たーきーちゃん", queue[0].readTxt.replace(/talkey/g, `たーきー`), "f1");
-    }
-
     //該当テキストチャットにメッセージ送信
     await queue[0].textChannel.send(`${queue[0].readTxt}`);
 
@@ -163,6 +158,12 @@ async function processELYZAQueue(queue) {
     guildLog.push(`あなたの回答:'${queue[0].readTxt};' \n`);
     if(guildLog.length>talkMemoryMaxLength){guildLog.shift();}
     // console.log(guildLog.slice(0,3));
+
+    //音声再生にスタック
+    if (queue[0].botConnection != undefined) {
+        const readreq = textOperator(queue[0].readTxt);
+        addAudioToMapQueue(queue[0].guildId, "たーきーちゃん", readreq.replace(/talkey/g, `たーきー`), "f1");
+    }
 
     queue.shift();
     processELYZAQueue(queue);
