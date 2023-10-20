@@ -47,7 +47,7 @@ module.exports = {
 
         //ユーザアカウントに偽装したwebhookを送る
         const waitlistLength=getLLMQueueLength();
-        const msgopt=`(待機件数:${waitlistLength}，予想処理時間${waitlistLength*5}分)`
+        const msgopt=`(待機件数:${waitlistLength+1}，予想処理時間${(waitlistLength+1)*5}分)`
         await sendMessage("🗣️", interaction,`${readTxt}${msgopt}`).catch(e => console.error(e));
         if (botConnection != undefined) {
             addTalkCommandCounter();
