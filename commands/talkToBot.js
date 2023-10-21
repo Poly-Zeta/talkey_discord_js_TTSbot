@@ -65,6 +65,7 @@ module.exports = {
         if(doTalkLogReset!==null){
             doTalkLogResetFlg=doTalkLogReset.value;
         }
+        console.log(`reset:${doTalkLogResetFlg}`);
 
         // await talkToBotFunc(readTxt, guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id);
         await talkToLlamaFunc(readTxt, guildId,interaction.channel, botConnection, interaction.member.displayName,interaction.user.id,doMoldProcessFlg,doTalkLogResetFlg);
