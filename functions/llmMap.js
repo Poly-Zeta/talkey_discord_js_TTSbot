@@ -39,7 +39,7 @@ async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConn
         talkMemoryMap.set(guildId,
             //このデモ応答登録は後々ファイル読み出しにした方が良い
             //そうなっていれば，ファイルIOにして記憶を引き継げる
-            defaultLog
+            structuredClone(defaultLog)
         );
     }
     if (startlength == 0) {
@@ -110,8 +110,8 @@ async function processELYZAQueue(queue) {
 
     console.log(`loop-logreset:${queue[0].doTalkLogResetFlg}`);
     if(queue[0].doTalkLogResetFlg){
-        talkMemoryMap.delete(queue[0].guildId);
-        talkMemoryMap.set(queue[0].guildId,defaultLog);
+        // talkMemoryMap.delete(queue[0].guildId);
+        talkMemoryMap.set(queue[0].guildId,structuredClone(defaultLog));
         console.log(`reseted:${talkMemoryMap.get(queue[0].guildId)}`);
     }
 
