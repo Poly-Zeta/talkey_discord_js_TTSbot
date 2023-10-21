@@ -108,11 +108,11 @@ async function processELYZAQueue(queue) {
         console.log(queue.length);
     }
 
-    console.log(`loop-logreset:${queue[0].doTalkLogResetFlg}`)
+    console.log(`loop-logreset:${queue[0].doTalkLogResetFlg}`);
     if(queue[0].doTalkLogResetFlg){
         talkMemoryMap.delete(queue[0].guildId);
         talkMemoryMap.set(queue[0].guildId,defaultLog);
-        console.log(talkMemoryMap.get(queue[0].guildId));
+        console.log(`reseted:${talkMemoryMap.get(queue[0].guildId)}`);
     }
 
     const namePattern = /たーきーちゃん|ターキーちゃん|たーきーくん|ターキーくん/;
