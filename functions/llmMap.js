@@ -110,8 +110,8 @@ async function processELYZAQueue(queue) {
 
     console.log(`loop-logreset:${queue[0].doTalkLogResetFlg}`)
     if(queue[0].doTalkLogResetFlg){
-        let guildLog=talkMemoryMap.get(queue[0].guildId);
-        guildLog=defaultLog;
+        talkMemoryMap.delete(queue[0].guildId);
+        talkMemoryMap.set(queue[0].guildId,defaultLog);
         console.log(talkMemoryMap.get(queue[0].guildId));
     }
 
