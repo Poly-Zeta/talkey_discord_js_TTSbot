@@ -203,6 +203,7 @@ async function onVoiceStateUpdate(oldState, newState) {
                         }
                         deleteGuildToMap(oldGuild.id);
                         oldBotConnection.destroy();
+                        console.log("here1");
                         await client.channels.cache.get(oldTextChannelId).send("ボイスチャットが空になりました．自動退出します．");
                         return;
                     } catch (error) {
@@ -253,6 +254,7 @@ async function onVoiceStateUpdate(oldState, newState) {
                         if(oldVc.userLimit>0){
                             await oldVc.setUserLimit(oldVc.userLimit-1);
                         }
+                        console.log("here2");
                         deleteGuildToMap(oldGuild.id);
                         oldBotConnection.destroy();
                         // return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
