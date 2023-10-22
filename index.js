@@ -205,7 +205,7 @@ async function onVoiceStateUpdate(oldState, newState) {
                         }
                         deleteGuildToMap(oldGuild.id);
                         oldBotConnection.destroy();
-                        console.log("here1");
+                        // console.log("here1");
                         await client.channels.cache.get(oldTextChannelId).send("ボイスチャットが空になりました．自動退出します．");
                         return;
                     } catch (error) {
@@ -256,7 +256,7 @@ async function onVoiceStateUpdate(oldState, newState) {
                         if(oldVc.userLimit>0){
                             await oldVc.setUserLimit(oldVc.userLimit-1);
                         }
-                        console.log("here2");
+                        // console.log("here2");
                         deleteGuildToMap(oldGuild.id);
                         oldBotConnection.destroy();
                         // return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
@@ -452,8 +452,8 @@ client.on('ready', () => {
     console.log(process.memoryUsage().heapUsed);
 
     //15分に1回(毎時0,15,30,45分)，vcで放置されていないかチェック
-    // cron.schedule('0,15,30,45 * * * *', () => {
-    cron.schedule('0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57 * * * *', () => {
+    cron.schedule('0,15,30,45 * * * *', () => {
+    // cron.schedule('0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57 * * * *', () => {
         const now = Date.now();
         const idList = scanQueueMap(now);
         // console.log(idList);
