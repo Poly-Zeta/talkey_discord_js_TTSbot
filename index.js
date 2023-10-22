@@ -11,6 +11,7 @@ const {
         Guilds,
         GuildMessages,
         MessageContent,
+        GuildModeration,
         // GuildMembers,
         GuildWebhooks,
         GuildVoiceStates
@@ -28,6 +29,7 @@ const client = new Discord.Client({
         Guilds,
         GuildMessages,
         MessageContent,
+        GuildModeration,
         // GuildMembers,
         GuildWebhooks,
         GuildVoiceStates
