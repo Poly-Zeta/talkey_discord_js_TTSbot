@@ -449,7 +449,7 @@ client.on('ready', () => {
 
     //15分に1回(毎時0,15,30,45分)，vcで放置されていないかチェック
     // cron.schedule('0,15,30,45 * * * *', () => {
-    cron.schedule('* * * * *', () => {
+    cron.schedule('0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57 * * * *', () => {
         const now = Date.now();
         const idList = scanQueueMap(now);
         // console.log(idList);
