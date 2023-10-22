@@ -198,6 +198,9 @@ async function onVoiceStateUpdate(oldState, newState) {
                 if (oldVc.members.size >= 1 && oldVc.members.filter(member => !member.user.bot).size == 0) {
                     // console.log("auto-disconnect");
                     try {
+                        if(oldVc.userLimit>0){
+                            await oldVc.setUserLimit(oldVc.userLimit-1);
+                        }
                         deleteGuildToMap(oldGuild.id);
                         oldBotConnection.destroy();
                         await client.channels.cache.get(oldTextChannelId).send("ボイスチャットが空になりました．自動退出します．");
@@ -247,6 +250,9 @@ async function onVoiceStateUpdate(oldState, newState) {
                     //oldはその移動で空になった？
                     if (oldVc.members.size >= 1 && oldVc.members.filter(member => !member.user.bot).size == 0) {
                         // console.log("auto-disconnect");
+                        if(oldVc.userLimit>0){
+                            await oldVc.setUserLimit(oldVc.userLimit-1);
+                        }
                         deleteGuildToMap(oldGuild.id);
                         oldBotConnection.destroy();
                         // return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
@@ -282,7 +288,15 @@ async function onVoiceStateUpdate(oldState, newState) {
             //再接続処理
             // oldGuild.systemChannel.send("botの移動を検知しました．接続データを変更します．読み上げなくなった際は，/byeと/joinで再接続してみてください．");
             await client.channels.cache.get(oldTextChannelId).send("botの移動を検知しました．接続データを変更します．読み上げなくなった際は，/byeと/joinで再接続してみてください．");
-            return await moveVoiceChannel(oldGuild, oldGuild.id, oldVc, newVc);
+            let isExpand=false;
+            if(0<newVc.userLimit && newVc.userLimit<99){
+                await newVc.setUserLimit(newVc.userLimit+1);
+                isExpand=true;
+            }
+            if(oldVc.userLimit>0){
+                await oldVc.setUserLimit(oldVc.userLimit-1);
+            }
+            return await moveVoiceChannel(oldGuild, oldGuild.id, oldVc, newVc,isExpand);
         }
         //ここに来たらbotのミュート
         // console.log("i mute or unmute");
@@ -297,6 +311,9 @@ async function onVoiceStateUpdate(oldState, newState) {
         //oldはその移動で空になった？
         if (oldVc.members.size >= 1 && oldVc.members.filter(member => !member.user.bot).size == 0) {
             // console.log("auto-disconnect");
+            if(oldVc.userLimit>0){
+                await oldVc.setUserLimit(oldVc.userLimit-1);
+            }
             deleteGuildToMap(oldGuild.id);
             oldBotConnection.destroy();
             // return oldGuild.systemChannel.send("ボイスチャットが空になりました．自動退出します．");
@@ -431,7 +448,8 @@ client.on('ready', () => {
     console.log(process.memoryUsage().heapUsed);
 
     //15分に1回(毎時0,15,30,45分)，vcで放置されていないかチェック
-    cron.schedule('0,15,30,45 * * * *', () => {
+    // cron.schedule('0,15,30,45 * * * *', () => {
+    cron.schedule('* * * * *', () => {
         const now = Date.now();
         const idList = scanQueueMap(now);
         // console.log(idList);
@@ -478,6 +496,10 @@ async function vcAutoDisconnect(elem){
     console.log(`elem:${elem}`);
     const botVcData = await getGuildMap(elem)
     console.log(botVcData);
+    const vcdata=await client.channels.cache.get(botVcData.voiceChannelId);
+    if(vcdata.userLimit>0){
+        await vcdata.setUserLimit(vcdata.userLimit-1);
+    }
     await deleteGuildToMap(elem);
     await client.channels.cache.get(botVcData.textChannelId).send('一定時間読み上げ指示が無かったため，切断しました．')
     console.log(`textChannelId:${botVcData.textChannelId}`);

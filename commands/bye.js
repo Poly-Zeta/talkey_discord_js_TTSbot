@@ -31,6 +31,9 @@ module.exports = {
         }
         else {
             //全部違ったら退出
+            if(memberVC.userLimit!=0){
+                await memberVC.setUserLimit(memberVC.userLimit-1);
+            }
             botConnection.destroy();
             deleteGuildToMap(interaction.guild.id);
             const replyMessage = "退出します．";
