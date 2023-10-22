@@ -28,7 +28,7 @@ module.exports = {
         const memberVC = interaction.member.voice.channel;
         const guild = interaction.guild;
         const textChannelId=interaction.channel.id;
-        console.log(`userLimit:${memberVC.userLimit}`)
+        // console.log(`userLimit:${memberVC.userLimit}`)
         // const member = await guild.members.fetch(interaction.member.id);
         // const memberVC = member.voice.channel;
 
