@@ -46,12 +46,6 @@ module.exports = {
             // return interaction.reply(replyMessage);
             return interaction.editReply(replyMessage);
         }
-        //何らかの事情でbotが参加できない場合
-        else if (!memberVC.joinable) {
-            const replyMessage = "botがボイスチャットに接続できませんでした．";
-            // return interaction.reply(replyMessage);
-            return interaction.editReply(replyMessage);
-        }
         //botに音声再生権限が無い場合
         else if (!memberVC.speakable) {
             const replyMessage = "botに音声再生権限がありません．";
@@ -109,6 +103,12 @@ module.exports = {
             embed.setImage('attachment://how_to_use.png');
             await interaction.editReply("finish!");
             return await interaction.editReply({ files: [attachment], embeds: [embed] });
+        }
+        //何らかの事情でbotが参加できない場合
+        else if (!memberVC.joinable) {
+            const replyMessage = "botがボイスチャットに接続できませんでした．";
+            // return interaction.reply(replyMessage);
+            return interaction.editReply(replyMessage);
         }
         //全部違ったら接続
         else {
