@@ -28,6 +28,7 @@ module.exports = {
         const memberVC = interaction.member.voice.channel;
         const guild = interaction.guild;
         const textChannelId=interaction.channel.id;
+        console.log(`userLimit:${memberVC.userLimit}`)
         // const member = await guild.members.fetch(interaction.member.id);
         // const memberVC = member.voice.channel;
 
@@ -45,12 +46,6 @@ module.exports = {
             // return interaction.reply(replyMessage);
             return interaction.editReply(replyMessage);
         }
-        //vcが満員でbotが参加できない場合
-        else if (memberVC.full) {
-            const replyMessage = "ボイスチャットが満員となっているため，botがボイスチャットに接続できませんでした．";
-            // return interaction.reply(replyMessage);
-            return interaction.editReply(replyMessage);
-        }
         //何らかの事情でbotが参加できない場合
         else if (!memberVC.joinable) {
             const replyMessage = "botがボイスチャットに接続できませんでした．";
@@ -63,6 +58,42 @@ module.exports = {
             // return interaction.reply(replyMessage);
             return interaction.editReply(replyMessage);
         }
+        // //vcが満員でbotが参加できない場合，制限を拡張して接続
+        // else if (memberVC.full) {
+        //     await memberVC.setUserLimit(memberVC.userLimit+1);
+        //     const embed = new EmbedBuilder()
+        //         .setTitle('ボイスチャットが満員となっているため，制限人数を拡張してボイスチャンネルに参加します')
+        //         .setColor('#ffff00')
+        //         .addFields(
+        //             {
+        //                 name: "制限人数について",
+        //                 value: "当botが退出した際に，自動的に元の数値に戻します．滞在中に何らかのエラーで当botが停止した場合は，お手数ですが手動で人数制限を再設定願います．"
+        //             },
+        //             {
+        //                 name: "詳細説明",
+        //                 value: `詳しい使い方やアプデ情報，質問はここから: ${tokens.officialServerURL}`
+        //             },
+        //             {
+        //                 name: "音声合成プログラム",
+        //                 value: "読み上げ用音声データ生成にはAquesTalkPiを利用させて頂いています．\nhttps://www.a-quest.com/products/aquestalkpi.html"
+        //             }
+        //         );
+        //     const connection = joinVoiceChannel({
+        //         guildId: guild.id,
+        //         channelId: memberVC.id,
+        //         adapterCreator: guild.voiceAdapterCreator,
+        //         selfMute: false,
+        //     });
+        //     const player = createAudioPlayer({ behaviors: { noSubscriber: NoSubscriberBehavior.Pause, } });
+        //     connection.subscribe(player);
+        //     addGuildToMap(guild.me, guild.id,textChannelId, memberVC.id, connection, player);
+        //     addMember(guild.id, interaction.user.id, interaction.user.username);
+
+        //     const attachment = new AttachmentBuilder('../how_to_use.png','how_to_use.png');
+        //     embed.setImage('attachment://how_to_use.png');
+        //     await interaction.editReply("finish!");
+        //     return await interaction.editReply({ files: [attachment], embeds: [embed] });
+        // }
         //全部違ったら接続
         else {
             const embed = new EmbedBuilder()
