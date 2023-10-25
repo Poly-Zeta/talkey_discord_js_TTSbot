@@ -1,5 +1,6 @@
 const {getResponseofTranslateAPI,getResponseofLlamaAPI} = require('../functions/talkapi.js');
 const { addAudioToMapQueue } = require('../functions/audioMap.js');
+const { textOperator } = require('../functions/textOperator.js');
 //queue処理のお試し
 //以下の改造
 //https://zenn.dev/s7/articles/86511eb5089fb6c05599
