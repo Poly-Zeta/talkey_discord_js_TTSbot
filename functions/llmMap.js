@@ -165,7 +165,7 @@ async function processELYZAQueue(queue) {
 
     //音声再生にスタック
     if (queue[0].botConnection != undefined) {
-        const readreq = textOperator(queue[0].readTxt);
+        const readreq = textOperator(`${queue[0].readTxt}`);
         addAudioToMapQueue(queue[0].guildId, "たーきーちゃん", readreq.replace(/talkey/g, `たーきー`), "f1");
     }
 
