@@ -23,7 +23,8 @@ const chaplusKey=tokens.chaplus;
 const meboAPIKey=tokens.meboKey;
 const meboAgentId=tokens.meboId;
 const translateURL=tokens.translateURLBase;
-const llamaServerAddress=tokens.llamaServerAddress;
+const llamaServerAddress0=tokens.llamaServerAddress0;
+// const llamaServerAddress=tokens.llamaServerAddress;
 const prompt=tokens.prompt;
 
 // async function getResponseofLlamaAPI(username,txt) {
@@ -32,7 +33,7 @@ async function getResponseofLlamaAPI(txt) {
     // const date=new Date;
     // const dateAndTime=`${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()},${date.getHours()}:${date.getMinutes()}`;
     const talkRes = await fetch(
-        llamaServerAddress,
+        llamaServerAddress0,
         {
             method: 'POST',
             body: JSON.stringify({
