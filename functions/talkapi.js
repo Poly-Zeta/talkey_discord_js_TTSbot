@@ -24,6 +24,8 @@ const meboAPIKey=tokens.meboKey;
 const meboAgentId=tokens.meboId;
 const translateURL=tokens.translateURLBase;
 const llamaServerAddress0=tokens.llamaServerAddress0;
+const llamaServerAddress1=tokens.llamaServerAddress1;
+const llamaServerAddress2=tokens.llamaServerAddress2;
 // const llamaServerAddress=tokens.llamaServerAddress;
 const prompt=tokens.prompt;
 
@@ -60,6 +62,48 @@ async function getResponseofLlamaAPI(txt) {
     // const replacedRes=tmp[0].split(/\r\n|\n|\r/);
     // console.log(replacedRes);
     // return replacedRes[0] ?? `リプライの生成時にエラーが発生しました．`;
+    const res = talkData.content;
+    return res;
+}
+
+async function getResponseofLlamaAPIMiddle(txt) {
+    console.log(`getResponseofLlamaAPI input : ${prompt}${txt}あなたの回答:`);
+    const talkRes = await fetch(
+        llamaServerAddress1,
+        {
+            method: 'POST',
+            body: JSON.stringify({
+                prompt:`${prompt}${txt}あなたの回答:'`,
+                n_predict: 512,
+                temperature:0.65
+            })
+        }
+    ); 
+    const talkData = await talkRes.json();
+    if(talkRes.status!=200){
+        return `リプライの生成時にエラーが発生しました．`;
+    }
+    const res = talkData.content;
+    return res;
+}
+
+async function getResponseofLlamaAPIHeavy(txt) {
+    console.log(`getResponseofLlamaAPI input : ${prompt}${txt}あなたの回答:`);
+    const talkRes = await fetch(
+        llamaServerAddress2,
+        {
+            method: 'POST',
+            body: JSON.stringify({
+                prompt:`${prompt}${txt}あなたの回答:'`,
+                n_predict: 512,
+                temperature:0.65
+            })
+        }
+    ); 
+    const talkData = await talkRes.json();
+    if(talkRes.status!=200){
+        return `リプライの生成時にエラーが発生しました．`;
+    }
     const res = talkData.content;
     return res;
 }
@@ -172,5 +216,7 @@ module.exports={
     getResponseofChaplus,
     getResponseofMebo,
     getResponseofTranslateAPI,
-    getResponseofLlamaAPI
+    getResponseofLlamaAPI,
+    getResponseofLlamaAPIMiddle,
+    getResponseofLlamaAPIHeavy
 }
