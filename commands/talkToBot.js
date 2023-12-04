@@ -5,6 +5,7 @@ const { getVoiceConnection } = require("@discordjs/voice");
 const { addTalkCommandCounter } = require('../functions/talkLog.js');
 const { talkToBotFunc,talkToLlamaFunc } = require('../functions/talkFunc.js');
 const { getLLMQueueLength } = require('../functions/llmMap.js');
+const { ndnDiceRoll } = require('../functions/diceroll.js');
 
 module.exports = {
     attr: "base",
