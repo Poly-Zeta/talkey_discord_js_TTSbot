@@ -30,7 +30,7 @@ const llamaServerAddress2=tokens.llamaServerAddress2;
 const prompt=tokens.prompt;
 
 // async function getResponseofLlamaAPI(username,txt) {
-async function getResponseofLlamaAPI(txt) {
+async function getResponseofLlamaAPILight(txt) {
     console.log(`getResponseofLlamaAPI input : ${prompt}${txt}あなたの回答:`);
     // const date=new Date;
     // const dateAndTime=`${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()},${date.getHours()}:${date.getMinutes()}`;
@@ -216,7 +216,7 @@ module.exports={
     getResponseofChaplus,
     getResponseofMebo,
     getResponseofTranslateAPI,
-    getResponseofLlamaAPI,
+    getResponseofLlamaAPILight,
     getResponseofLlamaAPIMiddle,
     getResponseofLlamaAPIHeavy
 }

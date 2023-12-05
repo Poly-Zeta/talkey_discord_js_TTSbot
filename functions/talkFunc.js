@@ -2,8 +2,9 @@ const { addAudioToMapQueue } = require('../functions/audioMap.js');
 const { addLlamaQueue } = require('../functions/llmMap.js');
 const { textOperator } = require('../functions/textOperator.js');
 const { getResponseofTalkAPI ,getResponseofChaplus,getResponseofMebo} = require('../functions/talkapi.js');
+const { ndnDiceRoll } = require('../functions/diceroll.js');
 
-async function talkToLlamaFunc(readTxt, guildId, textChannel, botConnection, nickname,uid,doMoldProcessFlg,doTalkLogResetFlg) {
+async function talkToLlamaFunc(readTxt, guildId, textChannel, botConnection, nickname,uid,doMoldProcessFlg,doTalkLogResetFlg,model) {
     //talkToBotFuncでは応答までこの関数内で片づけるが，スタックの都合この関数ではQueue実行までとする
     //入力->ユーザ書き込みの読み上げ->llama用に名前の下処理->llamaのスタック登録->終了とし
     //bot側の応答や応答読み上げはスタック処理に任せる
@@ -12,7 +13,7 @@ async function talkToLlamaFunc(readTxt, guildId, textChannel, botConnection, nic
         const readreq = textOperator(readTxt);
         addAudioToMapQueue(guildId, nickname, readreq, "f2");
     }
-    await addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg,doTalkLogResetFlg);
+    await addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg,doTalkLogResetFlg,model);
     
     return;
 }
@@ -31,7 +32,11 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,u
             addAudioToMapQueue(guildId, nickname, readreq, "f2");
         }
 
-        await addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection);
+        const models=["light","middle","heavy"];
+        const ans = ndnDiceRoll(1, 3);
+        model=models[ans-1];
+        // await addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection);
+        await addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection,false,false,model);
         // console.log(`namechk: ${readTxt}`);
         // var apiResponseText="";
         // const apiRandomizer = Math.floor(Math.random() * 100);

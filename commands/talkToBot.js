@@ -4,7 +4,7 @@ const { getResponseofTalkAPI } = require('../functions/talkapi.js');
 const { getVoiceConnection } = require("@discordjs/voice");
 const { addTalkCommandCounter } = require('../functions/talkLog.js');
 const { talkToBotFunc,talkToLlamaFunc } = require('../functions/talkFunc.js');
-const { getLLMQueueLength } = require('../functions/llmMap.js');
+const { getLLMQueueLength,getLLMProcessingTime } = require('../functions/llmMap.js');
 const { ndnDiceRoll } = require('../functions/diceroll.js');
 
 module.exports = {
@@ -75,19 +75,20 @@ module.exports = {
             model=models[ans-1];
         }
         
+        //次の処理のため，デフォルト返答メッセージを削除
         await interaction.deleteReply()
-            // .then(console.log)
             .catch(console.error);
-
 
         //ユーザアカウントに偽装したwebhookを送る
         const waitlistLength=getLLMQueueLength();
-        const msgopt=`(待機件数:${waitlistLength+1}，予想処理時間${(waitlistLength+1)*5}分)`
-        await sendMessage("🗣️", interaction,`${model},${readTxt}${msgopt}`).catch(e => console.error(e));
+        const estTimeRequired=getLLMProcessingTime(model);
+        const msgopt=`(待機件数:${waitlistLength+1}，予想処理時間${estTimeRequired}分)`
+        await sendMessage("🗣️", interaction,`${readTxt}${msgopt}`).catch(e => console.error(e));
         if (botConnection != undefined) {
             addTalkCommandCounter();
         }
 
+        //オプションの取得と初期値の代入：「下処理せずに返答」のフラグ
         const doMoldProcess=interaction.options.get("opt",false);
         let doMoldProcessFlg=true;
         if(doMoldProcess!==null){
@@ -95,6 +96,7 @@ module.exports = {
             console.log(`opt:${doMoldProcessFlg}`);
         }
 
+        //オプションの取得と初期値の代入：「会話ログのリセット」のフラグ
         const doTalkLogReset=interaction.options.get("logreset",false);
         let doTalkLogResetFlg=false;
         if(doTalkLogReset!==null){
@@ -102,8 +104,7 @@ module.exports = {
         }
         console.log(`reset:${doTalkLogResetFlg}`);
 
-        // await talkToBotFunc(readTxt, guildId, interaction.channel, botConnection, interaction.member.displayName,interaction.user.id);
-        await talkToLlamaFunc(readTxt, guildId,interaction.channel, botConnection, interaction.member.displayName,interaction.user.id,doMoldProcessFlg,doTalkLogResetFlg);
+        await talkToLlamaFunc(readTxt, guildId,interaction.channel, botConnection, interaction.member.displayName,interaction.user.id,doMoldProcessFlg,doTalkLogResetFlg,model);
 
         return;
     }

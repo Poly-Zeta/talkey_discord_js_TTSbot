@@ -1,4 +1,4 @@
-const {getResponseofTranslateAPI,getResponseofLlamaAPI} = require('../functions/talkapi.js');
+const {getResponseofTranslateAPI,getResponseofLlamaAPILight,getResponseofLlamaAPIMiddle,getResponseofLlamaAPIHeavy} = require('../functions/talkapi.js');
 const { addAudioToMapQueue } = require('../functions/audioMap.js');
 const { textOperator } = require('../functions/textOperator.js');
 //queue処理のお試し
@@ -30,9 +30,9 @@ const defaultLog=[
     "あなたの回答:'user556さん、こちらこそありがとうございました。頑張ってくださいね！;' \n ",
 ];
 
-async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg,doTalkLogResetFlg) {
+async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg,doTalkLogResetFlg,model) {
     const startlength=llmQueue.length;
-    llmQueue.push({guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg,doTalkLogResetFlg});
+    llmQueue.push({guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg,doTalkLogResetFlg,model});
 
     //当該ギルドに会話履歴が無ければ作成
     //デモ応答を登録する
@@ -45,63 +45,13 @@ async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConn
     }
     if (startlength == 0) {
         // console.log(`llmqueue@addllamaqueue:${llmQueue}`);
-        // processLlamaQueue(llmQueue);
-        processELYZAQueue(llmQueue);
+        processLlamaQueue(llmQueue);
     }
     return;
 };
 
 async function processLlamaQueue(queue) {
     console.log("loop");
-    // console.log(`llmqueue@processllamaqueue:${llmQueue}`);
-    // console.log(`queue@processllamaqueue:${queue}`);
-    // console.log(`queue.length@processllamaqueue:${queue.length}`);
-    // console.log(`queue[0]@processllamaqueue:${queue[0]}`);
-    if (!queue[0]?.readTxt || queue.length==0) {
-        return;
-    }else{
-        console.log(queue.length);
-    }
-
-    const namePattern = /たーきーちゃん|ターキーちゃん|たーきーくん|ターキーくん/;
-    queue[0].readTxt = queue[0].readTxt.replace(namePattern, "talkey-chan");
-    
-    console.log(`入力:${queue[0].readTxt}`);
-    //英訳
-    queue[0].readTxt=await getResponseofTranslateAPI(queue[0].readTxt,"ja","en");
-    console.log(`入力->英訳:${queue[0].readTxt}`);
-
-    queue[0].readTxt=queue[0].readTxt.replace(/Turkey-chan|talky-chan/gi,'talkey-chan').replace(/Turkey|talky/gi,'talkey-chan');
-    console.log(`英訳->名前処理:${queue[0].readTxt}`);
-
-    //llama
-    queue[0].textChannel.sendTyping();
-    queue[0].readTxt=await getResponseofLlamaAPI(queue[0].nickname,queue[0].readTxt);
-    console.log(`名前処理->llm:${queue[0].readTxt}`);
-
-    queue[0].readTxt=queue[0].readTxt.replace(/\*\S[a-z\s]*\S\*/gi,' ').replace(/\s{2,}/g,' ');
-    console.log(`llm->下処理:${queue[0].readTxt}`);
-
-    //和訳
-    queue[0].readTxt=await getResponseofTranslateAPI(queue[0].readTxt,"en","ja");
-    console.log(`llm->和訳:${queue[0].readTxt}`);
-
-    queue[0].readTxt=queue[0].readTxt.replace(/トーキーちゃん/g, `talkey`);
-
-    //音声再生にスタック
-    if (queue[0].botConnection != undefined) {
-        addAudioToMapQueue(queue[0].guildId, "たーきーちゃん", queue[0].readTxt.replace(/talkey/g, `たーきー`), "f1");
-    }
-
-    //該当テキストチャットにメッセージ送信
-    queue[0].textChannel.send(queue[0].readTxt);
-
-    queue.shift();
-    processLlamaQueue(queue);
-};
-
-async function processELYZAQueue(queue) {
-    console.log("loop");
     
     if (!queue[0]?.readTxt || queue.length==0) {
         return;
@@ -109,7 +59,7 @@ async function processELYZAQueue(queue) {
         console.log(queue.length);
     }
 
-    console.log(`loop-logreset:${queue[0].doTalkLogResetFlg}`);
+    // console.log(`loop-logreset:${queue[0].doTalkLogResetFlg}`);
     if(queue[0].doTalkLogResetFlg){
         // talkMemoryMap.delete(queue[0].guildId);
         talkMemoryMap.set(queue[0].guildId,structuredClone(defaultLog));
@@ -141,7 +91,19 @@ async function processELYZAQueue(queue) {
     // console.log(`processELYZAQueue joinedtxt:${queue[0].readTxt}`);
 
     // queue[0].readTxt=await getResponseofLlamaAPI(queue[0].nickname,queue[0].readTxt);
-    queue[0].readTxt=await getResponseofLlamaAPI(queue[0].readTxt);
+    // queue[0].readTxt=await getResponseofLlamaAPI(queue[0].readTxt);
+    //モデル切り換え
+    console.log(`LLMmodel:${queue[0].model}`)
+    if(queue[0].model=="light"){
+        queue[0].readTxt=await getResponseofLlamaAPILight(queue[0].readTxt);
+    }else if(queue[0].model=="middle"){
+        queue[0].readTxt=await getResponseofLlamaAPIMiddle(queue[0].readTxt);
+    }else if(queue[0].model=="heavy"){
+        queue[0].readTxt=await getResponseofLlamaAPIHeavy(queue[0].readTxt);
+    }else{
+        queue[0].readTxt="";
+    }
+
     if(queue[0].doMoldProcessFlg){
         const tmp=queue[0].readTxt.split(';');
         queue[0].readTxt=tmp[0].split(/\r\n|\n|\r/);
@@ -170,15 +132,31 @@ async function processELYZAQueue(queue) {
     }
 
     queue.shift();
-    processELYZAQueue(queue);
+    processLlamaQueue(queue);
 };
 
 function getLLMQueueLength(){
     return llmQueue.length;
 }
 
+function getLLMProcessingTime(new1){
+    const models={
+        light:1,
+        middle:4,
+        heavy:6
+    };
+    let ans=llmQueue.reduce(
+        function(s,a){
+            const tmp=a.model;
+            return s+models[tmp];
+        },0
+    );
+    return ans+models[new1];
+}
+
 module.exports = {
     addLlamaQueue,
-    getLLMQueueLength
+    getLLMQueueLength,
+    getLLMProcessingTime
 }
 
