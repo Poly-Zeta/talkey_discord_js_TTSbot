@@ -142,8 +142,8 @@ function getLLMQueueLength(){
 function getLLMProcessingTime(new1){
     const models={
         light:1,
-        middle:4,
-        heavy:6
+        middle:5,
+        heavy:10
     };
     let ans=llmQueue.reduce(
         function(s,a){
