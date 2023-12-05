@@ -142,7 +142,7 @@ module.exports = {
 
             const attachment = new AttachmentBuilder('../how_to_use.png','how_to_use.png');
             embed.setImage('attachment://how_to_use.png');
-            await interaction.editReply("finish!");
+            await interaction.editReply(`${interaction.user.username}さんを読み上げ対象に追加しました．/ttslist statusでリストを確認できます．\n読み上げさせずにテキストチャットへの書き込みをしたい場合は/noread コマンドを使用してください．`);
             return await interaction.editReply({ files: [attachment], embeds: [embed] });
             // return interaction.reply(replyMessage);
         }
