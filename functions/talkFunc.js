@@ -32,9 +32,10 @@ async function talkFunc(readTxt, guildId, textChannel, botConnection, nickname,u
             addAudioToMapQueue(guildId, nickname, readreq, "f2");
         }
 
-        const models=["light","middle","heavy"];
-        const ans = ndnDiceRoll(1, 3);
-        model=models[ans-1];
+        // const models=["light","middle","heavy"];
+        // const ans = ndnDiceRoll(1, 3);
+        // let model=models[ans-1];
+        let model="light";
         // await addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection);
         await addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection,false,false,model);
         // console.log(`namechk: ${readTxt}`);
