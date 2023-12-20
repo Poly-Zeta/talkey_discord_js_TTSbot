@@ -19,30 +19,30 @@ module.exports = {
                 description: "botに話しかける内容",
                 required: true
             },
-            // {
-            //     type: 3,//"STRING",
-            //     name: "model",
-            //     description: "回答生成に使用するモデルの選択(無入力の際はランダムで実行)",
-            //     required: false,
-            //     choices: [
-            //         {
-            //             name: "ランダム(3種のモデルをランダム選択)",
-            //             value: "random",
-            //         },
-            //         {
-            //             name: "高速(ELYZA-7bを使用@2023/12/04)",
-            //             value: "light",
-            //         },
-            //         {
-            //             name: "中程度(Wizard-vicuna-30bを使用@2023/12/04)",
-            //             value: "middle",
-            //         },
-            //         {
-            //             name: "低速(Xwin-LM-70bを使用@2023/12/04)",
-            //             value: "heavy",
-            //         },
-            //     ]
-            // },
+            {
+                type: 3,//"STRING",
+                name: "model",
+                description: "回答生成に使用するモデルの選択(無入力の際はランダムで実行)",
+                required: false,
+                choices: [
+                    {
+                        name: "ランダム(3種のモデルをランダム選択)",
+                        value: "random",
+                    },
+                    {
+                        name: "高速(ELYZA-7bを使用@2023/12/04)",
+                        value: "light",
+                    },
+                    {
+                        name: "中程度(Swallow-13bを使用@2023/12/20)",
+                        value: "middle",
+                    },
+                    {
+                        name: "低速(Swallow-70bを使用@2023/12/04)",
+                        value: "heavy",
+                    },
+                ]
+            },
             {
                 type:5,//"BOOLIAN",
                 name:"opt",
@@ -64,16 +64,16 @@ module.exports = {
         
         //引数のメッセージを取得
         let readTxt = interaction.options.get("saying").value;
-        // let getModel = interaction.options.get("model");
+        let getModel = interaction.options.get("model");
         let model="light";//"random";
-        // if(getModel!=null){
-        //     model=getModel.value;
-        // }
-        // if(model=="random"){
-        //     const models=["light","middle","heavy"];
-        //     const ans = ndnDiceRoll(1, 3);
-        //     model=models[ans-1];
-        // }
+        if(getModel!=null){
+            model=getModel.value;
+        }
+        if(model=="random"){
+            const models=["light","middle","heavy"];
+            const ans = ndnDiceRoll(1, 3);
+            model=models[ans-1];
+        }
         
         //次の処理のため，デフォルト返答メッセージを削除
         await interaction.deleteReply()
