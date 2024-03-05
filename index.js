@@ -392,7 +392,12 @@ async function onGuildCreate(guild) {
             }
         );
 
-    return guild.systemChannel.send({ embeds: [embed] });
+    try{
+        guild.systemChannel.send({ embeds: [embed] });
+    }catch(e){
+        
+    }
+    return;
 }
 
 //************************************************************************************ */
