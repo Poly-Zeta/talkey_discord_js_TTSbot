@@ -7,8 +7,9 @@ exports.textOperator = function (txt) {
     } else {
         txt = txt.normalize("NFKC");
         txt = txt.replace(twemojiRegex, "");
-        txt = txt.replace(/[!-/:-@[-`{-~]/, "");
-        txt = txt.replace('ヴぁ', 'バ').replace('ヴァ', 'バ').replace('ヴぃ', 'ビ').replace('ヴィ', 'ビ').replace('ヴぇ', 'ベ').replace('ヴェ', 'ベ').replace('ヴぉ', 'ボ').replace('ヴォ', 'ボ').replace("ヴ", "ブ");
+        txt = txt.replace(/<:[A-Za-z0-9]{1,}:[0-9]{19}>/g, "");
+        txt = txt.replace(/[!-/:-@[-`{-~]/g, "");
+        txt = txt.replace(/ヴぁ/g, 'バ').replace(/ヴァ/g, 'バ').replace(/ヴぃ/g, 'ビ').replace(/ヴィ/g, 'ビ').replace(/ヴぇ/g, 'ベ').replace(/ヴェ/g, 'ベ').replace(/ヴぉ/g, 'ボ').replace(/ヴォ/g, 'ボ').replace(/ヴ/g, "ブ");
         return txt;
     }
 }
