@@ -581,6 +581,7 @@ async function onMessage(message) {
     while(readTxt.search(uidPattern)>-1){
         readTxt=readTxt.replace(uidPattern,async (match,p1,offset,string)=>{
             let hitUser= await message.member.user.fetch(`${p1}`);
+            console.log(`hituser:${hitUser}`);
             return hitUser.displayName;
         });
     }
