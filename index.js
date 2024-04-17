@@ -576,7 +576,16 @@ async function onMessage(message) {
 
     addAutoSpeechCounter();
     // await talkFunc(message);
-    await talkFunc(message.content, message.guildId, message.channel, botConnection, message.member.displayName,message.member.user.id);
+    const uidPattern=/<@(\d{18})>/;
+    let readTxt=message.content;
+    while(readTxt.search(uidPattern)>-1){
+        readTxt=readTxt.replace(uidPattern,async (match,p1,offset,string)=>{
+            let hitUser= await message.member.user.fetch(`${p1}`);
+            return hitUser.displayName;
+        });
+    }
+    await talkFunc(readTxt, message.guildId, message.channel, botConnection, message.member.displayName,message.member.user.id);
+    // await talkFunc(message.content, message.guildId, message.channel, botConnection, message.member.displayName,message.member.user.id);
     return;
 }
 
