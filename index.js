@@ -582,9 +582,11 @@ async function onMessage(message) {
         readTxt=readTxt.replace(uidPattern,async (match,p1,offset,string) => {
             console.log(`p1:${p1}`);
             // const hitUser= await client.users.fetch(String(p1));
-            const hitUser= await client.users.cache.get(String(p1));
-            console.log(`hituser:${hitUser}`);
-            return hitUser.displayName;
+            // const hitUser= await client.users.cache.get(String(p1));
+            client.users.fetch(String(p1)).then((hitUser) => {
+                console.log(`hituser:${hitUser}`);
+                return hitUser.displayName;
+            });
         });
     }
     await talkFunc(readTxt, message.guildId, message.channel, botConnection, message.member.displayName,message.member.user.id);
