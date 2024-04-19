@@ -582,8 +582,10 @@ async function onMessage(message) {
     const mentionList=readTxt.match(uidPattern);//もしreadTxtにメンションがあればループ
     if(!(mentionList===null)){
         mentionList.forEach(async (mention)=>{
-            const id=mention.slice(2,-2);
+            const id=mention.slice(2,-1);
+            console.log(`id:${id}`);
             message.guild.members.fetch(id).then((idMember)=>{
+                console.log(`idMember:${idMember}`);
                 let outputName="";
                 if(idMember.displayName===null){
                     if(idMember.nickname===null){
@@ -594,6 +596,10 @@ async function onMessage(message) {
                 }else{
                     outputName=idMember.displayName;
                 }
+                console.log(`idMember.displayName:${idMember.displayName}`);
+                console.log(`idMember.nickname:${idMember.nickname}`);
+                console.log(`idMember.user.globalName:${idMember.user.globalName}`);
+                console.log(`outputName:${outputName}`);
                 readTxt.replace(mention,outputName);
             });
         });
