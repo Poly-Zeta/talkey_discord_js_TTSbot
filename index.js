@@ -580,9 +580,12 @@ async function onMessage(message) {
     const uidPattern=/<@\d{18}>/g;
     let readTxt=message.content;
     const mentionList=readTxt.match(uidPattern);//もしreadTxtにメンションがあればループ
+    console.log(typeof mentionList);
     if(!(mentionList===null)){
         for(const mention of mentionList){
+            console.log(typeof mention);
             const id=mention.slice(2,-1);
+            console.log(typeof id);
             console.log(`id:${id}`);
             const idMember=await message.guild.members.fetch(id);
             console.log(`idMember:${idMember}`);
@@ -602,7 +605,7 @@ async function onMessage(message) {
             console.log(`outputName:${outputName}`);
             console.log(`mention:${mention}`);
             console.log(`readTxt.match(mention):${readTxt.match(mention)}`);
-            readTxt.replace(mention,outputName);
+            readTxt.replace(`<@${id}>`,outputName);
             console.log(`replaced readTxt:${readTxt}`);
         }
         // mentionList.forEach((mention)=>{
