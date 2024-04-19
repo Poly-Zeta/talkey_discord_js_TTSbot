@@ -580,22 +580,24 @@ async function onMessage(message) {
     const uidPattern=/<@\d{18}>/g;
     let readTxt=message.content;
     const mentionList=readTxt.match(uidPattern);//もしreadTxtにメンションがあればループ
-    mentionList.forEach(async (mention)=>{
-        const id=mention.slice(2,-2);
-        message.guild.members.fetch(id).then((idMember)=>{
-            let outputName="";
-            if(idMember.displayName===null){
-                if(idMember.nickname===null){
-                    outputName=idMember.user.globalName;
+    if(!(mentionList===null)){
+        mentionList.forEach(async (mention)=>{
+            const id=mention.slice(2,-2);
+            message.guild.members.fetch(id).then((idMember)=>{
+                let outputName="";
+                if(idMember.displayName===null){
+                    if(idMember.nickname===null){
+                        outputName=idMember.user.globalName;
+                    }else{
+                        outputName=idMember.nickname;
+                    }
                 }else{
-                    outputName=idMember.nickname;
+                    outputName=idMember.displayName;
                 }
-            }else{
-                outputName=idMember.displayName;
-            }
-            readTxt.replace(mention,outputName);
+                readTxt.replace(mention,outputName);
+            });
         });
-    });
+    }
     // while(readTxt.search(uidPattern)>-1){
     //     readTxt=readTxt.replace(uidPattern,async (match,p1,offset,string) => {
     //         console.log(`p1:${p1}`);
