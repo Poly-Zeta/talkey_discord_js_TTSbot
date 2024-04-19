@@ -581,28 +581,51 @@ async function onMessage(message) {
     let readTxt=message.content;
     const mentionList=readTxt.match(uidPattern);//もしreadTxtにメンションがあればループ
     if(!(mentionList===null)){
-        mentionList.forEach((mention)=>{
+        for(const mention in mentionList){
             const id=mention.slice(2,-1);
             console.log(`id:${id}`);
-            message.guild.members.fetch(id).then((idMember)=>{
-                console.log(`idMember:${idMember}`);
-                let outputName="";
-                if(idMember.displayName===null){
-                    if(idMember.nickname===null){
-                        outputName=idMember.user.globalName;
-                    }else{
-                        outputName=idMember.nickname;
-                    }
+            const idMember=await message.guild.members.fetch(id);
+            console.log(`idMember:${idMember}`);
+            let outputName="";
+            if(idMember.displayName===null){
+                if(idMember.nickname===null){
+                    outputName=idMember.user.globalName;
                 }else{
-                    outputName=idMember.displayName;
+                    outputName=idMember.nickname;
                 }
-                console.log(`idMember.displayName:${idMember.displayName}`);
-                console.log(`idMember.nickname:${idMember.nickname}`);
-                console.log(`idMember.user.globalName:${idMember.user.globalName}`);
-                console.log(`outputName:${outputName}`);
-                readTxt.replace(mention,outputName);
-            });
-        });
+            }else{
+                outputName=idMember.displayName;
+            }
+            console.log(`idMember.displayName:${idMember.displayName}`);
+            console.log(`idMember.nickname:${idMember.nickname}`);
+            console.log(`idMember.user.globalName:${idMember.user.globalName}`);
+            console.log(`outputName:${outputName}`);
+            
+            readTxt.replace(mention,outputName);
+        }
+        // mentionList.forEach((mention)=>{
+        //     const id=mention.slice(2,-1);
+        //     console.log(`id:${id}`);
+        //     message.guild.members.fetch(id).then((idMember)=>{
+        //         console.log(`idMember:${idMember}`);
+        //         let outputName="";
+        //         if(idMember.displayName===null){
+        //             if(idMember.nickname===null){
+        //                 outputName=idMember.user.globalName;
+        //             }else{
+        //                 outputName=idMember.nickname;
+        //             }
+        //         }else{
+        //             outputName=idMember.displayName;
+        //         }
+        //         console.log(`idMember.displayName:${idMember.displayName}`);
+        //         console.log(`idMember.nickname:${idMember.nickname}`);
+        //         console.log(`idMember.user.globalName:${idMember.user.globalName}`);
+        //         console.log(`outputName:${outputName}`);
+                
+        //         // readTxt.replace(mention,outputName);
+        //     });
+        // });
     }
     console.log(`readTxt:${readTxt}`);
     // while(readTxt.search(uidPattern)>-1){
