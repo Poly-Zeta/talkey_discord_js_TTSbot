@@ -604,7 +604,7 @@ async function onMessage(message) {
             console.log(`idMember.user.globalName:${idMember.user.globalName}`);
             console.log(`outputName:${outputName}`);
             console.log(`mention:${mention}`);
-            console.log(`readTxt.match(mention):${readTxt.match(mention)}`);
+            console.log(`readTxt.indexOf(mention):${readTxt.indexOf(mention)}`);
             readTxt.replace(`<@${id}>`,outputName);
             console.log(`replaced readTxt:${readTxt}`);
         }
