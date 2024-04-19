@@ -584,10 +584,11 @@ async function onMessage(message) {
             // const hitUser= await client.users.fetch(String(p1));
             // const hitUser= await client.users.cache.get(String(p1));
             console.log(await client.users.fetch(p1));
-            client.users.fetch(p1).then((hitUser) => {
+            message.guild.members.fetch(p1).then((hitUser) => {
                 console.log(`hituser:${hitUser}`);
                 return hitUser.displayName;
             });
+            //取得はできてる，userから鯖メンバーであればdisplayname取得するとか？
         });
     }
     await talkFunc(readTxt, message.guildId, message.channel, botConnection, message.member.displayName,message.member.user.id);
