@@ -583,7 +583,7 @@ async function onMessage(message) {
             console.log(`p1:${p1}`);
             // const hitUser= await client.users.fetch(String(p1));
             // const hitUser= await client.users.cache.get(String(p1));
-            console.log(await client.users.fetch(p1));
+            console.log(await message.guild.members.fetch(p1));
             message.guild.members.fetch(p1).then((hitUser) => {
                 console.log(`hituser:${hitUser}`);
                 return hitUser.displayName;
