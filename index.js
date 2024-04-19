@@ -135,7 +135,7 @@ async function onVoiceStateUpdate(oldState, newState) {
     client.user.setActivity(statusMessageGen(getVoiceConnections().size, client.guilds.cache.size), { type: ActivityType.Listening});
 
     const updateMember = oldState.member;
-    console.log(`updatemember:${updateMember}`);
+    // console.log(`updatemember:${updateMember}`);
     const oldGuild = oldState.guild;
     const newGuild = newState.guild;
     const oldVc = oldState.channel;
@@ -585,10 +585,12 @@ async function onMessage(message) {
             // const hitUser= await client.users.fetch(String(p1));
             // const hitUser= await client.users.cache.get(String(p1));
             console.log(await message.guild.members.fetch(p1));
-            message.guild.members.fetch(p1).then((hitUser) => {
-                console.log(`hituser:${hitUser.gui}`);
-                return hitUser.displayName;
-            });
+            // message.guild.members.fetch(p1).then((hitUser) => {
+            //     console.log(`hituser:${hitUser}`);
+            //     return hitUser.displayName;
+            // });
+            const idMember=await message.guild.members.fetch(p1);
+            return idMember.displayName;
             //取得はできてる，userから鯖メンバーであればdisplayname取得するとか？
         });
     }
