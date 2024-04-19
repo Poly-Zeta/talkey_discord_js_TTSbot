@@ -604,7 +604,9 @@ async function onMessage(message) {
                 return idMember.displayName;
             }
             //取得はできてる，userから鯖メンバーであればdisplayname取得するとか？
+
         });
+        console.log(`replaced readTxt:${readTxt}`);
     }
     await talkFunc(readTxt, message.guildId, message.channel, botConnection, message.member.displayName,message.member.user.id);
     // await talkFunc(message.content, message.guildId, message.channel, botConnection, message.member.displayName,message.member.user.id);
