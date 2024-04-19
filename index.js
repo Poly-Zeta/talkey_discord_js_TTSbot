@@ -576,12 +576,11 @@ async function onMessage(message) {
     }
 
     addAutoSpeechCounter();
-    // await talkFunc(message);
+
     const uidPattern=/<@\d{18}>/g;
-    const roleIdPattern=/<@&\d{19}>/g;
+    const roleIdPattern=/<@&\d{18}>/g;
     let readTxt=message.content;
     const mentionList=readTxt.match(uidPattern);//もしreadTxtにメンションがあればループ
-    console.log(typeof mentionList);
     if(!(mentionList===null)){
         for(const mention of mentionList){
             console.log(typeof mention);
