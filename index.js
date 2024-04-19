@@ -590,6 +590,10 @@ async function onMessage(message) {
             //     return hitUser.displayName;
             // });
             const idMember=await message.guild.members.fetch(p1);
+            console.log(`idMember:${idMember}`);
+            console.log(`idMember.displayName:${idMember.displayName}`);
+            console.log(`idMember.nickname:${idMember.nickname}`);
+            console.log(`idMember.user.globalName:${idMember.user.globalName}`);
             if(idMember.displayName===null){
                 if(idMember.nickname===null){
                     return idMember.user.globalName;
