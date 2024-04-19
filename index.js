@@ -605,7 +605,7 @@ async function onMessage(message) {
             console.log(`outputName:${outputName}`);
             console.log(`mention:${mention}`);
             console.log(`readTxt.indexOf(mention):${readTxt.indexOf(mention)}`);
-            readTxt.replace(`<@${id}>`,outputName);
+            readTxt=readTxt.replace(mention,outputName);
             console.log(`replaced readTxt:${readTxt}`);
         }
         // mentionList.forEach((mention)=>{
