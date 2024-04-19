@@ -604,6 +604,7 @@ async function onMessage(message) {
             });
         });
     }
+    console.log(`readTxt:${readTxt}`);
     // while(readTxt.search(uidPattern)>-1){
     //     readTxt=readTxt.replace(uidPattern,async (match,p1,offset,string) => {
     //         console.log(`p1:${p1}`);
