@@ -577,37 +577,54 @@ async function onMessage(message) {
 
     addAutoSpeechCounter();
     // await talkFunc(message);
-    const uidPattern=/<@(\d{18})>/;
+    const uidPattern=/<@\d{18}>/g;
     let readTxt=message.content;
-    while(readTxt.search(uidPattern)>-1){
-        readTxt=readTxt.replace(uidPattern,async (match,p1,offset,string) => {
-            console.log(`p1:${p1}`);
-            // const hitUser= await client.users.fetch(String(p1));
-            // const hitUser= await client.users.cache.get(String(p1));
-            console.log(await message.guild.members.fetch(p1));
-            // message.guild.members.fetch(p1).then((hitUser) => {
-            //     console.log(`hituser:${hitUser}`);
-            //     return hitUser.displayName;
-            // });
-            const idMember=await message.guild.members.fetch(p1);
-            console.log(`idMember:${idMember}`);
-            console.log(`idMember.displayName:${idMember.displayName}`);
-            console.log(`idMember.nickname:${idMember.nickname}`);
-            console.log(`idMember.user.globalName:${idMember.user.globalName}`);
+    const mentionList=readTxt.match(uidPattern);//もしreadTxtにメンションがあればループ
+    mentionList.forEach(async (mention)=>{
+        const id=mention.slice(2,-2);
+        message.guild.members.fetch(id).then((idMember)=>{
+            let outputName="";
             if(idMember.displayName===null){
                 if(idMember.nickname===null){
-                    return idMember.user.globalName;
+                    outputName=idMember.user.globalName;
                 }else{
-                    return idMember.nickname;
+                    outputName=idMember.nickname;
                 }
             }else{
-                return idMember.displayName;
+                outputName=idMember.displayName;
             }
-            //取得はできてる，userから鯖メンバーであればdisplayname取得するとか？
-
+            readTxt.replace(mention,outputName);
         });
-        console.log(`replaced readTxt:${readTxt}`);
-    }
+    });
+    // while(readTxt.search(uidPattern)>-1){
+    //     readTxt=readTxt.replace(uidPattern,async (match,p1,offset,string) => {
+    //         console.log(`p1:${p1}`);
+    //         // const hitUser= await client.users.fetch(String(p1));
+    //         // const hitUser= await client.users.cache.get(String(p1));
+    //         console.log(await message.guild.members.fetch(p1));
+    //         // message.guild.members.fetch(p1).then((hitUser) => {
+    //         //     console.log(`hituser:${hitUser}`);
+    //         //     return hitUser.displayName;
+    //         // });
+    //         const idMember=await message.guild.members.fetch(p1);
+    //         console.log(`idMember:${idMember}`);
+    //         console.log(`idMember.displayName:${idMember.displayName}`);
+    //         console.log(`idMember.nickname:${idMember.nickname}`);
+    //         console.log(`idMember.user.globalName:${idMember.user.globalName}`);
+    //         if(idMember.displayName===null){
+    //             if(idMember.nickname===null){
+    //                 return idMember.user.globalName;
+    //             }else{
+    //                 return idMember.nickname;
+    //             }
+    //         }else{
+    //             return idMember.displayName;
+    //         }
+    //         //取得はできてる，userから鯖メンバーであればdisplayname取得するとか？
+
+    //     });
+    //     console.log(`replaced readTxt:${readTxt}`);
+    // }
     await talkFunc(readTxt, message.guildId, message.channel, botConnection, message.member.displayName,message.member.user.id);
     // await talkFunc(message.content, message.guildId, message.channel, botConnection, message.member.displayName,message.member.user.id);
     return;
