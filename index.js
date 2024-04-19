@@ -590,7 +590,15 @@ async function onMessage(message) {
             //     return hitUser.displayName;
             // });
             const idMember=await message.guild.members.fetch(p1);
-            return idMember.displayName;
+            if(idMember.displayName===null){
+                if(idMember.nickname===null){
+                    return idMember.user.globalName;
+                }else{
+                    return idMember.nickname;
+                }
+            }else{
+                return idMember.displayName;
+            }
             //取得はできてる，userから鯖メンバーであればdisplayname取得するとか？
         });
     }
