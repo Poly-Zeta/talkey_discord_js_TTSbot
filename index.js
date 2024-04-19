@@ -581,7 +581,7 @@ async function onMessage(message) {
     let readTxt=message.content;
     const mentionList=readTxt.match(uidPattern);//もしreadTxtにメンションがあればループ
     if(!(mentionList===null)){
-        for(const mention in mentionList){
+        for(const mention of mentionList){
             const id=mention.slice(2,-1);
             console.log(`id:${id}`);
             const idMember=await message.guild.members.fetch(id);
