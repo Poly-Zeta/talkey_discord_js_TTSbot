@@ -600,8 +600,10 @@ async function onMessage(message) {
             console.log(`idMember.nickname:${idMember.nickname}`);
             console.log(`idMember.user.globalName:${idMember.user.globalName}`);
             console.log(`outputName:${outputName}`);
-            
+            console.log(`mention:${mention}`);
+            console.log(`readTxt.match(mention):${readTxt.match(mention)}`);
             readTxt.replace(mention,outputName);
+            console.log(`replaced readTxt:${readTxt}`);
         }
         // mentionList.forEach((mention)=>{
         //     const id=mention.slice(2,-1);
