@@ -577,18 +577,14 @@ async function onMessage(message) {
 
     addAutoSpeechCounter();
 
-    const uidPattern=/<@\d{18}>/g;
-    const roleIdPattern=/<@&\d{18}>/g;
+    const uidPattern=/<@\d{17,19}>/g;
+    const roleIdPattern=/<@&\d{17,19}>/g;
     let readTxt=message.content;
     const mentionList=readTxt.match(uidPattern);//もしreadTxtにメンションがあればループ
     if(!(mentionList===null)){
         for(const mention of mentionList){
-            console.log(typeof mention);
             const id=mention.slice(2,-1);
-            console.log(typeof id);
-            console.log(`id:${id}`);
             const idMember=await message.guild.members.fetch(id);
-            console.log(`idMember:${idMember}`);
             let outputName="";
             if(idMember.displayName===null){
                 if(idMember.nickname===null){
@@ -599,82 +595,18 @@ async function onMessage(message) {
             }else{
                 outputName=idMember.displayName;
             }
-            console.log(`idMember.displayName:${idMember.displayName}`);
-            console.log(`idMember.nickname:${idMember.nickname}`);
-            console.log(`idMember.user.globalName:${idMember.user.globalName}`);
-            console.log(`outputName:${outputName}`);
-            console.log(`mention:${mention}`);
-            console.log(`readTxt.indexOf(mention):${readTxt.indexOf(mention)}`);
             readTxt=readTxt.replace(mention,`あっと${outputName}`);
-            console.log(`replaced readTxt:${readTxt}`);
         }
-        // mentionList.forEach((mention)=>{
-        //     const id=mention.slice(2,-1);
-        //     console.log(`id:${id}`);
-        //     message.guild.members.fetch(id).then((idMember)=>{
-        //         console.log(`idMember:${idMember}`);
-        //         let outputName="";
-        //         if(idMember.displayName===null){
-        //             if(idMember.nickname===null){
-        //                 outputName=idMember.user.globalName;
-        //             }else{
-        //                 outputName=idMember.nickname;
-        //             }
-        //         }else{
-        //             outputName=idMember.displayName;
-        //         }
-        //         console.log(`idMember.displayName:${idMember.displayName}`);
-        //         console.log(`idMember.nickname:${idMember.nickname}`);
-        //         console.log(`idMember.user.globalName:${idMember.user.globalName}`);
-        //         console.log(`outputName:${outputName}`);
-                
-        //         // readTxt.replace(mention,outputName);
-        //     });
-        // });
     }
     const roleMentionList=readTxt.match(roleIdPattern);//もしreadTxtにメンションがあればループ
     if(!(roleMentionList===null)){
         for(const mention of roleMentionList){
             const id=mention.slice(3,-1);
-            console.log(`id:${id}`);
             const idRole=await message.guild.roles.fetch(id);
-            console.log(`idRole:${idRole}`);
             readTxt=readTxt.replace(mention,`あっと${idRole.name}`);
-            console.log(`replaced readTxt:${readTxt}`);
         }
     }
-    console.log(`readTxt:${readTxt}`);
-    // while(readTxt.search(uidPattern)>-1){
-    //     readTxt=readTxt.replace(uidPattern,async (match,p1,offset,string) => {
-    //         console.log(`p1:${p1}`);
-    //         // const hitUser= await client.users.fetch(String(p1));
-    //         // const hitUser= await client.users.cache.get(String(p1));
-    //         console.log(await message.guild.members.fetch(p1));
-    //         // message.guild.members.fetch(p1).then((hitUser) => {
-    //         //     console.log(`hituser:${hitUser}`);
-    //         //     return hitUser.displayName;
-    //         // });
-    //         const idMember=await message.guild.members.fetch(p1);
-    //         console.log(`idMember:${idMember}`);
-    //         console.log(`idMember.displayName:${idMember.displayName}`);
-    //         console.log(`idMember.nickname:${idMember.nickname}`);
-    //         console.log(`idMember.user.globalName:${idMember.user.globalName}`);
-    //         if(idMember.displayName===null){
-    //             if(idMember.nickname===null){
-    //                 return idMember.user.globalName;
-    //             }else{
-    //                 return idMember.nickname;
-    //             }
-    //         }else{
-    //             return idMember.displayName;
-    //         }
-    //         //取得はできてる，userから鯖メンバーであればdisplayname取得するとか？
-
-    //     });
-    //     console.log(`replaced readTxt:${readTxt}`);
-    // }
     await talkFunc(readTxt, message.guildId, message.channel, botConnection, message.member.displayName,message.member.user.id);
-    // await talkFunc(message.content, message.guildId, message.channel, botConnection, message.member.displayName,message.member.user.id);
     return;
 }
 
