@@ -578,6 +578,7 @@ async function onMessage(message) {
     addAutoSpeechCounter();
     // await talkFunc(message);
     const uidPattern=/<@\d{18}>/g;
+    const roleIdPattern=/<@&\d{19}>/g;
     let readTxt=message.content;
     const mentionList=readTxt.match(uidPattern);//もしreadTxtにメンションがあればループ
     console.log(typeof mentionList);
@@ -605,7 +606,7 @@ async function onMessage(message) {
             console.log(`outputName:${outputName}`);
             console.log(`mention:${mention}`);
             console.log(`readTxt.indexOf(mention):${readTxt.indexOf(mention)}`);
-            readTxt=readTxt.replace(mention,outputName);
+            readTxt=readTxt.replace(mention,`あっと${outputName}`);
             console.log(`replaced readTxt:${readTxt}`);
         }
         // mentionList.forEach((mention)=>{
@@ -631,6 +632,17 @@ async function onMessage(message) {
         //         // readTxt.replace(mention,outputName);
         //     });
         // });
+    }
+    const roleMentionList=readTxt.match(roleIdPattern);//もしreadTxtにメンションがあればループ
+    if(!(roleMentionList===null)){
+        for(const mention of roleMentionList){
+            const id=mention.slice(3,-1);
+            console.log(`id:${id}`);
+            const idRole=await message.guild.roles.fetch(id);
+            console.log(`idRole:${idRole}`);
+            readTxt=readTxt.replace(mention,`あっと${idRole.name}`);
+            console.log(`replaced readTxt:${readTxt}`);
+        }
     }
     console.log(`readTxt:${readTxt}`);
     // while(readTxt.search(uidPattern)>-1){
