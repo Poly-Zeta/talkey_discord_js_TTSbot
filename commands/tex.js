@@ -33,17 +33,25 @@ module.exports = {
         const metadata = await sharp(Buffer.from(svgStr)).metadata();
         // const resizeWidth = metadata.width>600 ? metadata.width:600;
         // const resizeHeight = metadata.height>400 ? metadata.height:400;
-        const pngBuff = await sharp({ 
-            create: { 
-                width: metadata.width, 
-                height: metadata.height,
-                channels: 4, 
-                background: { r: 255, g: 255, b: 255, alpha: 0 }}
-        })
-        .composite(Buffer.from(svgStr))
+        const pngBuff = await sharp(Buffer.from(svgStr))
         .negate()
-        // .resize(resizeWidth,resizeHeight)
+        .resize({
+            width: 500,
+            height: 300,
+            fit: 'outside'
+        })
         .toBuffer();
+        // const pngBuff = await sharp({ 
+        //     create: { 
+        //         width: metadata.width, 
+        //         height: metadata.height,
+        //         channels: 4, 
+        //         background: { r: 255, g: 255, b: 255, alpha: 0 }}
+        // })
+        // .composite(Buffer.from(svgStr))
+        // .negate()
+        // // .resize(resizeWidth,resizeHeight)
+        // .toBuffer();
 
         const attachment = new AttachmentBuilder()
             .setFile(pngBuff)
