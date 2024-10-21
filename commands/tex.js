@@ -48,7 +48,7 @@ module.exports = {
         // .removeAlpha()
         // .toBuffer();
 
-        cBuf=await sharp(cBuf).extractChannel("alpha").toBuffer();
+        // cBuf=await sharp(cBuf).extractChannel("alpha").toBuffer();
 
         //反転->背景000000,文字ffffff
         // cBuf=await sharp(cBuf).negate().toBuffer();
