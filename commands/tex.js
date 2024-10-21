@@ -36,7 +36,7 @@ module.exports = {
         
         let cBuf=Buffer.from(svgStr);
         //2値化->背景ffffff,文字000000，α削除
-        // cBuf=await sharp(cBuf)
+        cBuf=await sharp(cBuf)
         // .extend({
         //     top: 3,
         //     right: 3,
@@ -45,11 +45,11 @@ module.exports = {
         //     background: '#ffffff'
         // })
         // .threshold(50)
-        // .removeAlpha()
-        // .toBuffer();
+        .removeAlpha()
+        .toBuffer();
 
         //反転->背景000000,文字ffffff
-        cBuf=await sharp(cBuf).negate().toBuffer();
+        // cBuf=await sharp(cBuf).negate().toBuffer();
 
         //αを追加
         // cBuf=await sharp(cBuf).ensureAlpha().toBuffer();
