@@ -48,10 +48,12 @@ module.exports = {
         // .removeAlpha()
         // .toBuffer();
 
-        //反転->背景000000,文字ffffff
-        cBuf=await sharp(cBuf).negate().toBuffer();
+        cBuf=await sharp(cBuf).extractChannel("alpha").toBuffer();
 
-        cBuf=await sharp(cBuf).removeAlpha().toBuffer();
+        //反転->背景000000,文字ffffff
+        // cBuf=await sharp(cBuf).negate().toBuffer();
+
+        // cBuf=await sharp(cBuf).removeAlpha().toBuffer();
 
         //αを追加
         // cBuf=await sharp(cBuf).ensureAlpha().toBuffer();
