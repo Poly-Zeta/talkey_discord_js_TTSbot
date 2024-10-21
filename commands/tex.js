@@ -45,7 +45,7 @@ module.exports = {
         //     background: '#ffffff'
         // })
         .threshold(50)
-        .removeAlpha()
+        // .removeAlpha()
         .toBuffer();
         //反転->背景000000,文字ffffff
         // cBuf=await sharp(cBuf).negate().toBuffer();
