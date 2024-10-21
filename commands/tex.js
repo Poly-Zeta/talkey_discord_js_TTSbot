@@ -36,7 +36,7 @@ module.exports = {
         
         let cBuf=Buffer.from(svgStr);
         //2値化->背景ffffff,文字000000，α削除
-        cBuf=await sharp(cBuf)
+        // cBuf=await sharp(cBuf)
         // .extend({
         //     top: 3,
         //     right: 3,
@@ -44,15 +44,19 @@ module.exports = {
         //     left: 3,
         //     background: '#ffffff'
         // })
-        .threshold(50)
+        // .threshold(50)
         // .removeAlpha()
-        .toBuffer();
+        // .toBuffer();
+
         //反転->背景000000,文字ffffff
         // cBuf=await sharp(cBuf).negate().toBuffer();
+
         //αを追加
         // cBuf=await sharp(cBuf).ensureAlpha().toBuffer();
+
         //全chの値を非αの値に指定->文字のffffffとαを共通にして，残りは0で透過
         // cBuf=await sharp(cBuf).extractChannel("red").toBuffer();
+        
         //リサイズして終了
         const pngBuff = await sharp(cBuf)
         .resize({
