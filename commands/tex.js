@@ -30,17 +30,14 @@ module.exports = {
                 .replace(/<\/mjx-container>/, "");
         });
 
+        const metadata = await sharp(Buffer.from(svgStr)).metadata();
         const pngBuff = await sharp(Buffer.from(svgStr))
+        .negate()
+        .resize(metadata.width,metadata.height)
         .toBuffer();
-        // const attachment = new AttachmentBuilder('../how_to_use.png','how_to_use.png');
-        // embed.setImage('attachment://how_to_use.png');
+
         const attachment = new AttachmentBuilder()
-            // .setName("fig.png")
             .setFile(pngBuff)
-        // channel.send({
-        //     files: [attachment],
-        //     embeds: [embed]
-        // })
         
         await interaction.editReply(reply);
         return await interaction.editReply({ files: [attachment]});
