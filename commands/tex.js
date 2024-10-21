@@ -24,15 +24,15 @@ module.exports = {
         await mathjax.init({
             loader: {load: ["input/tex", "output/svg"]}
         }).then(async (MathJax) => {
-            const svg = MathJax.tex2svg(readTxt, {display: true});
+            const svg = MathJax.tex2svg(` ${readTxt}`, {display: true});
             svgStr = MathJax.startup.adaptor.outerHTML(svg)
                 .replace(/<mjx-container class="MathJax" jax="SVG" display="true">/, "")
                 .replace(/<\/mjx-container>/, "");
         });
 
         const metadata = await sharp(Buffer.from(svgStr)).metadata();
-        const resizeWidth = metadata.width>600 ? metadata.width:600;
-        const resizeHeight = metadata.height>400 ? metadata.height:400;
+        // const resizeWidth = metadata.width>600 ? metadata.width:600;
+        // const resizeHeight = metadata.height>400 ? metadata.height:400;
         const pngBuff = await sharp({ 
             create: { 
                 width: metadata.width, 
@@ -42,7 +42,7 @@ module.exports = {
         })
         .composite(Buffer.from(svgStr))
         .negate()
-        .resize(resizeWidth,resizeHeight)
+        // .resize(resizeWidth,resizeHeight)
         .toBuffer();
 
         const attachment = new AttachmentBuilder()
