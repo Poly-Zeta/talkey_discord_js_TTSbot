@@ -30,7 +30,7 @@ module.exports = {
                 .replace(/<\/mjx-container>/, "");
         });
 
-        const pngBuff = await sharp(svgStr)
+        const pngBuff = await sharp(Buffer.from(svgStr))
         .toBuffer();
         // const attachment = new AttachmentBuilder('../how_to_use.png','how_to_use.png');
         // embed.setImage('attachment://how_to_use.png');
