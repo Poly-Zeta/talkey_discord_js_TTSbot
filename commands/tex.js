@@ -24,7 +24,7 @@ module.exports = {
         await mathjax.init({
             loader: {load: ["input/tex", "output/svg"]}
         }).then(async (MathJax) => {
-            const svg = MathJax.tex2svg(obj.str, {display: true});
+            const svg = MathJax.tex2svg(readTxt, {display: true});
             svgStr = MathJax.startup.adaptor.outerHTML(svg)
                 .replace(/<mjx-container class="MathJax" jax="SVG" display="true">/, "")
                 .replace(/<\/mjx-container>/, "");
@@ -43,6 +43,6 @@ module.exports = {
         // })
         
         await interaction.editReply(reply);
-        return await interaction.editReply({ files: [attachment], embeds: [embed] });
+        return await interaction.editReply({ files: [attachment]});
     }
 }
