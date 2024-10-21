@@ -34,7 +34,9 @@ module.exports = {
         // const resizeWidth = metadata.width>600 ? metadata.width:600;
         // const resizeHeight = metadata.height>400 ? metadata.height:400;
         const pngBuff = await sharp(Buffer.from(svgStr))
-        .negate()
+        // .negate()
+        .bandbool("and")
+        .ensureAlpha()
         .resize({
             width: 500,
             height: 300,
