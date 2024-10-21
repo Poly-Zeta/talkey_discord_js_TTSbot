@@ -37,14 +37,14 @@ module.exports = {
         let cBuf=Buffer.from(svgStr);
         //2値化->背景ffffff,文字000000，余白も付けておく
         cBuf=await sharp(cBuf)
-        .extend({
-            top: 10,
-            right: 10,
-            bottom: 10,
-            left: 10,
-            background: '#fff'
-        })
-        .threshold(150)
+        // .extend({
+        //     top: 3,
+        //     right: 3,
+        //     bottom: 3,
+        //     left: 3,
+        //     background: '#ffffff'
+        // })
+        .threshold(200)
         .toBuffer();
         //反転->背景000000,文字ffffff
         // cBuf=await sharp(cBuf).negate().toBuffer();
