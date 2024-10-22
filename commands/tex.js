@@ -24,11 +24,14 @@ module.exports = {
         await mathjax.init({
             loader: {load: ["input/tex", "output/svg"]}
         }).then(async (MathJax) => {
-            await MathJax.typesetPromise();
-            const svg = await MathJax.tex2svg(` ${readTxt}`, {display: true});
-            svgStr = await MathJax.startup.adaptor.outerHTML(svg)
-                .replace(/<mjx-container class="MathJax" jax="SVG" display="true">/, "")
-                .replace(/<\/mjx-container>/, "");
+            try{
+                const svg = await MathJax.tex2svg(` ${readTxt}`, {display: true});
+                svgStr = await MathJax.startup.adaptor.outerHTML(svg)
+                    .replace(/<mjx-container class="MathJax" jax="SVG" display="true">/, "")
+                    .replace(/<\/mjx-container>/, "");
+            }catch(e){
+                return await interaction.editReply("対応していない数式が入力されました．エラーのため，コマンド実行を中断します．");
+            }
         });
 
         // const metadata = await sharp(Buffer.from(svgStr)).metadata();
