@@ -51,7 +51,7 @@ module.exports = {
                 right: 10,
                 bottom: 10,
                 left: 10,
-                background: '#ffffff'
+                background: '#00000000'
             }).toBuffer();
 
             cBuf=await sharp(cBuf).extractChannel("alpha").toBuffer();
