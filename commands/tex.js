@@ -60,7 +60,7 @@ module.exports = {
                 right: 1,
                 bottom: 1,
                 left: 1,
-                background: '#0000000000'
+                background: '#00000000'
             })
             .resize({
                 width: 500,
