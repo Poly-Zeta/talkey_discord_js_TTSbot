@@ -53,6 +53,15 @@ module.exports = {
             // const resizeHeight = metadata.height>400 ? metadata.height:400;
             
             let cBuf=Buffer.from(svgStr);
+            
+            cBuf=await sharp(cBuf)
+            .resize({
+                width: 500,
+                height: 300,
+                fit: 'outside'
+            })
+            .toBuffer();
+
             //2値化->背景ffffff,文字000000，α削除
             // cBuf=await sharp(cBuf)
             // .extend({
@@ -66,7 +75,7 @@ module.exports = {
             // .removeAlpha()
             // .toBuffer();
 
-            // cBuf=await sharp(cBuf).extractChannel("alpha").toBuffer();
+            cBuf=await sharp(cBuf).extractChannel("alpha").toBuffer();
 
             //反転->背景000000,文字ffffff
             // cBuf=await sharp(cBuf).negate().toBuffer();
@@ -81,11 +90,11 @@ module.exports = {
 
             //リサイズして終了
             const pngBuff = await sharp(cBuf)
-            .resize({
-                width: 500,
-                height: 300,
-                fit: 'outside'
-            })
+            // .resize({
+            //     width: 500,
+            //     height: 300,
+            //     fit: 'outside'
+            // })
             .toBuffer();
             // const pngBuff = await sharp(Buffer.from(svgStr))
             // .negate()
