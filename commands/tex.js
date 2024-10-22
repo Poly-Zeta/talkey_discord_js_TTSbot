@@ -24,6 +24,7 @@ module.exports = {
         await mathjax.init({
             loader: {load: ["input/tex", "output/svg"]}
         }).then(async (MathJax) => {
+            await MathJax.typesetPromise();
             const svg = await MathJax.tex2svg(` ${readTxt}`, {display: true});
             svgStr = await MathJax.startup.adaptor.outerHTML(svg)
                 .replace(/<mjx-container class="MathJax" jax="SVG" display="true">/, "")
