@@ -55,6 +55,13 @@ module.exports = {
             let cBuf=Buffer.from(svgStr);
             
             cBuf=await sharp(cBuf)
+            .extend({
+                top: 1,
+                right: 1,
+                bottom: 1,
+                left: 1,
+                background: '#0000000000'
+            })
             .resize({
                 width: 500,
                 height: 300,
