@@ -39,19 +39,19 @@ module.exports = {
 
             cBuf=await sharp(cBuf)
             .resize({
-                width: 490,
-                height: 290,
+                width: 480,
+                height: 280,
                 fit: 'outside'
             })
             .toBuffer();
 
             cBuf=await sharp(cBuf)
             .extend({
-                top: 5,
-                right: 5,
-                bottom: 5,
-                left: 5,
-                background: '#000000'
+                top: 10,
+                right: 10,
+                bottom: 10,
+                left: 10,
+                background: '#ffffff'
             }).toBuffer();
 
             cBuf=await sharp(cBuf).extractChannel("alpha").toBuffer();
