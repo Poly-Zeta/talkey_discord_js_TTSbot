@@ -36,23 +36,23 @@ module.exports = {
                 .replace(/<\/mjx-container>/, "");
                 
             let cBuf=Buffer.from(svgStr);
-            
-            cBuf=await sharp(cBuf)
-            .extend({
-                top: 1,
-                right: 1,
-                bottom: 1,
-                left: 1,
-                background: '#00000000'
-            }).toBuffer();
 
             cBuf=await sharp(cBuf)
             .resize({
-                width: 500,
-                height: 300,
+                width: 490,
+                height: 290,
                 fit: 'outside'
             })
             .toBuffer();
+
+            cBuf=await sharp(cBuf)
+            .extend({
+                top: 5,
+                right: 5,
+                bottom: 5,
+                left: 5,
+                background: '#000000'
+            }).toBuffer();
 
             cBuf=await sharp(cBuf).extractChannel("alpha").toBuffer();
 
