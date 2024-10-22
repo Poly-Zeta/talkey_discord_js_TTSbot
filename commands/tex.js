@@ -35,23 +35,6 @@ module.exports = {
                 .replace(/<mjx-container class="MathJax" jax="SVG" display="true">/, "")
                 .replace(/<\/mjx-container>/, "");
                 
-            // await mathjax.init({
-            //     loader: {load: ["input/tex", "output/svg"]}
-            // }).then(async (MathJax) => {
-            //     try{
-            //         const svg = await MathJax.tex2svg(` ${readTxt}`, {display: true});
-            //         svgStr = await MathJax.startup.adaptor.outerHTML(svg)
-            //             .replace(/<mjx-container class="MathJax" jax="SVG" display="true">/, "")
-            //             .replace(/<\/mjx-container>/, "");
-            //     }catch(e){
-            //         return await interaction.editReply("対応していない数式が入力されました．エラーのため，コマンド実行を中断します．");
-            //     }
-            // });
-
-            // const metadata = await sharp(Buffer.from(svgStr)).metadata();
-            // const resizeWidth = metadata.width>600 ? metadata.width:600;
-            // const resizeHeight = metadata.height>400 ? metadata.height:400;
-            
             let cBuf=Buffer.from(svgStr);
             
             cBuf=await sharp(cBuf)
@@ -61,26 +44,15 @@ module.exports = {
                 bottom: 1,
                 left: 1,
                 background: '#00000000'
-            })
+            }).toBuffer();
+
+            cBuf=await sharp(cBuf)
             .resize({
                 width: 500,
                 height: 300,
                 fit: 'outside'
             })
             .toBuffer();
-
-            //2値化->背景ffffff,文字000000，α削除
-            // cBuf=await sharp(cBuf)
-            // .extend({
-            //     top: 3,
-            //     right: 3,
-            //     bottom: 3,
-            //     left: 3,
-            //     background: '#ffffff'
-            // })
-            // .threshold(50)
-            // .removeAlpha()
-            // .toBuffer();
 
             cBuf=await sharp(cBuf).extractChannel("alpha").toBuffer();
 
@@ -95,24 +67,8 @@ module.exports = {
             //全chの値を非αの値に指定->文字のffffffとαを共通にして，残りは0で透過
             // cBuf=await sharp(cBuf).extractChannel("red").toBuffer();
 
-            //リサイズして終了
-            const pngBuff = await sharp(cBuf)
-            // .resize({
-            //     width: 500,
-            //     height: 300,
-            //     fit: 'outside'
-            // })
-            .toBuffer();
-            // const pngBuff = await sharp(Buffer.from(svgStr))
-            // .negate()
-            // .bandbool("and")
-            // .ensureAlpha()
-            // .resize({
-            //     width: 500,
-            //     height: 300,
-            //     fit: 'outside'
-            // })
-            // .toBuffer();
+            //終了
+            const pngBuff = await sharp(cBuf).toBuffer();
 
             const attachment = new AttachmentBuilder()
                 .setFile(pngBuff)
