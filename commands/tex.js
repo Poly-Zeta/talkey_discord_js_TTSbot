@@ -18,7 +18,7 @@ module.exports = {
     },
     async execute(interaction) {
         let readTxt = interaction.options.get("eq").value;
-        let reply = `> ${readTxt}`;
+        let reply = ` \`\`\` ${readTxt} \`\`\``;
         let svgStr="";
 
         const MathJax=await mathjax.init(
