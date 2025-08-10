@@ -19,15 +19,21 @@ const { textOperator } = require('../functions/textOperator.js');
 
 const llmQueue = [];
 const talkMemoryLength=6;
-const talkMemoryMaxLength=30;
+const talkMemoryMaxLength=10;
 const talkMemoryMap=new Map();
 const defaultLog=[
-    "userinput:875oasfj,2023/2/17,19:57,'お元気ですか？' \n ",
-    "あなたの回答:'こんばんは！私は元気です！875oasfjさんはお元気ですか？;' \n ",
-    "userinput:falken936,2022/12/28,21:40,'今日は仕事に行きたくない' \n ",
-    "あなたの回答:'falken936さん、大丈夫ですか？休憩は取れていますか？;' \n ",
-    "userinput:user556,2021/1/3,1:26,'お喋りしてくれてありがとうターキーちゃん。私は今から皿を洗います。応援しててね！' \n ",
-    "あなたの回答:'user556さん、こちらこそありがとうございました。頑張ってくださいね！;' \n ",
+    "username:875oasfj,date:2023/2/17,19:57,text:'お元気ですか？' \n ",
+    "'こんばんは！私は元気です！875oasfjさんはお元気ですか？;' \n ",
+    "username:falken936,date:2022/12/28,21:40,text':今日は仕事に行きたくない' \n ",
+    "'falken936さん、大丈夫ですか？休憩は取れていますか？;' \n ",
+    "username:user556,date:2021/1/3,1:26,text'お喋りしてくれてありがとうターキーちゃん。私は今から皿を洗います。応援しててね！' \n ",
+    "'user556さん、こちらこそありがとうございました。頑張ってくださいね！;' \n ",
+    // "userinput:875oasfj,2023/2/17,19:57,'お元気ですか？' \n ",
+    // "あなたの回答:'こんばんは！私は元気です！875oasfjさんはお元気ですか？;' \n ",
+    // "userinput:falken936,2022/12/28,21:40,'今日は仕事に行きたくない' \n ",
+    // "あなたの回答:'falken936さん、大丈夫ですか？休憩は取れていますか？;' \n ",
+    // "userinput:user556,2021/1/3,1:26,'お喋りしてくれてありがとうターキーちゃん。私は今から皿を洗います。応援しててね！' \n ",
+    // "あなたの回答:'user556さん、こちらこそありがとうございました。頑張ってくださいね！;' \n ",
 ];
 
 async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConnection,doMoldProcessFlg,doTalkLogResetFlg,model) {
@@ -50,6 +56,7 @@ async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConn
     return;
 };
 
+//llamaの応答を取得する
 async function processLlamaQueue(queue) {
     console.log("loop");
     
@@ -79,30 +86,36 @@ async function processLlamaQueue(queue) {
     //最新のユーザ入力の成形
     const date=new Date;
     const dateAndTime=`${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()},${date.getHours()}:${date.getMinutes()}`;
-    queue[0].readTxt=`userinput:${queue[0].nickname},${dateAndTime},'${queue[0].readTxt}' \n `;
+    queue[0].readTxt=`username:${queue[0].nickname},date:${dateAndTime},text:'${queue[0].readTxt}' \n `;
+    // queue[0].readTxt=`userinput:${queue[0].nickname},${dateAndTime},'${queue[0].readTxt}' \n `;
+
     //最新のユーザ入力をログに登録
     const guildLog=talkMemoryMap.get(queue[0].guildId);
     // console.log(`processELYZAQueue guildlog:${guildLog}`);
     guildLog.push(queue[0].readTxt);
+
     //ログの長さは一定で切る
     if(guildLog.length>talkMemoryMaxLength){guildLog.shift();}
+
     //ログからn/2回の会話往復と最新のユーザ入力を引き出して成形
-    queue[0].readTxt=guildLog.slice(-1*(talkMemoryLength+1)).join("");
+    // queue[0].readTxt=guildLog.slice(-1*(talkMemoryLength+1)).join("");
     // console.log(`processELYZAQueue joinedtxt:${queue[0].readTxt}`);
 
     // queue[0].readTxt=await getResponseofLlamaAPI(queue[0].nickname,queue[0].readTxt);
     // queue[0].readTxt=await getResponseofLlamaAPI(queue[0].readTxt);
+
     //モデル切り換え
-    console.log(`LLMmodel:${queue[0].model}`)
-    if(queue[0].model=="light"){
-        queue[0].readTxt=await getResponseofLlamaAPILight(queue[0].readTxt);
-    }else if(queue[0].model=="middle"){
-        queue[0].readTxt=await getResponseofLlamaAPIMiddle(queue[0].readTxt);
-    }else if(queue[0].model=="heavy"){
-        queue[0].readTxt=await getResponseofLlamaAPIHeavy(queue[0].readTxt);
-    }else{
-        queue[0].readTxt="";
-    }
+    // console.log(`LLMmodel:${queue[0].model}`)
+    // if(queue[0].model=="light"){
+    //     queue[0].readTxt=await getResponseofLlamaAPILight(queue[0].readTxt);
+    // }else if(queue[0].model=="middle"){
+    //     queue[0].readTxt=await getResponseofLlamaAPIMiddle(queue[0].readTxt);
+    // }else if(queue[0].model=="heavy"){
+    //     queue[0].readTxt=await getResponseofLlamaAPIHeavy(queue[0].readTxt);
+    // }else{
+    //     queue[0].readTxt="";
+    // }
+    queue[0].readTxt=getResponseofGPToss(queue);
 
     if(queue[0].doMoldProcessFlg){
         const tmp=queue[0].readTxt.split(';');
@@ -121,7 +134,7 @@ async function processLlamaQueue(queue) {
         const tmp=queue[0].readTxt.split(';');
         queue[0].readTxt=tmp[0].split(/\r\n|\n|\r/);
     }
-    guildLog.push(`あなたの回答:'${queue[0].readTxt};' \n`);
+    guildLog.push(`'${queue[0].readTxt};' \n`);
     if(guildLog.length>talkMemoryMaxLength){guildLog.shift();}
     // console.log(guildLog.slice(0,3));
 

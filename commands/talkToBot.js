@@ -19,42 +19,42 @@ module.exports = {
                 description: "botに話しかける内容",
                 required: true
             },
-            {
-                type: 3,//"STRING",
-                name: "model",
-                description: "回答生成に使用するモデルの選択(無入力の際はランダムで実行)",
-                required: false,
-                choices: [
-                    {
-                        name: "ランダム(3種のモデルをランダム選択)",
-                        value: "random",
-                    },
-                    {
-                        name: "高速(ELYZA-7bを使用@2023/12/04)",
-                        value: "light",
-                    },
-                    {
-                        name: "中程度(Swallow-13bを使用@2023/12/20)",
-                        value: "middle",
-                    },
-                    {
-                        name: "低速(Swallow-70bを使用@2023/12/04)",
-                        value: "heavy",
-                    },
-                ]
-            },
-            {
-                type:5,//"BOOLIAN",
-                name:"opt",
-                description: "falseのとき，成形処理をスキップして出力(無入力の際はtrueで実行)",
-                required:false,
-            },
-            {
-                type:5,//"BOOLIAN",
-                name:"logreset",
-                description: "trueのとき，コマンド実行ギルドの会話履歴をクリア(無入力の際はfalseで実行)",
-                required:false,
-            }
+            // {
+            //     type: 3,//"STRING",
+            //     name: "model",
+            //     description: "回答生成に使用するモデルの選択(無入力の際はランダムで実行)",
+            //     required: false,
+            //     choices: [
+            //         {
+            //             name: "ランダム(3種のモデルをランダム選択)",
+            //             value: "random",
+            //         },
+            //         {
+            //             name: "高速(ELYZA-7bを使用@2023/12/04)",
+            //             value: "light",
+            //         },
+            //         {
+            //             name: "中程度(Swallow-13bを使用@2023/12/20)",
+            //             value: "middle",
+            //         },
+            //         {
+            //             name: "低速(Swallow-70bを使用@2023/12/04)",
+            //             value: "heavy",
+            //         },
+            //     ]
+            // },
+            // {
+            //     type:5,//"BOOLIAN",
+            //     name:"opt",
+            //     description: "falseのとき，成形処理をスキップして出力(無入力の際はtrueで実行)",
+            //     required:false,
+            // },
+            // {
+            //     type:5,//"BOOLIAN",
+            //     name:"logreset",
+            //     description: "trueのとき，コマンド実行ギルドの会話履歴をクリア(無入力の際はfalseで実行)",
+            //     required:false,
+            // }
         ]
     },
     async execute(interaction) {
@@ -64,16 +64,16 @@ module.exports = {
         
         //引数のメッセージを取得
         let readTxt = interaction.options.get("saying").value;
-        let getModel = interaction.options.get("model");
-        let model="light";//"random";
-        if(getModel!=null){
-            model=getModel.value;
-        }
-        if(model=="random"){
-            const models=["light","middle","heavy"];
-            const ans = ndnDiceRoll(1, 3);
-            model=models[ans-1];
-        }
+        // let getModel = interaction.options.get("model");
+        // let model="light";//"random";
+        // if(getModel!=null){
+        //     model=getModel.value;
+        // }
+        // if(model=="random"){
+        //     const models=["light","middle","heavy"];
+        //     const ans = ndnDiceRoll(1, 3);
+        //     model=models[ans-1];
+        // }
         
         //次の処理のため，デフォルト返答メッセージを削除
         await interaction.deleteReply()
@@ -81,8 +81,10 @@ module.exports = {
 
         //ユーザアカウントに偽装したwebhookを送る
         const waitlistLength=getLLMQueueLength();
-        const estTimeRequired=getLLMProcessingTime(model);
-        const msgopt=`(待機件数:${waitlistLength+1}，予想処理時間${estTimeRequired}分)`
+        // const estTimeRequired=getLLMProcessingTime(model);
+        // const estTimeRequired=getLLMProcessingTime("light");
+        // const msgopt=`(待機件数:${waitlistLength+1}，予想処理時間${estTimeRequired}分)`
+        const msgopt=`(待機件数:${waitlistLength+1})`
         await sendMessage("🗣️", interaction,`${readTxt}${msgopt}`).catch(e => console.error(e));
         if (botConnection != undefined) {
             addTalkCommandCounter();

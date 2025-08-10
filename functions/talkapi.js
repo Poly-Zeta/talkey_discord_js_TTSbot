@@ -26,8 +26,42 @@ const translateURL=tokens.translateURLBase;
 const llamaServerAddress0=tokens.llamaServerAddress0;
 const llamaServerAddress1=tokens.llamaServerAddress1;
 const llamaServerAddress2=tokens.llamaServerAddress2;
-// const llamaServerAddress=tokens.llamaServerAddress;
 const prompt=tokens.prompt;
+const gptossServerAddress=tokens.gptossServerAddress;
+const gptossPrompt=tokens.gptossPrompt;
+
+async function getResponseofGPToss(queue) { 
+    const talkRes = await fetch(
+        gptossServerAddress,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer sample`
+            },
+            body: JSON.stringify({
+                model: "openai/gpt-oss-20b",
+                messages: [
+                    { "role": "system", "content": `${gptossPrompt}` },
+                    { "role": "user", "content": queue[6].readTxt },
+                    { "role": "assistant", "content": queue[5].readTxt },
+                    { "role": "user", "content": queue[4].readTxt },
+                    { "role": "assistant", "content": queue[3].readTxt },
+                    { "role": "user", "content": queue[2].readTxt },
+                    { "role": "assistant", "content": queue[1].readTxt },
+                    { "role": "user", "content": queue[0].readTxt },
+                ],
+            })
+        }
+    ); 
+    const talkData = await talkRes.json();
+    if(talkRes.status!=200){
+        return `リプライの生成時にエラーが発生しました．`;
+    }
+    // const res = talkData.content;
+    const res = talkData.choices[0].message.content;
+    return res;
+}
 
 // async function getResponseofLlamaAPI(username,txt) {
 async function getResponseofLlamaAPILight(txt) {
@@ -218,5 +252,6 @@ module.exports={
     getResponseofTranslateAPI,
     getResponseofLlamaAPILight,
     getResponseofLlamaAPIMiddle,
-    getResponseofLlamaAPIHeavy
+    getResponseofLlamaAPIHeavy,
+    getResponseofGPToss
 }
