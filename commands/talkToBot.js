@@ -65,7 +65,7 @@ module.exports = {
         //引数のメッセージを取得
         let readTxt = interaction.options.get("saying").value;
         // let getModel = interaction.options.get("model");
-        // let model="light";//"random";
+        let model="light";//"random";
         // if(getModel!=null){
         //     model=getModel.value;
         // }
