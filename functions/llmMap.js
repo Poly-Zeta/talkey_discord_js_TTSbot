@@ -1,4 +1,4 @@
-const {getResponseofTranslateAPI,getResponseofLlamaAPILight,getResponseofLlamaAPIMiddle,getResponseofLlamaAPIHeavy} = require('../functions/talkapi.js');
+const {getResponseofGPToss,getResponseofTranslateAPI,getResponseofLlamaAPILight,getResponseofLlamaAPIMiddle,getResponseofLlamaAPIHeavy} = require('../functions/talkapi.js');
 const { addAudioToMapQueue } = require('../functions/audioMap.js');
 const { textOperator } = require('../functions/textOperator.js');
 //queue処理のお試し
