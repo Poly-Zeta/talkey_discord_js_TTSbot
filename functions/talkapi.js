@@ -31,6 +31,22 @@ const gptossServerAddress=tokens.gptossServerAddress;
 const gptossPrompt=tokens.gptossPrompt;
 
 async function getResponseofGPToss(queue) { 
+    //queueの中身を最大6件まで，末尾からmessageLogに入れていく
+    //形式は偶数行が{ "role": "user", "content": queue[n].readTxt },
+    //形式は奇数行が{ "role": "assistant", "content": queue[n].readTxt },
+    const messageLog= [];
+    messageLog.push({ "role": "system", "content": `${gptossPrompt}` });
+
+    //start:min(queueの末尾,6) step:1 end:0
+    for(let i=Math.min(queue.length-1,6); i>=0; i--){
+        if(i%2==0){ //偶数行
+            messageLog.push({ "role": "user", "content": queue[i].readTxt });
+        }else{ //奇数行
+            messageLog.push({ "role": "assistant", "content": queue[i].readTxt  });
+        }
+    }
+    // console.log(messageLog); 
+    
     const talkRes = await fetch(
         gptossServerAddress,
         {
@@ -41,16 +57,17 @@ async function getResponseofGPToss(queue) {
             },
             body: JSON.stringify({
                 model: "openai/gpt-oss-20b",
-                messages: [
-                    { "role": "system", "content": `${gptossPrompt}` },
-                    { "role": "user", "content": queue[6].readTxt },
-                    { "role": "assistant", "content": queue[5].readTxt },
-                    { "role": "user", "content": queue[4].readTxt },
-                    { "role": "assistant", "content": queue[3].readTxt },
-                    { "role": "user", "content": queue[2].readTxt },
-                    { "role": "assistant", "content": queue[1].readTxt },
-                    { "role": "user", "content": queue[0].readTxt },
-                ],
+                messages: messageLog,
+                // [
+                //     { "role": "system", "content": `${gptossPrompt}` },
+                //     { "role": "user", "content": queue[6].readTxt },
+                //     { "role": "assistant", "content": queue[5].readTxt },
+                //     { "role": "user", "content": queue[4].readTxt },
+                //     { "role": "assistant", "content": queue[3].readTxt },
+                //     { "role": "user", "content": queue[2].readTxt },
+                //     { "role": "assistant", "content": queue[1].readTxt },
+                //     { "role": "user", "content": queue[0].readTxt },
+                // ],
             })
         }
     ); 

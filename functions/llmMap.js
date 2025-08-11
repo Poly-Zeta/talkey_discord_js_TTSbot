@@ -57,7 +57,7 @@ async function addLlamaQueue(guildId, nickname, readTxt, uid,textChannel,botConn
 };
 
 //llamaの応答を取得する
-async function processLlamaQueue(queue) {
+async function processLlamaQueue(queue){
     console.log("loop");
     
     if (!queue[0]?.readTxt || queue.length==0) {
@@ -115,7 +115,7 @@ async function processLlamaQueue(queue) {
     // }else{
     //     queue[0].readTxt="";
     // }
-    queue[0].readTxt=getResponseofGPToss(queue);
+    queue[0].readTxt=await getResponseofGPToss(queue);
 
     if(queue[0].doMoldProcessFlg){
         const tmp=queue[0].readTxt.split(';');
