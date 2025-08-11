@@ -115,7 +115,7 @@ async function processLlamaQueue(queue){
     // }else{
     //     queue[0].readTxt="";
     // }
-    queue[0].readTxt=await getResponseofGPToss(queue);
+    queue[0].readTxt=await getResponseofGPToss(guildLog);
 
     if(queue[0].doMoldProcessFlg){
         const tmp=queue[0].readTxt.split(';');

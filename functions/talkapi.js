@@ -45,7 +45,7 @@ async function getResponseofGPToss(queue) {
             messageLog.push({ "role": "assistant", "content": queue[i].readTxt  });
         }
     }
-    // console.log(messageLog); 
+    console.log(messageLog); 
     
     const talkRes = await fetch(
         gptossServerAddress,
