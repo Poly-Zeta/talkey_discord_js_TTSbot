@@ -38,11 +38,11 @@ async function getResponseofGPToss(queue) {
     messageLog.push({ "role": "system", "content": `${gptossPrompt}` });
     console.log(messageLog); 
 
-    for(let i=0; i<=6; i++){
+    for(let i=0; i<6; i++){
         if(i%2==0){ //偶数行
-            messageLog.push({ "role": "user", "content": queue[i] });
-        }else{ //奇数行
             messageLog.push({ "role": "assistant", "content": queue[i] });
+        }else{ //奇数行
+            messageLog.push({ "role": "user", "content": queue[i] });
         }
     }
     console.log(messageLog); 
