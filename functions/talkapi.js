@@ -37,14 +37,11 @@ async function getResponseofGPToss(queue) {
     const messageLog= [];
     messageLog.push({ "role": "system", "content": `${gptossPrompt}` });
 
-    //start:min(queueの末尾,6) step:1 end:0
-    for(let i=Math.min(queue.length-1,6); i>=0; i--){
-        if(queue[i].readTxt!=undefined){
-            if(i%2==0){ //偶数行
-                messageLog.push({ "role": "user", "content": queue[i].readTxt });
-            }else{ //奇数行
-                messageLog.push({ "role": "assistant", "content": queue[i].readTxt  });
-            }
+    for(let i=0; i<=6; i++){
+        if(i%2==0){ //偶数行
+            messageLog.push({ "role": "user", "content": queue[i] });
+        }else{ //奇数行
+            messageLog.push({ "role": "assistant", "content": queue[i] });
         }
     }
     console.log(messageLog); 
