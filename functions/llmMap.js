@@ -95,7 +95,8 @@ async function processLlamaQueue(queue){
     guildLog.push(queue[0].readTxt);
 
     //ログの長さは一定で切る
-    if(guildLog.length>talkMemoryMaxLength){guildLog.shift();}
+    if(guildLog.length>=talkMemoryLength){guildLog.shift();}
+    // if(guildLog.length>talkMemoryMaxLength){guildLog.shift();}
 
     //ログからn/2回の会話往復と最新のユーザ入力を引き出して成形
     // queue[0].readTxt=guildLog.slice(-1*(talkMemoryLength+1)).join("");

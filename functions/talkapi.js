@@ -36,6 +36,7 @@ async function getResponseofGPToss(queue) {
     //形式は奇数行が{ "role": "assistant", "content": queue[n].readTxt },
     const messageLog= [];
     messageLog.push({ "role": "system", "content": `${gptossPrompt}` });
+    console.log(messageLog); 
 
     for(let i=0; i<=6; i++){
         if(i%2==0){ //偶数行
